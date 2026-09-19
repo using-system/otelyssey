@@ -11,18 +11,28 @@ permissions:
 jobs:
   refresh:
     runs-on: ubuntu-26.04
-    env:
-      GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
     steps:
+      - name: App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
-          token: ${{ secrets.OTELYSSEY_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
       - name: Statistics
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: python3 -m scripts.stats --failures work-stats.json
       - name: Releases
         run: python3 -m scripts.releases --workdir work --json > work-releases.json
       - name: Issues for the releases that failed
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           python3 - <<'PY'
           import json, subprocess
@@ -79,7 +89,7 @@ jobs:
         run: |
           rm -rf work work-releases.json work-stats.json
           python3 -m scripts.build
-          git config user.name "otelyssey-bot"
-          git config user.email "otelyssey-bot@users.noreply.github.com"
+          git config user.name "otelyssey-bot[bot]"
+          git config user.email "otelyssey-bot[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --quiet || { git commit -m "chore(store): nightly refresh"; git push origin main; }

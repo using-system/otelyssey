@@ -39,18 +39,20 @@ repository root (`python3 -m scripts.<name>`), never as files. A script
 prints its result and nothing else; exit 0 on pass, 1 on a failed check,
 2 on a usage or infrastructure error.
 
-## One token, no other secret
+## One GitHub App, one secret
 
 The pipeline chains workflows through events (a label, a pull request)
-that GitHub never emits for the repository's own `GITHUB_TOKEN`. One
-fine-grained token of the maintainer, stored as the Actions secret
-`OTELYSSEY_TOKEN` (this repository only: Contents, Issues and Pull
-requests read and write, Metadata read), labels and comments in
-`intake.yml`, signs the agentic workflows' safe outputs, merges and
-pushes in `admit.yml` and pushes in `nightly.yml`. The `main` ruleset
-requires a pull request and the `ci` check, with "Repository admin" as
-bypass actor for those two pushes. No other secret exists, and no value
-of it is ever written down.
+that GitHub never emits for the repository's own `GITHUB_TOKEN`. A
+GitHub App installed on this repository (Contents, Issues and Pull
+requests read and write, Metadata read) mints a short-lived
+installation token in the first step of `intake.yml`, `admit.yml` and
+`nightly.yml` and signs the agentic workflows' safe outputs. Its client
+id is the repository variable `OTELYSSEY_APP_CLIENT_ID`; its private
+key is the secret `OTELYSSEY_APP_PRIVATE_KEY`, the only secret, and no
+value of it is ever written down. The `main` ruleset requires a pull
+request and the `ci` check, with the app as bypass actor for the two
+pushes (the admission's and the nightly's). The pipeline's comments and
+commits appear as `otelyssey-bot[bot]`.
 
 ## Labels
 

@@ -216,13 +216,18 @@ past issues are respected.
   contributor fixes the issue and the gates re-run.
 - Actions pinned by commit SHA with the version in a comment;
   permissions minimal per job; the install smoke runs under an
-  isolated HOME with no credential. One secret, the maintainer's
-  fine-grained token `OTELYSSEY_TOKEN` (this repository only:
-  Contents, Issues and Pull requests), labels the submission issue,
-  signs the agentic workflows' safe outputs, merges the admission and
-  pushes the bot commits: an event produced with `GITHUB_TOKEN` starts
-  no workflow, so the chain intake → review → admission needs it. Its
-  value is never written anywhere.
+  isolated HOME with no credential. A GitHub App installed on this
+  repository only (Contents, Issues and Pull requests read and write,
+  Metadata read) is the pipeline's identity, `otelyssey-bot[bot]`:
+  `intake.yml`, `admit.yml` and `nightly.yml` mint a one-hour
+  installation token in their first step, the agentic workflows sign
+  their safe outputs with it, and it labels the submission issue,
+  merges the admission and pushes the bot commits, bypassing the
+  `main` ruleset: an event produced with `GITHUB_TOKEN` starts no
+  workflow, so the chain intake → review → admission needs it. Its
+  client id is the repository variable `OTELYSSEY_APP_CLIENT_ID`, its
+  private key the one secret, `OTELYSSEY_APP_PRIVATE_KEY`, whose value
+  is never written anywhere.
 - gh-aw workflows are compiled to `.lock.yml` and committed with their
   `.md`; `gh aw compile` in `ci.yml` refuses a drift.
 - A plugin's own code is never executed by the pipeline beyond the

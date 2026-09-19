@@ -11,7 +11,9 @@ tools:
   github:
     toolsets: [repos, issues]
 safe-outputs:
-  github-token: ${{ secrets.OTELYSSEY_TOKEN }}
+  github-app:
+    client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+    private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
   create-issue:
     title-prefix: "[duplicate-review] "
     labels: [duplicate-review]

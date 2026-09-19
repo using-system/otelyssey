@@ -16,14 +16,24 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'admission')
     runs-on: ubuntu-26.04
     env:
-      GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
       NUMBER: ${{ github.event.pull_request.number }}
     steps:
+      - name: App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           persist-credentials: false
       - name: One store record, and nothing else, in the change
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           files=$(gh pr view "$NUMBER" --json files --jq '.files[].path')
           [ "$(printf '%s\n' "$files" | wc -l)" -eq 1 ] || { echo "::error::an admission changes one file"; exit 1; }
@@ -50,6 +60,7 @@ jobs:
         # --required: this job's own check run is attached to the same commit and would never
         # end while waited on; the ruleset makes ci the one required check
         env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           gh pr checks "$NUMBER" --watch --fail-fast --required
@@ -58,17 +69,19 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
-          token: ${{ secrets.OTELYSSEY_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
       - name: Canonical record, rebuilt artifacts, pushed to main
         run: |
           python3 -m scripts.store --write
           python3 -m scripts.build
-          git config user.name "otelyssey-bot"
-          git config user.email "otelyssey-bot@users.noreply.github.com"
+          git config user.name "otelyssey-bot[bot]"
+          git config user.email "otelyssey-bot[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --quiet || git commit -m "chore(build): artifacts after the admission of ${record#.store/}"
           git push origin main
       - name: Close the submission
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           issue=$(python3 -c "import json, os; print(json.load(open(os.environ['record']))['submitted_in'])")
           name=$(python3 -c "import json, os; print(json.load(open(os.environ['record']))['name'])")

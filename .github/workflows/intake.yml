@@ -16,6 +16,13 @@ jobs:
     if: contains(github.event.issue.labels.*.name, 'submission')
     runs-on: ubuntu-26.04
     steps:
+      - name: App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
+          permission-issues: write
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
@@ -81,7 +88,7 @@ jobs:
           echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
       - name: Comment and label
         env:
-          GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           ISSUE: ${{ github.event.issue.number }}
           VERDICT: ${{ steps.report.outputs.verdict }}
           LABELS: ${{ join(github.event.issue.labels.*.name, ' ') }}
@@ -89,9 +96,9 @@ jobs:
           # one intake comment per issue: edit the previous one when it exists
           comments="repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments"
           previous=$(gh api "$comments" --paginate \
-            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .id // empty' | head -1)
+            --jq '[.[] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .id // empty' | head -1)
           prev_body=$(gh api "$comments" --paginate \
-            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .body // empty')
+            --jq '[.[] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty')
           prev_line=$(printf '%s' "$prev_body" | grep -o '<!-- otelyssey-candidate .* -->' || true)
           new_line=$(grep -o '<!-- otelyssey-candidate .* -->' work/comment.md || true)
           if [ -n "$previous" ]; then
