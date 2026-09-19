@@ -9,7 +9,7 @@ A CLI toolbox for Observability-Driven Development (ODD): coding agents observe 
 - License: MIT
 - Keywords: `opentelemetry`, `observability`, `mcp`
 - Homepage: <https://github.com/using-system/oddyssey#readme>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-09-19T20:39:31Z)
+- Stars 9, forks 2, watchers 0 (refreshed 2026-09-19T20:41:13Z)
 - Admitted from [issue #9](https://github.com/using-system/otelyssey/issues/9) on 2026-09-19
 
 ## Install

@@ -17,7 +17,7 @@ copilot plugin marketplace add using-system/otelyssey
 <!-- otelyssey:table -->
 | Plugin | Description | Category | Repository | Stars | Forks | Watchers |
 | --- | --- | --- | --- | ---: | ---: | ---: |
-| [oddyssey](marketplace/oddyssey/README.md) | A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5). | workflow | [using-system/oddyssey](https://github.com/using-system/oddyssey) | 0 | 0 | 0 |
+| [oddyssey](marketplace/oddyssey/README.md) | A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5). | workflow | [using-system/oddyssey](https://github.com/using-system/oddyssey) | 9 | 2 | 0 |
 <!-- /otelyssey:table -->
 
 ## Submit a plugin
