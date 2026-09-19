@@ -1,4 +1,5 @@
 import json
+import os
 from pathlib import Path
 
 from scripts import smoke
@@ -43,3 +44,33 @@ def test_smoke_twice_on_one_workdir_is_clean(tmp_path: Path, monkeypatch):
     third = smoke.smoke("my-otel-plugin", PLUGIN, tmp_path)
     assert all(r["status"] == "pass" for r in third.values())
     assert not stale.exists()
+
+
+def test_smoke_resolves_a_relative_workdir(tmp_path: Path, monkeypatch):
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr(smoke.shutil, "which", lambda host: "/bin/true")
+    calls: list[tuple[list[str], Path]] = []
+
+    def fake_run(args: list[str], home: Path) -> tuple[int, str]:
+        calls.append((args, home))
+        return 0, "my-otel-plugin"
+
+    monkeypatch.setattr(smoke, "_run", fake_run)
+    smoke.smoke("my-otel-plugin", PLUGIN, Path("relative-work"))
+    assert calls
+    assert all(home.is_absolute() for _, home in calls)
+    adds = [args for args, _ in calls if args[1:4] == ["plugin", "marketplace", "add"]]
+    assert adds
+    for args in adds:
+        market = Path(args[-1])
+        assert market.is_absolute()
+        assert market.is_relative_to(tmp_path / "relative-work")
+
+
+def test_ephemeral_marketplace_keeps_symlinks_as_links(tmp_path: Path):
+    src = tmp_path / "src"
+    src.mkdir()
+    (src / "plugin.json").write_bytes((PLUGIN / "plugin.json").read_bytes())
+    os.symlink("nowhere", src / "dangling")
+    market = smoke.ephemeral_marketplace(tmp_path / "wd", "my-otel-plugin", src)
+    assert (market / "plugin" / "dangling").is_symlink()

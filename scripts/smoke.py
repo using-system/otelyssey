@@ -19,7 +19,7 @@ def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
     market = workdir / "market"
     if market.exists():
         shutil.rmtree(market)
-    shutil.copytree(plugin_dir, market / "plugin")
+    shutil.copytree(plugin_dir, market / "plugin", symlinks=True)
     (market / ".claude-plugin").mkdir(parents=True)
     manifest = {
         "name": MARKETPLACE,
@@ -55,7 +55,7 @@ def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[st
     if shutil.which(host) is None:
         return "unavailable", f"the {host} CLI is not on this machine"
     shutil.rmtree(home, ignore_errors=True)
-    home.mkdir(parents=True)
+    home.mkdir(parents=True, exist_ok=True)
     code, out = _run([host, "plugin", "marketplace", "add", str(marketplace_dir)], home)
     if code != 0:
         return "fail", f"marketplace add exited {code}\n{out}"
@@ -71,6 +71,8 @@ def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[st
 def smoke(
     name: str, plugin_dir: Path, workdir: Path, hosts: tuple[str, ...] = HOSTS
 ) -> dict[str, dict]:
+    """The workdir is made absolute: the hosts run with the isolated HOME as cwd."""
+    workdir = workdir.resolve()
     market = ephemeral_marketplace(workdir, name, plugin_dir)
     result: dict[str, dict] = {}
     for host in hosts:
