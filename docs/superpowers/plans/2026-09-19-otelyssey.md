@@ -1108,7 +1108,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        The repository checks the format of your plugin at the tag you name, installs it,
+        The repository checks the format of your plugin at your repository's latest release tag (X.Y.Z or vX.Y.Z), installs it,
         judges its relevance to OpenTelemetry and its novelty, and answers here.
         Do not open a pull request against `.store/`: the pipeline writes it.
   - type: input
