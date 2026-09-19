@@ -10,12 +10,12 @@ CANDIDATE = {
     "repository": "contoso/my-otel-plugin",
     "path": "",
     "ref": "v1.2.0",
+    "sha": "1" * 40,
     "author": {"name": "Contoso"},
     "license": "Apache-2.0",
     "homepage": "",
     "keywords": ["opentelemetry"],
     "submitted_in": 7,
-    "submitted_version": "1.2.0",
 }
 VALIDATION = {
     "sha": "1" * 40,
@@ -42,13 +42,21 @@ def test_green_report_carries_the_candidate_block_in_store_order():
     assert candidate["sha"] == "1" * 40
     assert candidate["version"] == "1.2.0"
     assert candidate["homepage"] == "https://contoso.example/plugin"
+    assert "**Plugin at the tag `v1.2.0`**: pass (commit `111111111111`)" in body
     assert "Notes (informational)" in body and "commands:" in body
 
 
+def test_the_record_takes_the_version_of_the_manifest_and_the_sha_of_the_validation():
+    candidate = {k: v for k, v in CANDIDATE.items() if k != "sha"}
+    record = report.candidate_record(candidate, VALIDATION)
+    assert record["sha"] == "1" * 40
+    assert record["version"] == "1.2.0"
+
+
 def test_form_errors_make_needs_changes():
-    body, verdict = report.render({}, ["Release tag: a release tag, vX.Y.Z"], None, None)
+    body, verdict = report.render({}, ["GitHub repository: owner/repo"], None, None)
     assert verdict == "needs-changes"
-    assert "Release tag" in body
+    assert "GitHub repository" in body
     assert report.CANDIDATE_MARK not in body
 
 
@@ -56,7 +64,7 @@ def test_validation_errors_make_needs_changes():
     validation = {**VALIDATION, "sha": None, "errors": ["repository: not found"], "notes": []}
     body, verdict = report.render(CANDIDATE, [], validation, None)
     assert verdict == "needs-changes"
-    assert "unresolved" in body
+    assert "**Plugin at the tag `v1.2.0`**: needs changes (commit `unresolved`)" in body
 
 
 def test_unavailable_host_is_an_infra_error():
