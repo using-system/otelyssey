@@ -434,8 +434,8 @@ def main(argv: list[str] | None = None) -> int:
         errors = validate_record(record)
         if path.stem != record.get("name"):
             errors.append("file name and record name differ")
-        if path.read_text(encoding="utf-8") != canonical(record) if not errors else False:
-            errors.append("not in canonical form (run scripts/store.py --write)")
+        if not errors and path.read_text(encoding="utf-8") != canonical(record):
+            errors.append("not in canonical form (rewrite it with store.write_record)")
         for error in errors:
             print(f"{path.name}: {error}", file=sys.stderr)
         failures += bool(errors)
@@ -473,7 +473,7 @@ store.write_record(Path("."), {
     "license": "MIT",
     "homepage": "https://github.com/using-system/oddyssey#readme",
     "keywords": ["opentelemetry", "observability", "mcp", "claude-code", "copilot"],
-    "submitted_in": 2,
+    "submitted_in": <the issue number>,
     "admitted_at": "2026-09-19",
     "stats": {"stars": <n>, "forks": <n>, "watchers": <n>, "refreshed_at": "<now UTC>"},
 })
@@ -482,7 +482,7 @@ rm .store/.gitkeep
 python3 scripts/store.py --check
 ```
 
-`submitted_in` is the issue this plan's PR closes; open it before the commit if it does not exist yet (`chore(store): the first record, oddyssey`).
+`submitted_in` is the submission issue for oddyssey: open it first with the form of Task 5 when Task 5 is done, or, before that, as a plain issue titled `[Plugin]: oddyssey` labelled `submission`, and put its number here. Task 14 replays the whole pipeline on that same issue.
 
 - [ ] **Step 6: Add the store check to CI and commit**
 
