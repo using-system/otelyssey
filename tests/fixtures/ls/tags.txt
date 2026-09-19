@@ -1,0 +1,5 @@
+aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa	refs/tags/v1.0.0
+bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb	refs/tags/v1.0.0^{}
+cccccccccccccccccccccccccccccccccccccccc	refs/tags/v1.10.0
+dddddddddddddddddddddddddddddddddddddddd	refs/tags/v1.2.0
+eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee	refs/tags/nightly
