@@ -128,3 +128,14 @@ def test_main_smoke_flag_passes_the_install(tmp_path: Path, monkeypatch, capsys)
     assert result["errors"] == [
         "install on claude: unavailable: the claude CLI is not on this machine"
     ]
+
+
+def test_a_record_the_store_refuses_is_a_failed_follow(tmp_path: Path, monkeypatch):
+    root = store_with(tmp_path)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    tainted = {**PASSING, "manifest": {"version": "1.14.0\nFOO=bar"}}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(tainted))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert (result["status"], result["tag"]) == ("failed", "v1.14.0")
+    assert any("control character" in e for e in result["errors"])
+    assert json.loads((root / ".store" / "oddyssey.json").read_text())["ref"] == "v1.13.0"

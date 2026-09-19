@@ -77,7 +77,7 @@ def validate_record(record: dict) -> list[str]:
     else:
         url, email = author.get("url"), author.get("email")
         if "url" in author and (not isinstance(url, str) or not URL_RE.match(url)):
-            errors.append("author.url: not an https URL")
+            errors.append("author.url: not an https URL without spaces or ()<>[]")
         if "email" in author and (not _is_text(email) or any(c.isspace() for c in email)):
             errors.append("author.email: empty or carries whitespace")
     if not _is_text(record["license"]):
@@ -85,7 +85,7 @@ def validate_record(record: dict) -> list[str]:
     if not isinstance(record["homepage"], str) or (
         record["homepage"] and not URL_RE.match(record["homepage"])
     ):
-        errors.append("homepage: not an https URL (empty allowed)")
+        errors.append("homepage: not an https URL without spaces or ()<>[] (empty allowed)")
     keywords = record["keywords"]
     if not isinstance(keywords, list) or not all(isinstance(k, str) for k in keywords):
         errors.append("keywords: not a list of strings")

@@ -55,7 +55,13 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
                 result[name] = {"status": "failed", "tag": tag, "errors": errors}
                 continue
         version = check["manifest"].get("version") or record["version"]
-        store.write_record(root, {**record, "ref": tag, "sha": check["sha"], "version": version})
+        try:
+            store.write_record(
+                root, {**record, "ref": tag, "sha": check["sha"], "version": version}
+            )
+        except ValueError as error:
+            result[name] = {"status": "failed", "tag": tag, "errors": [f"record: {error}"]}
+            continue
         result[name] = {"status": "updated", "tag": tag, "errors": []}
     return result
 
