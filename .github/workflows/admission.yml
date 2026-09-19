@@ -43,9 +43,11 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          set -o pipefail
           mkdir -p work
+          # gh api refuses --slurp with --jq: the slurped pages go through jq
           gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
-            --jq '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
+            | jq -r '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
             > work/comment.md
           [ -s work/comment.md ] || { echo "::error::no intake comment by otelyssey-bot[bot] on #${ISSUE}"; exit 1; }
           record=$(python3 -m scripts.admission --comment-file work/comment.md --issue "$ISSUE" --root work) || { echo "::error::no record: ${record:-see above}"; exit 1; }
@@ -68,8 +70,9 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
+          set -o pipefail
           ruling=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
-            --jq '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty')
+            | jq -r '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty')
           [ -n "$ruling" ] || { echo "::error::no admissible ruling by the review on #${ISSUE}"; exit 1; }
           printf '%s' "$ruling" | grep -q "\`${NAME}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${NAME}"; exit 1; }
           printf '%s' "$ruling" | grep -q "\`${SHA}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${SHA}: the intake changed since"; exit 1; }
