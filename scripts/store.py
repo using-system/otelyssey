@@ -128,6 +128,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--root", default=".", help="the repository root")
     args = parser.parse_args(argv)
     root = Path(args.root)
+    if not (root / ".store").is_dir():
+        print(f"{root / '.store'}: no such directory", file=sys.stderr)
+        return 2
     paths = sorted((root / ".store").glob("*.json"))
     failures = 0
     for path in paths:

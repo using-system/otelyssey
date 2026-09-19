@@ -82,3 +82,8 @@ def test_write_rewrites_a_valid_record_canonically(tmp_path: Path):
     loose.write_text(json.dumps(RECORD))
     assert store.main(["--write", "--root", str(tmp_path)]) == 0
     assert loose.read_text() == store.canonical(RECORD)
+
+
+def test_check_refuses_a_root_without_a_store(tmp_path: Path, capsys):
+    assert store.main(["--check", "--root", str(tmp_path)]) == 2
+    assert ".store" in capsys.readouterr().err
