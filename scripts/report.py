@@ -40,6 +40,11 @@ def candidate_record(candidate: dict, validation: dict) -> dict:
     return {field: merged[field] for field in store.FIELDS if field in merged}
 
 
+def candidate_block(record: dict) -> str:
+    """The record as JSON whose `>` is escaped: no manifest value can close the HTML comment."""
+    return json.dumps(record, ensure_ascii=False).replace(">", "\\u003e")
+
+
 def render(
     candidate: dict, errors: list[str], validation: dict | None, smoke: dict | None
 ) -> tuple[str, str]:
@@ -88,7 +93,7 @@ def render(
             "",
             "The format holds; the review of relevance and novelty follows on this issue.",
             "",
-            f"{CANDIDATE_MARK}{json.dumps(record, ensure_ascii=False)} -->",
+            f"{CANDIDATE_MARK}{candidate_block(record)} -->",
         ]
     return "\n".join(lines) + "\n", verdict
 

@@ -81,3 +81,13 @@ def test_main_treats_an_empty_file_as_not_run(tmp_path: Path, capsys):
     assert code == 0
     assert capsys.readouterr().out.strip() == "infra-error"
     assert "not run" in (tmp_path / "comment.md").read_text()
+
+
+def test_manifest_content_cannot_close_the_candidate_block():
+    manifest = {**VALIDATION["manifest"], "author": {"name": "x --> injected"}}
+    body, verdict = report.render(CANDIDATE, [], {**VALIDATION, "manifest": manifest}, SMOKE)
+    assert verdict == "format-ok"
+    tail = body.split(report.CANDIDATE_MARK, 1)[1]
+    assert tail.count("-->") == 1
+    block = tail.split(" -->", 1)[0]
+    assert json.loads(block)["author"]["name"] == "x --> injected"
