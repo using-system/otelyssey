@@ -27,8 +27,10 @@ jobs:
         run: python3 -m scripts.store --check
       - name: Generated artifacts
         # an admission pull request carries one store record and nothing else: its artifacts
-        # are stale by design and admit.yml rebuilds them right after the merge, on main
-        if: ${{ !contains(github.event.pull_request.labels.*.name, 'admission') }}
+        # are stale by design and admit.yml rebuilds them right after the merge, on main;
+        # on main the artifacts are kept fresh by the admission's rebuild and by the nightly,
+        # a push run checks nothing there
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'admission')
         run: python3 -m scripts.build --check
       - name: Agentic workflows compiled
         env:
