@@ -128,6 +128,9 @@ def validate(
 ) -> dict:
     """sha, manifest, errors and notes of the plugin at the tag; never raises on a bad input."""
     result: dict = {"sha": None, "manifest": {}, "errors": [], "notes": []}
+    if path.startswith("/") or ".." in path.split("/"):
+        result["errors"].append("path: not a relative directory inside the repository")
+        return result
     try:
         sha = gitrepo.resolve(repository, tag)
         result["sha"] = sha

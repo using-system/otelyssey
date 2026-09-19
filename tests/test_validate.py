@@ -57,3 +57,13 @@ def test_validate_names_an_unreadable_repository(tmp_path: Path, monkeypatch):
     assert result["sha"] is None
     assert result["errors"] == ["repository: repository not found"]
     assert result["notes"] == []
+
+
+def test_validate_refuses_a_path_outside_the_checkout(tmp_path: Path, monkeypatch):
+    def must_not_be_called(repository):
+        raise AssertionError("must not be called")
+
+    monkeypatch.setattr(validate.gitrepo, "list_tags", must_not_be_called)
+    for path in ("/etc", "../x"):
+        result = validate.validate("contoso/x", "v1.0.0", path, "x", "1.0.0", tmp_path)
+        assert result["errors"] == ["path: not a relative directory inside the repository"]
