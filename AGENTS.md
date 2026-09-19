@@ -44,7 +44,7 @@ prints its result and nothing else; exit 0 on pass, 1 on a failed check,
 The pipeline chains workflows through events (a label, a pull request)
 that GitHub never emits for the repository's own `GITHUB_TOKEN`. A
 GitHub App installed on this repository (Contents, Issues and Pull
-requests read and write, Metadata read) mints a short-lived
+requests read and write, Checks read, Metadata read) mints a short-lived
 installation token in the first step of `intake.yml`, `admit.yml` and
 `nightly.yml` and signs the agentic workflows' safe outputs. Its client
 id is the repository variable `OTELYSSEY_APP_CLIENT_ID`; its private

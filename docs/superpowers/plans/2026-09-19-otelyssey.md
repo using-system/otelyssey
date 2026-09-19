@@ -177,7 +177,7 @@ prints its result and nothing else; exit 0 on pass, 1 on a failed check,
 The pipeline chains workflows through events (a label, a pull request)
 that GitHub never emits for the repository's own `GITHUB_TOKEN`. A
 GitHub App installed on this repository (Contents, Issues and Pull
-requests read and write, Metadata read) mints a short-lived
+requests read and write, Checks read, Metadata read) mints a short-lived
 installation token in the first step of `intake.yml`, `admit.yml` and
 `nightly.yml` and signs the agentic workflows' safe outputs. Its client
 id is the repository variable `OTELYSSEY_APP_CLIENT_ID`; its private
@@ -3216,7 +3216,7 @@ git commit -m "feat(duplicates): the weekly agentic audit of the store"
 
 - [ ] **Step 1: The secret, the labels, the ruleset (the maintainer does this by hand)**
 
-1. Create the GitHub App `otelyssey-bot` (its bot login is `otelyssey-bot[bot]`) with the repository permissions Contents read and write, Issues read and write, Pull requests read and write, Metadata read, and install it on `using-system/otelyssey` only; store its client id as the repository variable `OTELYSSEY_APP_CLIENT_ID` (`gh variable set OTELYSSEY_APP_CLIENT_ID`) and its private key (PEM) as the Actions secret `OTELYSSEY_APP_PRIVATE_KEY` (`gh secret set OTELYSSEY_APP_PRIVATE_KEY` reads it from stdin; never paste it anywhere else).
+1. Create the GitHub App `otelyssey-bot` (its bot login is `otelyssey-bot[bot]`) with the repository permissions Contents read and write, Issues read and write, Pull requests read and write, Checks read, Metadata read, and install it on `using-system/otelyssey` only; store its client id as the repository variable `OTELYSSEY_APP_CLIENT_ID` (`gh variable set OTELYSSEY_APP_CLIENT_ID`) and its private key (PEM) as the Actions secret `OTELYSSEY_APP_PRIVATE_KEY` (`gh secret set OTELYSSEY_APP_PRIVATE_KEY` reads it from stdin; never paste it anywhere else).
 2. Create the labels:
 
 ```bash

@@ -220,7 +220,7 @@ past issues are respected.
   permissions minimal per job; the install smoke runs under an
   isolated HOME with no credential. A GitHub App installed on this
   repository only (Contents, Issues and Pull requests read and write,
-  Metadata read) is the pipeline's identity, `otelyssey-bot[bot]`:
+  Checks read, Metadata read) is the pipeline's identity, `otelyssey-bot[bot]`:
   `intake.yml`, `admit.yml` and `nightly.yml` mint a one-hour
   installation token in their first step, the agentic workflows sign
   their safe outputs with it, and it labels the submission issue,
