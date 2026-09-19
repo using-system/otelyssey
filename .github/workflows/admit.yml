@@ -56,7 +56,8 @@ jobs:
           if tags.get(r["ref"]) != r["sha"]:
               print(f"::error::{r['ref']} of {r['repository']} is not at {r['sha']}")
               raise SystemExit(1)
-          # store-validated strings without newlines; path is PLUGIN_PATH, never PATH
+          # the store refuses control characters in every string field, so one key=value line
+          # per value is safe; path is PLUGIN_PATH, never PATH
           keys = {"repository": "REPOSITORY", "ref": "REF", "path": "PLUGIN_PATH",
                   "name": "NAME", "version": "VERSION", "sha": "SHA"}
           with open(os.environ["GITHUB_ENV"], "a") as env:
@@ -67,6 +68,9 @@ jobs:
           out=$(python3 -m scripts.validate --repository "$REPOSITORY" --tag "$REF" --path "$PLUGIN_PATH" --name "$NAME" --version "$VERSION" --workdir work/validate) || { printf '%s\n' "$out"; echo "::error::$NAME does not validate at $REF"; exit 1; }
           printf '%s\n' "$out"
           printf '%s\n' "$out" | grep -qx "valid at $SHA" || { echo "::error::$NAME validated at another commit than the record's $SHA"; exit 1; }
+      - name: Clean the workspace
+        # the plugin checkout sits next to no token-bearing step and never reaches git add -A
+        run: rm -rf work
       - name: Wait for the required checks (ci), then merge
         # --required: this job's own check run is attached to the same commit and would never
         # end while waited on; the ruleset makes ci the one required check
