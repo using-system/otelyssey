@@ -1,0 +1,74 @@
+name: admit
+
+on:
+  pull_request:
+    types: [opened, synchronize, labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: admit-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  admit:
+    if: contains(github.event.pull_request.labels.*.name, 'admission')
+    runs-on: ubuntu-26.04
+    env:
+      GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
+      NUMBER: ${{ github.event.pull_request.number }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: One store record, and nothing else, in the change
+        run: |
+          files=$(gh pr view "$NUMBER" --json files --jq '.files[].path')
+          [ "$(printf '%s\n' "$files" | wc -l)" -eq 1 ] || { echo "::error::an admission changes one file"; exit 1; }
+          case "$files" in .store/*.json) ;; *) echo "::error::not a store record: $files"; exit 1;; esac
+          echo "record=$files" >> "$GITHUB_ENV"
+      - name: The record is valid and its sha is a tag commit
+        run: |
+          python3 -m scripts.store --check
+          python3 - <<'PY'
+          import json, os, subprocess
+          r = json.load(open(os.environ["record"]))
+          try:
+              tags = subprocess.run(
+                  ["git", "ls-remote", "--tags", f"https://github.com/{r['repository']}.git"],
+                  capture_output=True, text=True, check=True, timeout=60,
+              ).stdout
+          except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+              print(f"::error::{r['repository']} cannot be read: {error}")
+              raise SystemExit(1)
+          if r["sha"] not in tags:
+              print(f"::error::{r['sha']} is not a tag commit of {r['repository']}")
+              raise SystemExit(1)
+          PY
+      - name: Wait for the required checks (ci), then merge
+        # --required: this job's own check run is attached to the same commit and would never
+        # end while waited on; the ruleset makes ci the one required check
+        run: |
+          gh pr checks "$NUMBER" --watch --fail-fast --required
+          gh pr merge "$NUMBER" --squash --delete-branch
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          token: ${{ secrets.OTELYSSEY_TOKEN }}
+      - name: Canonical record, rebuilt artifacts, pushed to main
+        run: |
+          python3 -m scripts.store --write
+          python3 -m scripts.build
+          git config user.name "otelyssey-bot"
+          git config user.email "otelyssey-bot@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || git commit -m "chore(build): artifacts after the admission of ${record#.store/}"
+          git push origin main
+      - name: Close the submission
+        run: |
+          issue=$(python3 -c "import json, os; print(json.load(open(os.environ['record']))['submitted_in'])")
+          name=$(python3 -c "import json, os; print(json.load(open(os.environ['record']))['name'])")
+          gh issue edit "$issue" --add-label admitted --remove-label admission-opened --remove-label format-ok
+          gh issue close "$issue" --comment "Admitted: https://github.com/${GITHUB_REPOSITORY}/blob/main/marketplace/${name}/README.md"
