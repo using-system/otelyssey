@@ -8,12 +8,12 @@ permissions:
   copilot-requests: write
 engine: copilot
 tools:
-  # read-only shell, for the store's records; gh-aw requires it to be explicit below approved
+  # read-only shell, for the store's records; gh-aw's strict mode requires it to be explicit at none
   bash: [cat, ls, find, grep, head, tail, wc]
   github:
     toolsets: [repos, issues]
-    # the audit reads the submission issues, written by contributors (author association NONE);
-    # gh-aw's public-repo default, approved, would filter them out
+    # the audit reads its own past issues, opened by the app (author association NONE) and
+    # holding the owner's rulings; gh-aw's public-repo default, approved, would filter them out
     min-integrity: none
 safe-outputs:
   github-app:

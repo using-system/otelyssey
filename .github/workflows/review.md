@@ -15,7 +15,7 @@ permissions:
   copilot-requests: write
 engine: copilot
 tools:
-  # read-only shell, for the store's records; gh-aw requires it to be explicit below approved
+  # read-only shell, for the store's records; gh-aw's strict mode requires it to be explicit at none
   bash: [cat, ls, find, grep, head, tail, wc]
   github:
     toolsets: [repos, issues, pull_requests]

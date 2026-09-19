@@ -9,6 +9,15 @@ messages, PR titles and issue titles follow Conventional Commits,
 per PR; every PR references an existing issue (`Closes #N`). Every
 committed artifact is in English.
 
+## Every implementation is reviewed by a sub-agent
+
+Mandatory, before a change is pushed: dispatch one code-reviewer
+sub-agent on the diff, with the change's intent and the issue it
+answers, and nothing from the session's history. Fix what it reports,
+then send the fixed diff back to the same reviewer; repeat until it
+reports nothing left to fix. Its verdict gates the push; a push-back
+against a finding is written with its reasoning, never silent.
+
 ## The store is the pipeline's
 
 `.store/<name>.json` records are written by the admission and nightly
@@ -63,11 +72,11 @@ renamed app is a change in those files.
 `review.md` and `duplicates.md` set `tools.github.min-integrity: none`
 and an explicit read-only `tools.bash` list. gh-aw's default for a public
 repository, `approved`, silently filters every object whose author is
-not an owner, member or collaborator: the contributor's issue and
-replies, and the intake comment the app posts (its bot has association
-`NONE`). The agent then sees empty results, not a refusal, and retries
-until its budget ends. The prompts treat what they read as data, and the
-safe outputs bound what they can do.
+not an owner, member, collaborator or a platform bot GitHub trusts: the
+contributor's issue and replies, and the intake comment the app posts
+(its bot has association `NONE`). The agent then sees empty results,
+not a refusal, and retries until its budget ends. The prompts treat
+what they read as data, and the safe outputs bound what they can do.
 
 ## Labels
 
@@ -76,8 +85,9 @@ safe outputs bound what they can do.
 `rejected` / `admitted` (the review and the admission), `admission` (on
 the admission pull request), `release-follow` (a nightly failure),
 `duplicate-review` (the weekly audit). gh-aw adds `agentic-workflows` on
-its own `[aw] Detection Runs` issue, opened when an agentic run fails,
-times out or is cancelled; it manages that issue itself.
+its own `[aw] Detection Runs` issue, where its threat-detection job
+reports every run it concluded with a warning or a failure, a failed or
+timed-out agent run among them; it manages that issue itself.
 
 ## No plugin execution
 
