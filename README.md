@@ -12,10 +12,14 @@ claude plugin marketplace add using-system/otelyssey
 copilot plugin marketplace add using-system/otelyssey
 ```
 
-Claude Code clones a plugin's repository over SSH: it needs a GitHub SSH
-key, or `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` in the environment, or
-`git config --global url.https://github.com/.insteadOf git@github.com:`,
-to clone over HTTPS instead. Copilot CLI needs none of these.
+## Submit a plugin
+
+Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml):
+a public GitHub repository holding a `plugin.json` in the Agent Plugins
+format, a release tag, and a subject that is OpenTelemetry. The
+repository checks the format, installs the plugin, judges its relevance
+and its novelty, talks to you on the issue, and lists it. Every night it
+follows your releases and refreshes your repository's statistics.
 
 ## Plugins
 
@@ -26,15 +30,3 @@ to clone over HTTPS instead. Copilot CLI needs none of these.
 <img src="https://img.shields.io/github/v/release/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="release">&nbsp;&nbsp;<img src="https://img.shields.io/github/created-at/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="created-at">&nbsp;&nbsp;<img src="https://img.shields.io/github/last-commit/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="last-commit">&nbsp;&nbsp;<img src="https://img.shields.io/github/license/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="license">&nbsp;&nbsp;<img src="https://img.shields.io/github/stars/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="stars">&nbsp;&nbsp;<img src="https://img.shields.io/github/forks/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="forks">&nbsp;&nbsp;<img src="https://img.shields.io/github/watchers/using-system/oddyssey?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="watchers">
 
 <!-- /otelyssey:plugins -->
-
-## Submit a plugin
-
-Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml):
-a public GitHub repository holding a `plugin.json` in the Agent Plugins
-format, a release tag, and a subject that is OpenTelemetry. The
-repository checks the format, installs the plugin, judges its relevance
-and its novelty, talks to you on the issue, and lists it. Every night it
-follows your releases and refreshes your repository's statistics.
-
-The design is in
-[docs/superpowers/specs/2026-09-19-otelyssey-design.md](docs/superpowers/specs/2026-09-19-otelyssey-design.md).
