@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -124,6 +125,8 @@ def readme_table(records: dict[str, dict]) -> str:
 
 
 def splice(text: str, table: str) -> str:
+    if TABLE_START not in text or TABLE_END not in text:
+        raise SystemExit("README.md: the table markers are missing")
     start = text.index(TABLE_START) + len(TABLE_START)
     end = text.index(TABLE_END)
     return text[:start] + "\n" + table + text[end:]
@@ -154,8 +157,7 @@ def build(root: Path, check: bool) -> list[str]:
             continue
         changed.append(str(path.relative_to(root)))
         if not check:
-            path.unlink()
-            path.parent.rmdir()
+            shutil.rmtree(path.parent)
     return sorted(changed)
 
 

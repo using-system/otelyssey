@@ -46,3 +46,11 @@ def test_main_prints_json(tmp_path: Path, capsys):
     body.write_text((FIXTURES / "valid.md").read_text())
     assert intake.main(["--body-file", str(body), "--issue", "7", "--json"]) == 0
     assert '"name": "my-otel-plugin"' in capsys.readouterr().out
+
+
+def test_path_is_refused_by_segment_not_by_substring():
+    fields = intake.parse_form((FIXTURES / "valid.md").read_text())
+    record, errors = intake.candidate({**fields, "Path inside the repository": "a..b"}, 7)
+    assert errors == [] and record["path"] == "a..b"
+    _, errors = intake.candidate({**fields, "Path inside the repository": "a/../b"}, 7)
+    assert errors == ["Path inside the repository: a relative directory"]

@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts import build, store
 
 FIXTURES = Path(__file__).parent / "fixtures"
@@ -151,3 +153,20 @@ def test_plugin_page_escapes_markdown_in_the_author_and_the_description():
 def test_text_collapses_whitespace_and_escapes_markdown():
     assert build.text(" a\n\tb ") == "a b"
     assert build.text("[<*_`>]") == "\\[\\<\\*\\_\\`\\>\\]"
+
+
+@pytest.mark.parametrize(
+    "text", ["# x\n\n<!-- /otelyssey:table -->\n", "# x\n\n<!-- otelyssey:table -->\n"]
+)
+def test_splice_names_a_missing_marker(text):
+    with pytest.raises(SystemExit, match="README.md: the table markers are missing"):
+        build.splice(text, "| new |\n")
+
+
+def test_withdrawal_removes_a_page_directory_with_other_files(tmp_path: Path):
+    root = root_with_fixture(tmp_path)
+    build.build(root, check=False)
+    (root / "marketplace" / "oddyssey" / "stray.txt").write_text("x")
+    (root / ".store" / "oddyssey.json").unlink()
+    assert "marketplace/oddyssey/README.md" in build.build(root, check=False)
+    assert not (root / "marketplace" / "oddyssey").exists()

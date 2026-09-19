@@ -82,7 +82,7 @@ def candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str
         errors.append(f"Category: one of {', '.join(store.CATEGORIES)}")
     if not store.REPO_RE.match(record["repository"]):
         errors.append("GitHub repository: owner/repo")
-    if record["path"].startswith("/") or ".." in record["path"]:
+    if ".." in record["path"].split("/"):
         errors.append("Path inside the repository: a relative directory")
     if not TAG_RE.match(record["ref"]):
         errors.append("Release tag: a release tag, vX.Y.Z")
