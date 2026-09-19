@@ -30,3 +30,10 @@ jobs:
         # are stale by design and admit.yml rebuilds them right after the merge, on main
         if: ${{ !contains(github.event.pull_request.labels.*.name, 'admission') }}
         run: python3 -m scripts.build --check
+      - name: Agentic workflows compiled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install github/gh-aw --pin v0.88.7
+          gh aw compile
+          test -z "$(git status --porcelain .github .gitattributes)" || { git status --porcelain .github .gitattributes; exit 1; }
