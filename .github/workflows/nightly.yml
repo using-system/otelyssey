@@ -31,6 +31,17 @@ jobs:
           for name, reason in stats_failed.items():
               result.setdefault(name, {"status": "unchanged", "tag": "", "errors": []})
               result[name]["stats_error"] = reason
+
+          def last_line(text):
+              return (text.strip().splitlines() or [""])[-1]
+
+          label = subprocess.run(
+              ["gh", "label", "create", "release-follow", "--color", "B60205",
+               "--description", "the nightly could not follow a release", "--force"],
+              capture_output=True, text=True, check=False,
+          )
+          if label.returncode != 0:
+              print(f"::warning::could not create the label release-follow: {last_line(label.stderr)}")
           for name, r in result.items():
               if r["status"] != "failed" and "stats_error" not in r:
                   continue
@@ -44,18 +55,25 @@ jobs:
                   errors = [r["stats_error"]]
                   opening = "The nightly refresh could not read the repository's statistics:"
                   closing = "The listing keeps the last counts read until the repository answers again."
-              existing = subprocess.run(
+              search = subprocess.run(
                   ["gh", "issue", "list", "--label", "release-follow", "--state", "all",
                    "--search", f'"{title}" in:title', "--json", "number", "--jq", "length"],
-                  capture_output=True, text=True,
-              ).stdout.strip()
-              if existing not in ("", "0"):
+                  capture_output=True, text=True, check=False,
+              )
+              if search.returncode != 0:
+                  print(f"::warning::could not search the issues for {title}")
+                  continue
+              if search.stdout.strip() not in ("", "0"):
                   continue
               body = opening + "\n\n" + "\n".join(f"- {e}" for e in errors) + "\n\n" + closing
-              subprocess.run(
+              created = subprocess.run(
                   ["gh", "issue", "create", "--title", title, "--label", "release-follow", "--body", body],
-                  check=True,
+                  capture_output=True, text=True, check=False,
               )
+              if created.returncode != 0:
+                  print(f"::warning::could not open the issue {title}: {last_line(created.stderr)}")
+              else:
+                  print(created.stdout.strip())
           PY
       - name: Rebuild and commit
         run: |
