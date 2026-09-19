@@ -53,7 +53,7 @@ jobs:
           out = subprocess.run(
               [sys.executable, "-m", "scripts.validate", "--repository", c["repository"],
                "--tag", c["ref"], "--path", c["path"], "--name", c["name"],
-               "--version", c["submitted_version"], "--workdir", "work/validate", "--json"],
+               "--workdir", "work/validate", "--json"],
               capture_output=True, text=True,
           )
           open("work/validation.json", "w").write(out.stdout)
