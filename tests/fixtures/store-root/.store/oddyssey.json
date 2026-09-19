@@ -1,0 +1,28 @@
+{
+  "name": "oddyssey",
+  "description": "Observability-Driven Development for CLI coding agents.",
+  "category": "workflow",
+  "repository": "using-system/oddyssey",
+  "path": "marketplace/oddyssey",
+  "ref": "v1.13.0",
+  "sha": "1111111111111111111111111111111111111111",
+  "version": "1.13.0",
+  "author": {
+    "name": "using-system",
+    "url": "https://github.com/using-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/using-system/oddyssey#readme",
+  "keywords": [
+    "opentelemetry",
+    "observability"
+  ],
+  "submitted_in": 1,
+  "admitted_at": "2026-09-19",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-19T00:00:00Z"
+  }
+}
