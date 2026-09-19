@@ -36,7 +36,10 @@ jobs:
         run: |
           python3 - <<'PY'
           import json, subprocess, sys
-          data = json.load(open("work/candidate.json"))
+          try:
+              data = json.load(open("work/candidate.json"))
+          except ValueError:
+              sys.exit(0)
           if data["errors"]:
               sys.exit(0)
           c = data["candidate"]
@@ -84,20 +87,33 @@ jobs:
           LABELS: ${{ join(github.event.issue.labels.*.name, ' ') }}
         run: |
           # one intake comment per issue: edit the previous one when it exists
-          previous=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate \
-            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .id // empty')
+          comments="repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments"
+          previous=$(gh api "$comments" --paginate \
+            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .id // empty' | head -1)
+          prev_body=$(gh api "$comments" --paginate \
+            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .body // empty')
+          prev_line=$(printf '%s' "$prev_body" | grep -o '<!-- otelyssey-candidate .* -->' || true)
+          new_line=$(grep -o '<!-- otelyssey-candidate .* -->' work/comment.md || true)
           if [ -n "$previous" ]; then
             gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${previous}" -F body=@work/comment.md >/dev/null
           else
             gh issue comment "$ISSUE" --body-file work/comment.md >/dev/null
           fi
-          # relabel only when the verdict changed: a label event starts the review workflow
+          # relabel when the verdict changed, or when the candidate changed under format-ok:
+          # removing and re-adding the label is what emits the event that starts the review
           case " $LABELS " in
-            *" $VERDICT "*) echo "verdict unchanged: $VERDICT" ;;
-            *)
-              for old in format-ok needs-changes infra-error; do
-                [ "$old" = "$VERDICT" ] || gh issue edit "$ISSUE" --remove-label "$old" 2>/dev/null || true
-              done
-              gh issue edit "$ISSUE" --add-label "$VERDICT"
-              ;;
+            *" $VERDICT "*) reason="" ;;
+            *) reason="the verdict changed to $VERDICT" ;;
           esac
+          if [ -z "$reason" ] && [ "$VERDICT" = format-ok ] && [ "$prev_line" != "$new_line" ]; then
+            reason="the candidate changed under format-ok"
+          fi
+          if [ -z "$reason" ]; then
+            echo "labels unchanged: $VERDICT already set for this candidate"
+          else
+            echo "relabel: $reason"
+            for old in format-ok needs-changes infra-error; do
+              gh issue edit "$ISSUE" --remove-label "$old" 2>/dev/null || true
+            done
+            gh issue edit "$ISSUE" --add-label "$VERDICT"
+          fi

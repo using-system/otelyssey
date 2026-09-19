@@ -103,7 +103,9 @@ def main(argv: list[str] | None = None) -> int:
     intake = _read_json(args.candidate)
     if intake is None:
         print("infra-error")
-        Path(args.out).write_text(f"{MARK}\n## Intake\n\nThe form could not be parsed.\n")
+        Path(args.out).write_text(
+            f"{MARK}\n## Intake\n\nThe form could not be parsed.\n", encoding="utf-8"
+        )
         return 0
     validation = _read_json(args.validation)
     smoke = _read_json(args.smoke)
