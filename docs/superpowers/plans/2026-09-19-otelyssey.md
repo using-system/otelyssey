@@ -1092,8 +1092,8 @@ git commit -m "feat(build): plugin pages, the readme table and the check mode"
 
 **Interfaces:**
 - Consumes: `store.NAME_RE`, `store.REPO_RE`, `store.CATEGORIES`.
-- Produces: `parse_form(body: str) -> dict[str, str]` (label to value, `_No response_` read as empty), `candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str]]` (a record without `sha`, `admitted_at`, `stats`, carrying `submitted_version` instead of `version`, plus the errors), `main(argv) -> int` with `--body-file`, `--issue N`, `--json`.
-- The form's labels, exactly: `Plugin name`, `Description`, `GitHub repository`, `Path inside the repository`, `Release tag`, `Version`, `License`, `Author name`, `Author URL`, `Homepage`, `Keywords`, `Category`. A value containing `-->` is refused: the candidate travels inside an HTML comment (Task 9).
+- Produces: `parse_form(body: str) -> dict[str, str]` (label to value, `_No response_` read as empty), `candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str]]` (a record without `ref`, `sha`, `version`, `admitted_at`, `stats`, plus the errors), `main(argv) -> int` with `--body-file`, `--issue N`, `--json`, `--no-resolve`.
+- The form's labels, exactly: `Plugin name`, `Description`, `GitHub repository`, `Path inside the repository`, `License`, `Author name`, `Author URL`, `Homepage`, `Keywords`, `Category`. Neither the tag nor the version is asked: `main` resolves the repository's latest release (`resolve_ref(repository) -> (tag, sha, errors)`, through `gitrepo.list_tags` and `gitrepo.latest_release`) into the candidate's `ref` and `sha`, and the version is read from `plugin.json` by the validation (issue #7). A value containing `-->` is refused: the candidate travels inside an HTML comment (Task 9).
 
 - [ ] **Step 1: Write the issue form**
 
@@ -1142,22 +1142,6 @@ body:
       placeholder: plugins/my-otel-plugin
     validations:
       required: false
-  - type: input
-    id: tag
-    attributes:
-      label: Release tag
-      description: The tag to review, a release of your repository. Only `X.Y.Z` and `vX.Y.Z` tags are followed.
-      placeholder: v1.0.0
-    validations:
-      required: true
-  - type: input
-    id: version
-    attributes:
-      label: Version
-      description: The version plugin.json carries at that tag.
-      placeholder: 1.0.0
-    validations:
-      required: true
   - type: input
     id: license
     attributes:
@@ -2419,7 +2403,7 @@ jobs:
           out = subprocess.run(
               [sys.executable, "-m", "scripts.validate", "--repository", c["repository"],
                "--tag", c["ref"], "--path", c["path"], "--name", c["name"],
-               "--version", c["submitted_version"], "--workdir", "work/validate", "--json"],
+               "--workdir", "work/validate", "--json"],
               capture_output=True, text=True,
           )
           open("work/validation.json", "w").write(out.stdout)
