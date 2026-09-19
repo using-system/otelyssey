@@ -54,7 +54,7 @@ The pipeline chains workflows through events (a label, a pull request)
 that GitHub never emits for the repository's own `GITHUB_TOKEN`. A
 GitHub App installed on this repository (Contents, Issues and Pull
 requests read and write, Checks read, Metadata read) mints a short-lived
-installation token in the first step of `intake.yml`, `admit.yml` and
+installation token in the first step of `intake.yml`, `admission.yml` and
 `nightly.yml` and signs the agentic workflows' safe outputs. Its client
 id is the repository variable `OTELYSSEY_APP_CLIENT_ID`; its private
 key is the secret `OTELYSSEY_APP_PRIVATE_KEY`, the only secret, and no
@@ -63,9 +63,25 @@ request and the `ci` check; its bypass actor is the app `otelyssey-bot`,
 for the two pushes (the admission's and the nightly's), and the
 maintainer's own pushes to `main` are refused. The pipeline's comments
 and commits appear as `otelyssey-bot[bot]`: that login is written
-literally in `intake.yml`, `review.md` and, as the committer, in
-`admit.yml` and `nightly.yml`, and must match the app's slug; a
-renamed app is a change in those files.
+literally in `intake.yml`, `admission.yml`, `review.md` and, as the
+committer, in `admission.yml` and `nightly.yml`, and must match the
+app's slug; a renamed app is a change in those files.
+
+## The agents rule, the scripts write
+
+The review judges a submission and labels it `admissible` or `rejected`;
+`admission.yml` writes the store record, opens the admission pull
+request, merges it once `ci` passes, rebuilds and closes the issue. The
+agents never write a file: the GitHub MCP server they read through
+strips HTML comments and escapes quotes, so the intake's hidden
+candidate block never reaches them and a visible JSON would reach them
+corrupted. The intake comment states in backticks what the review rules
+on (name, version, repository, path, tag, sha); the hidden block is for
+`admission.yml`, which reads the comment through the REST API, intact.
+The admissible ruling's first line names the plugin, its version and
+its sha in backticks, and `admission.yml` admits no record the latest
+ruling does not name: an issue edited after the ruling is not admitted,
+and the label `admissible` alone, set by hand, admits nothing.
 
 ## The agentic workflows read untrusted content on purpose
 
@@ -81,10 +97,11 @@ what they read as data, and the safe outputs bound what they can do.
 ## Labels
 
 `submission` (the form sets it), `format-ok` / `needs-changes` /
-`infra-error` (intake verdicts), `under-review` / `admission-opened` /
-`rejected` / `admitted` (the review and the admission), `admission` (on
-the admission pull request), `release-follow` (a nightly failure),
-`duplicate-review` (the weekly audit). gh-aw adds `agentic-workflows` on
+`infra-error` (intake verdicts), `under-review` / `admissible` /
+`rejected` (the review's rulings), `admission-opened` / `admitted` (the
+admission), `admission` (on the admission pull request),
+`release-follow` (a nightly failure), `duplicate-review` (the weekly
+audit). gh-aw adds `agentic-workflows` on
 its own `[aw] Detection Runs` issue, where its threat-detection job
 reports every run it concluded with a warning or a failure, a failed or
 timed-out agent run among them; it manages that issue itself.

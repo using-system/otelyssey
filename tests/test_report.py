@@ -42,8 +42,18 @@ def test_green_report_carries_the_candidate_block_in_store_order():
     assert candidate["sha"] == "1" * 40
     assert candidate["version"] == "1.2.0"
     assert candidate["homepage"] == "https://contoso.example/plugin"
-    assert "**Plugin at the tag `v1.2.0`**: pass (commit `111111111111`)" in body
+    assert "**Plugin at the tag `v1.2.0`**: pass (commit `" + "1" * 40 + "`)" in body
     assert "Notes (informational)" in body and "commands:" in body
+
+
+def test_green_report_states_the_facts_the_review_reads_in_backticks():
+    # the review reads through a sanitizer that drops HTML comments and escapes quotes:
+    # the facts it rules on stand in the text, in backticks, the full sha included
+    body, _ = report.render(CANDIDATE, [], VALIDATION, SMOKE)
+    assert "**Plugin**: `my-otel-plugin` `1.2.0` in `contoso/my-otel-plugin` at its root" in body
+    candidate = {**CANDIDATE, "path": "plugins/my-otel-plugin"}
+    body, _ = report.render(candidate, [], VALIDATION, SMOKE)
+    assert "in `contoso/my-otel-plugin` at `plugins/my-otel-plugin`" in body
 
 
 def test_the_record_takes_the_version_of_the_manifest_and_the_sha_of_the_validation():

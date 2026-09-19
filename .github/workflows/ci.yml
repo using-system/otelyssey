@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   checks:
-    name: ci # the status check the main ruleset requires, and admit.yml waits for
+    name: ci # the status check the main ruleset requires, and admission.yml waits for
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -27,10 +27,12 @@ jobs:
         run: python3 -m scripts.store --check
       - name: Generated artifacts
         # an admission pull request carries one store record and nothing else: its artifacts
-        # are stale by design and admit.yml rebuilds them right after the merge, on main;
+        # are stale by design and admission.yml rebuilds them right after the merge, on main;
+        # its branch is the signal, not its label: gh labels a pull request in a second call
+        # after creating it, and the opened event's payload carries no label yet;
         # on main the artifacts are kept fresh by the admission's rebuild and by the nightly,
         # a push run checks nothing there
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'admission')
+        if: github.event_name == 'pull_request' && !startsWith(github.head_ref, 'admission/')
         run: python3 -m scripts.build --check
       - name: Agentic workflows compiled
         env:

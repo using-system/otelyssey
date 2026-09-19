@@ -61,8 +61,8 @@ scripts/                             the deterministic layer, Python 3.11+, stan
 tests/                               pytest on recorded fixtures
 .github/ISSUE_TEMPLATE/submit-plugin.yml
 .github/workflows/intake.yml         deterministic gates on the submission issue
-.github/workflows/review.md          gh-aw: judgment, conversation, admission
-.github/workflows/admit.yml          merges the admission pull request, rebuilds, closes the issue
+.github/workflows/review.md          gh-aw: judgment, conversation, the ruling
+.github/workflows/admission.yml      writes the record, opens and merges the admission pull request, rebuilds, closes the issue
 .github/workflows/nightly.yml        statistics, releases, rebuild
 .github/workflows/duplicates.md      gh-aw, weekly audit of the store
 .github/workflows/ci.yml             lint and tests of the scripts, schema check of the store
@@ -158,13 +158,18 @@ that no pull request against `.store/` is accepted from a contributor.
    re-edit re-runs it (concurrency per issue, cancel in progress).
 5. On `format-ok` the candidate record is attached to the issue as a
    hidden comment block (`<!-- otelyssey-candidate ... -->`), the input
-   of the agentic step, so the agent never re-derives what the gates
-   established.
+   of the admission workflow, which reads it through the REST API. The
+   agent never sees it: the GitHub MCP server strips HTML comments and
+   escapes quotes in every body it returns (settled by the first run,
+   #5), so the comment also states in backticks what the review rules
+   on - name, version, repository, path, tag, full sha - and the agent
+   never re-derives what the gates established.
 
 ### review (gh-aw, engine copilot, on `format-ok` labelled)
 
-Inputs: the candidate record, the plugin's README and `plugin.json` at
-the sha, the store, the open and closed submission issues. The agent:
+Inputs: the intake comment's facts (name, version, repository, path,
+tag, sha), the plugin's README and `plugin.json` at the sha, the store,
+the open and closed submission issues. The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills and README, and states the
@@ -178,23 +183,33 @@ the sha, the store, the open and closed submission issues. The agent:
   would make the plugin admissible, an answer to the contributor's
   replies (the workflow also triggers on `issue_comment` from the
   submitter while `format-ok` holds);
-- **admits** by a safe output `create-pull-request` carrying exactly
-  one file, `.store/<name>.json`, with the candidate record plus
-  `admitted_at`, and the label `admission`; or **rejects** with
-  `rejected` and the reason, closing the issue.
+- **admits** by commenting the two rulings with their evidence and
+  labelling `admissible`; or **rejects** with `rejected` and the
+  reason, closing the issue. The agent writes no file and opens no
+  pull request: the agents rule, the scripts write (settled by the
+  first run, #5: the record cannot cross the MCP sanitizer exactly).
 
-Bounds: `max-ai-credits` per run, one comment and one pull request at
-most per run, network limited to GitHub, the contributor's content
-treated as untrusted (gh-aw's prompt-injection filtering, no shell
-execution of plugin content).
+Bounds: `max-ai-credits` per run, one comment at most per run, a
+read-only shell, network limited to GitHub, the contributor's content
+treated as untrusted (the agentic workflows read below gh-aw's
+`approved` integrity on purpose, since a submission is external by
+definition; no shell execution of plugin content).
 
-### admit (deterministic, on the `admission` pull request)
+### admission (deterministic, on `admissible` labelled)
 
-`ci.yml` validates the record against the store schema and
-`build.py`'s output; on green, `admit.yml` squash-merges the pull
-request, runs `build.py`, commits the generated artifacts to `main`,
-closes the submission issue with `admitted` and a comment linking the
-plugin's page.
+`admission.yml` reads the intake comment through the REST API, writes
+`.store/<name>.json` from its candidate block plus `admitted_at` and
+zero `stats` (`scripts/admission.py`), refuses a record the review's
+latest ruling does not name (the ruling's first line carries the name,
+the version and the sha, so an issue edited after the ruling is not
+admitted, and the label alone admits nothing), checks the plugin still
+validates at its tag at the record's sha, pushes `admission/<name>`,
+opens the pull request labelled `admission` (`ci.yml` validates the
+record against the store schema), waits for `ci`, squash-merges, runs
+`build.py`, commits the generated artifacts to `main`, and closes the
+submission issue with `admitted` and a comment linking the plugin's
+page. One workflow chains the whole admission explicitly: no workflow
+listens to every pull request event to find the admission one.
 
 ## Nightly
 
@@ -227,7 +242,7 @@ past issues are respected.
   isolated HOME with no credential. A GitHub App installed on this
   repository only (Contents, Issues and Pull requests read and write,
   Checks read, Metadata read) is the pipeline's identity, `otelyssey-bot[bot]`:
-  `intake.yml`, `admit.yml` and `nightly.yml` mint a one-hour
+  `intake.yml`, `admission.yml` and `nightly.yml` mint a one-hour
   installation token in their first step, the agentic workflows sign
   their safe outputs with it, and it labels the submission issue,
   merges the admission and pushes the bot commits as the `main`
