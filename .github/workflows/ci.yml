@@ -1,0 +1,25 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: ci # the status check the main ruleset requires, and admit.yml waits for
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - name: Lint and format
+        run: |
+          uvx ruff@0.16.4 check scripts tests
+          uvx ruff@0.16.4 format --check scripts tests
+      - name: Tests
+        run: uv run --no-project --with pytest pytest -q
