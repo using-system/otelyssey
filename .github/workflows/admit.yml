@@ -28,31 +28,33 @@ jobs:
           files=$(gh pr view "$NUMBER" --json files --jq '.files[].path')
           [ "$(printf '%s\n' "$files" | wc -l)" -eq 1 ] || { echo "::error::an admission changes one file"; exit 1; }
           case "$files" in .store/*.json) ;; *) echo "::error::not a store record: $files"; exit 1;; esac
+          [ -f "$files" ] || { echo "::error::the record is deleted, not added: $files"; exit 1; }
           echo "record=$files" >> "$GITHUB_ENV"
       - name: The record is valid and its sha is a tag commit
         run: |
           python3 -m scripts.store --check
           python3 - <<'PY'
-          import json, os, subprocess
+          import json, os
+          from scripts import gitrepo
           r = json.load(open(os.environ["record"]))
           try:
-              tags = subprocess.run(
-                  ["git", "ls-remote", "--tags", f"https://github.com/{r['repository']}.git"],
-                  capture_output=True, text=True, check=True, timeout=60,
-              ).stdout
-          except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+              tags = gitrepo.list_tags(r["repository"])
+          except gitrepo.RepositoryError as error:
               print(f"::error::{r['repository']} cannot be read: {error}")
               raise SystemExit(1)
-          if r["sha"] not in tags:
-              print(f"::error::{r['sha']} is not a tag commit of {r['repository']}")
+          if tags.get(r["ref"]) != r["sha"]:
+              print(f"::error::{r['ref']} of {r['repository']} is not at {r['sha']}")
               raise SystemExit(1)
           PY
       - name: Wait for the required checks (ci), then merge
         # --required: this job's own check run is attached to the same commit and would never
         # end while waited on; the ruleset makes ci the one required check
+        env:
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           gh pr checks "$NUMBER" --watch --fail-fast --required
-          gh pr merge "$NUMBER" --squash --delete-branch
+          # --match-head-commit: the merge is refused when the head moved after the guards ran
+          gh pr merge "$NUMBER" --squash --delete-branch --match-head-commit "$HEAD_SHA"
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: main
