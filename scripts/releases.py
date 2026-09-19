@@ -54,7 +54,7 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
             if errors:
                 result[name] = {"status": "failed", "tag": tag, "errors": errors}
                 continue
-        version = check["manifest"].get("version") or record["version"]
+        version = check["manifest"]["version"]
         try:
             store.write_record(
                 root, {**record, "ref": tag, "sha": check["sha"], "version": version}
