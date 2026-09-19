@@ -1,4 +1,4 @@
-"""Generate the listing artifacts from the store: manifest, plugin pages, README table."""
+"""Generate the listing artifacts from the store: manifest, plugin pages, README list."""
 
 from __future__ import annotations
 
@@ -13,8 +13,18 @@ from scripts import store
 MARKETPLACE_NAME = "otelyssey"
 MARKETPLACE_REPO = "using-system/otelyssey"
 OWNER = {"name": "using-system", "url": "https://github.com/using-system"}
-TABLE_START = "<!-- otelyssey:table -->"
-TABLE_END = "<!-- /otelyssey:table -->"
+LIST_START = "<!-- otelyssey:plugins -->"
+LIST_END = "<!-- /otelyssey:plugins -->"
+CATEGORY_TITLES = {
+    "instrumentation": "Instrumentation",
+    "collector": "Collector",
+    "conventions": "Semantic conventions",
+    "backend": "Backends",
+    "workflow": "Workflows",
+}
+# live, from GitHub through shields.io: the README needs no refresh when a count moves
+BADGES = ("v/release", "created-at", "last-commit", "license", "stars", "forks", "watchers")
+BADGE_STYLE = "style=flat-square&labelColor=2b2b2b&color=6b6b6b"
 
 
 def source_of(record: dict) -> dict:
@@ -102,34 +112,45 @@ def plugin_page(record: dict) -> str:
     )
 
 
-def cell(text: str) -> str:
-    """One markdown table cell: whitespace collapsed to spaces, pipes escaped."""
-    return " ".join(text.split()).replace("|", "\\|")
+def badge(kind: str, repository: str) -> str:
+    alt = kind.rsplit("/", 1)[-1]
+    src = f"https://img.shields.io/github/{kind}/{repository}?{BADGE_STYLE}"
+    return f'<img src="{src}" alt="{alt}">'
 
 
-def readme_table(records: dict[str, dict]) -> str:
-    lines = [
-        "| Plugin | Description | Category | Repository | Stars | Forks | Watchers |",
-        "| --- | --- | --- | --- | ---: | ---: | ---: |",
-    ]
-    for name in sorted(records):
-        r = records[name]
-        s = r["stats"]
-        repo = f"[{r['repository']}](https://github.com/{r['repository']})"
-        lines.append(
-            f"| [{name}](marketplace/{name}/README.md) | {cell(r['description'])} | "
-            f"{cell(r['category'])} | "
-            f"{repo} | {s['stars']} | {s['forks']} | {s['watchers']} |"
-        )
-    return "\n".join(lines) + "\n"
+def readme_entry(record: dict) -> str:
+    """One list item: the plugin, its author, its description, its page; its badges below."""
+    author = record["author"]
+    author_name = text(author["name"])
+    author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
+    repo = record["repository"]
+    return (
+        f"- [{record['name']}](https://github.com/{repo}) by {author_text} - "
+        f"{text(record['description'])} · [install](marketplace/{record['name']}/README.md)  \n"
+        + "&nbsp;&nbsp;".join(badge(kind, repo) for kind in BADGES)
+        + "\n\n"
+    )
 
 
-def splice(text: str, table: str) -> str:
-    if TABLE_START not in text or TABLE_END not in text:
-        raise SystemExit("README.md: the table markers are missing")
-    start = text.index(TABLE_START) + len(TABLE_START)
-    end = text.index(TABLE_END)
-    return text[:start] + "\n" + table + text[end:]
+def readme_list(records: dict[str, dict]) -> str:
+    """The plugins by category, in the store's category order, the empty categories left out."""
+    if not records:
+        return "No plugin listed yet.\n"
+    sections = []
+    for category in store.CATEGORIES:
+        names = sorted(name for name, r in records.items() if r["category"] == category)
+        if names:
+            entries = "".join(readme_entry(records[name]) for name in names)
+            sections.append(f"### {CATEGORY_TITLES[category]}\n\n{entries}")
+    return "".join(sections)
+
+
+def splice(text: str, listing: str) -> str:
+    if LIST_START not in text or LIST_END not in text:
+        raise SystemExit("README.md: the list markers are missing")
+    start = text.index(LIST_START) + len(LIST_START)
+    end = text.index(LIST_END)
+    return text[:start] + "\n" + listing + text[end:]
 
 
 def build(root: Path, check: bool) -> list[str]:
@@ -142,7 +163,7 @@ def build(root: Path, check: bool) -> list[str]:
         # content, twice
         "marketplace.json": manifest,
         ".claude-plugin/marketplace.json": manifest,
-        "README.md": splice(readme, readme_table(records)),
+        "README.md": splice(readme, readme_list(records)),
     }
     for name, record in records.items():
         wanted[f"marketplace/{name}/README.md"] = plugin_page(record)

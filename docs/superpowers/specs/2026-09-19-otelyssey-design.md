@@ -59,7 +59,7 @@ marketplace.json                     generated: the marketplace Copilot CLI read
 .claude-plugin/marketplace.json      generated: the same content, the one Claude Code reads
 .agents/plugins/marketplace.json     generated, later: the same for Codex
 marketplace/<plugin>/README.md       generated: the plugin's page
-README.md                            intro, then the generated table
+README.md                            intro, then the generated plugin list
 scripts/                             the deterministic layer, Python 3.11+, standard library only
 tests/                               pytest on recorded fixtures
 .github/ISSUE_TEMPLATE/submit-plugin.yml
@@ -112,8 +112,13 @@ idempotently:
   category, repository link, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code and Copilot
   CLI, the issue it was admitted from;
-- the README's table, between two markers: plugin (linked to its
-  page), description, category, repository, stars, forks, watchers.
+- the README's plugin list, between two markers: one subsection per
+  category holding plugins, one entry per plugin (the plugin linked to
+  its repository, the author, the description, a link to its page) and
+  a line of live shields.io badges below it: release, created, last
+  commit, license, stars, forks, watchers. The counts the store carries
+  refresh the plugin's page, not the README, which changes only when a
+  record does.
 
 A run of `build.py` on a store that did not change produces no diff.
 
