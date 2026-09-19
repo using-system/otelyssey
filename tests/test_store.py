@@ -43,6 +43,23 @@ def test_valid_record_has_no_errors():
         ("author", {"name": "x", "email": ""}, "author.email"),
         ("author", {"name": "x", "url": 1}, "author.url"),
         ("author", {"name": "x", "email": None}, "author.email"),
+        ("ref", "v1.0.0\n", "ref: control character"),
+        ("version", "1.0.0\nx", "version: control character"),
+        ("description", "a \x1b[31mred", "description: control character"),
+        ("name", "a\x7fb", "name: control character"),
+        ("path", "a\tb", "path: control character"),
+        ("license", "MIT\r", "license: control character"),
+        ("homepage", "https://e.example/\x01", "homepage: control character"),
+        ("keywords", ["ok", "bad\n"], "keywords: control character"),
+        ("author", {"name": "x\n"}, "author.name: control character"),
+        ("author", {"name": "x", "email": "a@b\x00"}, "author.email: control character"),
+        ("author", {"name": "x", "url": "https://e.example/\n"}, "author.url: control character"),
+        (
+            "author",
+            {"name": "x", "url": "https://e.example/)[x](https://evil.example)"},
+            "author.url",
+        ),
+        ("homepage", "https://e.example/<a>", "homepage"),
     ],
 )
 def test_invalid_field_is_named(field, value, fragment):

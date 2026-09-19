@@ -14,7 +14,7 @@ REPO_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/[A-Za-z0-9._-]+
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 STAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
-URL_RE = re.compile(r"^https://\S+$")
+URL_RE = re.compile(r"^https://[^\s()<>\[\]]+$")  # no whitespace, no markdown link character
 FIELDS = (
     "name",
     "description",
@@ -37,6 +37,11 @@ STATS = ("stars", "forks", "watchers", "refreshed_at")
 
 def _is_text(value: object) -> bool:
     return isinstance(value, str) and bool(value)
+
+
+def _clean(value: str) -> bool:
+    """No control character: a value that fits one key=value line and one page line."""
+    return not any(ord(c) < 32 or c == "\x7f" for c in value)
 
 
 def validate_record(record: dict) -> list[str]:
@@ -97,6 +102,15 @@ def validate_record(record: dict) -> list[str]:
                 errors.append(f"stats.{key}: not a count")
         if not isinstance(stats["refreshed_at"], str) or not STAMP_RE.match(stats["refreshed_at"]):
             errors.append("stats.refreshed_at: not an RFC3339 UTC stamp")
+    texts = [(f, record[f]) for f in ("name", "description", "path", "ref", "version", "license")]
+    texts.append(("homepage", record["homepage"]))
+    if isinstance(keywords, list):
+        texts.append(("keywords", "".join(k for k in keywords if isinstance(k, str))))
+    if isinstance(author, dict):
+        texts += [(f"author.{k}", v) for k, v in author.items() if k in ("name", "email", "url")]
+    for field, value in texts:
+        if isinstance(value, str) and not _clean(value):
+            errors.append(f"{field}: control character")
     return errors
 
 

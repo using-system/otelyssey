@@ -25,7 +25,6 @@ LABELS = (
     "Category",
 )
 EMPTY = "_No response_"
-URL_RE = re.compile(r"^https://\S+$")
 TAG_RE = re.compile(r"^v?\d+\.\d+\.\d+$")
 
 
@@ -92,9 +91,9 @@ def candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str
         errors.append("License: empty")
     if not author["name"]:
         errors.append("Author name: empty")
-    if author.get("url") and not URL_RE.match(author["url"]):
+    if author.get("url") and not store.URL_RE.match(author["url"]):
         errors.append("Author URL: an https URL")
-    if record["homepage"] and not URL_RE.match(record["homepage"]):
+    if record["homepage"] and not store.URL_RE.match(record["homepage"]):
         errors.append("Homepage: an https URL")
     if not record["keywords"]:
         errors.append("Keywords: at least one")

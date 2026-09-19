@@ -4,14 +4,12 @@ from __future__ import annotations
 
 import argparse
 import json
-import re
 import sys
 from pathlib import Path
 
 from scripts import store
 
 MARK = "<!-- otelyssey-intake -->"
-URL_RE = re.compile(r"^https://\S+$")  # the form's rule (intake.URL_RE), applied to the manifest
 CANDIDATE_MARK = "<!-- otelyssey-candidate "
 
 
@@ -34,14 +32,14 @@ def candidate_record(candidate: dict, validation: dict) -> dict:
     if not merged.get("license") and isinstance(manifest.get("license"), str):
         merged["license"] = manifest["license"]
     homepage = manifest.get("homepage")
-    if not merged.get("homepage") and isinstance(homepage, str) and URL_RE.match(homepage):
+    if not merged.get("homepage") and isinstance(homepage, str) and store.URL_RE.match(homepage):
         merged["homepage"] = homepage
     if not merged.get("keywords") and isinstance(manifest.get("keywords"), list):
         merged["keywords"] = manifest["keywords"]
     author = manifest.get("author")
     if isinstance(author, dict) and author.get("name"):
         merged["author"] = {k: v for k, v in author.items() if k in ("name", "email")}
-        if isinstance(author.get("url"), str) and URL_RE.match(author["url"]):
+        if isinstance(author.get("url"), str) and store.URL_RE.match(author["url"]):
             merged["author"]["url"] = author["url"]
     return {field: merged[field] for field in store.FIELDS if field in merged}
 
