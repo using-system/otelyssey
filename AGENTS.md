@@ -58,13 +58,26 @@ literally in `intake.yml`, `review.md` and, as the committer, in
 `admit.yml` and `nightly.yml`, and must match the app's slug; a
 renamed app is a change in those files.
 
+## The agentic workflows read untrusted content on purpose
+
+`review.md` and `duplicates.md` set `tools.github.min-integrity: none`
+and an explicit read-only `tools.bash` list. gh-aw's default for a public
+repository, `approved`, silently filters every object whose author is
+not an owner, member or collaborator: the contributor's issue and
+replies, and the intake comment the app posts (its bot has association
+`NONE`). The agent then sees empty results, not a refusal, and retries
+until its budget ends. The prompts treat what they read as data, and the
+safe outputs bound what they can do.
+
 ## Labels
 
 `submission` (the form sets it), `format-ok` / `needs-changes` /
 `infra-error` (intake verdicts), `under-review` / `admission-opened` /
 `rejected` / `admitted` (the review and the admission), `admission` (on
 the admission pull request), `release-follow` (a nightly failure),
-`duplicate-review` (the weekly audit).
+`duplicate-review` (the weekly audit). gh-aw adds `agentic-workflows` on
+its own `[aw] Detection Runs` issue, opened when an agentic run fails,
+times out or is cancelled; it manages that issue itself.
 
 ## No plugin execution
 
