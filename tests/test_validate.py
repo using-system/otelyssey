@@ -60,6 +60,18 @@ def test_layout_notes_are_not_errors():
     assert not any("com.example.tool" in n for n in notes)
 
 
+def test_layout_notes_ignore_undefined_root_files(tmp_path: Path):
+    (tmp_path / "plugin.json").write_text("{}")
+    (tmp_path / "CLAUDE.md").write_text("Plugin documentation")
+    (tmp_path / "CITATION.cff").write_text("cff-version: 1.2.0")
+    (tmp_path / "unexpected-directory").mkdir()
+
+    errors, notes = validate.check_layout(tmp_path)
+
+    assert errors == []
+    assert notes == ["unexpected-directory: not an entry the Agent Plugins format defines"]
+
+
 def test_validate_names_an_unreadable_repository(tmp_path: Path, monkeypatch):
     def failing(repository):
         raise validate.gitrepo.RepositoryError("repository not found")

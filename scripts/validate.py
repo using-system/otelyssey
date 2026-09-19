@@ -115,7 +115,7 @@ def check_layout(plugin_dir: Path) -> tuple[list[str], list[str]]:
             continue
         elif entry.is_dir() and NAMESPACE_RE.match(entry.name):
             continue
-        else:
+        elif entry.is_dir():
             notes.append(f"{entry.name}: not an entry the Agent Plugins format defines")
     skills = plugin_dir / "skills"
     if skills.is_dir():
