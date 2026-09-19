@@ -1,0 +1,67 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-26.04
+    env:
+      GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          token: ${{ secrets.OTELYSSEY_TOKEN }}
+      - name: Statistics
+        run: python3 -m scripts.stats --failures work-stats.json
+      - name: Releases
+        run: python3 -m scripts.releases --workdir work --json > work-releases.json
+      - name: Issues for the releases that failed
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          result = json.load(open("work-releases.json"))
+          stats_failed = json.load(open("work-stats.json"))
+          for name, reason in stats_failed.items():
+              result.setdefault(name, {"status": "unchanged", "tag": "", "errors": []})
+              result[name]["stats_error"] = reason
+          for name, r in result.items():
+              if r["status"] != "failed" and "stats_error" not in r:
+                  continue
+              if r["status"] == "failed":
+                  title = f"release-follow: {name} {r['tag']} does not validate"
+                  errors = r["errors"] + ([r["stats_error"]] if "stats_error" in r else [])
+                  opening = "The nightly follow of releases found this tag and could not re-pin it:"
+                  closing = "The marketplace keeps the previous release until a tag validates."
+              else:
+                  title = f"release-follow: {name} repository statistics unreadable"
+                  errors = [r["stats_error"]]
+                  opening = "The nightly refresh could not read the repository's statistics:"
+                  closing = "The listing keeps the last counts read until the repository answers again."
+              existing = subprocess.run(
+                  ["gh", "issue", "list", "--label", "release-follow", "--state", "all",
+                   "--search", f'"{title}" in:title', "--json", "number", "--jq", "length"],
+                  capture_output=True, text=True,
+              ).stdout.strip()
+              if existing not in ("", "0"):
+                  continue
+              body = opening + "\n\n" + "\n".join(f"- {e}" for e in errors) + "\n\n" + closing
+              subprocess.run(
+                  ["gh", "issue", "create", "--title", title, "--label", "release-follow", "--body", body],
+                  check=True,
+              )
+          PY
+      - name: Rebuild and commit
+        run: |
+          rm -rf work work-releases.json work-stats.json
+          python3 -m scripts.build
+          git config user.name "otelyssey-bot"
+          git config user.email "otelyssey-bot@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || { git commit -m "chore(store): nightly refresh"; git push origin main; }
