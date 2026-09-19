@@ -136,8 +136,12 @@ def build(root: Path, check: bool) -> list[str]:
     """Write (or, under check, only compare) the artifacts; the relative paths that differ."""
     records = store.load_store(root)
     readme = (root / "README.md").read_text(encoding="utf-8")
+    manifest = render_json(marketplace_json(records))
     wanted = {
-        ".claude-plugin/marketplace.json": render_json(marketplace_json(records)),
+        # Copilot CLI looks at the root first, Claude Code in .claude-plugin/ only: one
+        # content, twice
+        "marketplace.json": manifest,
+        ".claude-plugin/marketplace.json": manifest,
         "README.md": splice(readme, readme_table(records)),
     }
     for name, record in records.items():
