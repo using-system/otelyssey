@@ -222,8 +222,9 @@ past issues are respected.
   `intake.yml`, `admit.yml` and `nightly.yml` mint a one-hour
   installation token in their first step, the agentic workflows sign
   their safe outputs with it, and it labels the submission issue,
-  merges the admission and pushes the bot commits, bypassing the
-  `main` ruleset: an event produced with `GITHUB_TOKEN` starts no
+  merges the admission and pushes the bot commits as the `main`
+  ruleset's bypass actor, the app `otelyssey-bot` (the maintainer's
+  own pushes are refused): an event produced with `GITHUB_TOKEN` starts no
   workflow, so the chain intake → review → admission needs it. Its
   client id is the repository variable `OTELYSSEY_APP_CLIENT_ID`, its
   private key the one secret, `OTELYSSEY_APP_PRIVATE_KEY`, whose value

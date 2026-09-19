@@ -27,8 +27,8 @@ exist: an empty store must remain a directory.
 - when a `.github/workflows/*.md` changed: `gh aw compile` (gh-aw pinned
   to the version `ci.yml` installs, run from a clone whose `origin` is
   this repository), then commit everything it wrote: the `.lock.yml`
-  files, `agentics-maintenance.yml`, `.github/aw/actions-lock.json`,
-  `.gitattributes`; CI compiles again and refuses any difference under
+  files, `.github/aw/actions-lock.json`, `.gitattributes`; CI compiles
+  again and refuses any difference under
   `.github/` or in `.gitattributes`. The first compile that adds a secret or an action needs
   `gh aw compile --approve`.
 
@@ -50,9 +50,10 @@ installation token in the first step of `intake.yml`, `admit.yml` and
 id is the repository variable `OTELYSSEY_APP_CLIENT_ID`; its private
 key is the secret `OTELYSSEY_APP_PRIVATE_KEY`, the only secret, and no
 value of it is ever written down. The `main` ruleset requires a pull
-request and the `ci` check, with the app as bypass actor for the two
-pushes (the admission's and the nightly's). The pipeline's comments and
-commits appear as `otelyssey-bot[bot]`.
+request and the `ci` check; its bypass actor is the app `otelyssey-bot`,
+for the two pushes (the admission's and the nightly's), and the
+maintainer's own pushes to `main` are refused. The pipeline's comments
+and commits appear as `otelyssey-bot[bot]`.
 
 ## Labels
 
