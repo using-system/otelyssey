@@ -108,18 +108,27 @@ def test_build_is_idempotent(tmp_path: Path):
     root = root_with_fixture(tmp_path)
     first = build.build(root, check=False)
     assert set(first) == {
+        "marketplace.json",
         ".claude-plugin/marketplace.json",
         "marketplace/oddyssey/README.md",
         "README.md",
     }
     assert build.build(root, check=True) == []
+    # Copilot CLI looks at the root first, Claude Code in .claude-plugin/ only: one content, twice
+    assert (root / "marketplace.json").read_bytes() == (
+        root / ".claude-plugin" / "marketplace.json"
+    ).read_bytes()
     assert build.main(["--check", "--root", str(root)]) == 0
 
 
 def test_build_on_an_empty_store(tmp_path: Path):
     (tmp_path / ".store").mkdir()
     (tmp_path / "README.md").write_text(EMPTY_README)
-    assert build.build(tmp_path, check=False) == [".claude-plugin/marketplace.json", "README.md"]
+    assert build.build(tmp_path, check=False) == [
+        ".claude-plugin/marketplace.json",
+        "README.md",
+        "marketplace.json",
+    ]
     manifest = json.loads((tmp_path / ".claude-plugin" / "marketplace.json").read_text())
     assert manifest["plugins"] == []
     assert not (tmp_path / "marketplace").exists()
@@ -129,6 +138,9 @@ def test_check_fails_when_an_artifact_is_stale(tmp_path: Path):
     root = root_with_fixture(tmp_path)
     build.build(root, check=False)
     (root / ".claude-plugin" / "marketplace.json").write_text("{}\n")
+    assert build.main(["--check", "--root", str(root)]) == 1
+    build.build(root, check=False)
+    (root / "marketplace.json").write_text("{}\n")
     assert build.main(["--check", "--root", str(root)]) == 1
 
 

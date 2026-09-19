@@ -27,6 +27,9 @@ def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
         "plugins": [{"name": name, "source": "./plugin"}],
     }
     text = json.dumps(manifest, indent=2) + "\n"
+    # the layout the marketplace ships: at the root for Copilot CLI, in .claude-plugin/ for
+    # Claude Code
+    (market / "marketplace.json").write_text(text)
     (market / ".claude-plugin" / "marketplace.json").write_text(text)
     return market
 

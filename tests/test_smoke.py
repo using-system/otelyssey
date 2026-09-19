@@ -10,6 +10,9 @@ PLUGIN = Path(__file__).parent / "fixtures" / "plugins" / "valid"
 def test_ephemeral_marketplace_points_at_a_copy(tmp_path: Path):
     market = smoke.ephemeral_marketplace(tmp_path, "my-otel-plugin", PLUGIN)
     manifest = json.loads((market / ".claude-plugin" / "marketplace.json").read_text())
+    assert (market / "marketplace.json").read_text() == (
+        market / ".claude-plugin" / "marketplace.json"
+    ).read_text()
     assert manifest["name"] == "otelyssey-intake"
     [entry] = manifest["plugins"]
     assert entry == {"name": "my-otel-plugin", "source": "./plugin"}

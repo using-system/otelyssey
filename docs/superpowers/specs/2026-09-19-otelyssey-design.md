@@ -6,9 +6,11 @@ Date: 2026-09-19. Status: approved design, before the implementation plan.
 
 A marketplace of agent plugins whose subject is OpenTelemetry, in the
 [Agent Plugins](https://agent-plugins.org/) format (`plugin.json` at
-schema 1.0.0), readable by Claude Code and GitHub Copilot CLI first
-(both read `.claude-plugin/marketplace.json` at the repository root),
-Codex later (`.agents/plugins/marketplace.json`, the same generator).
+schema 1.0.0), readable by Claude Code and GitHub Copilot CLI today
+(Copilot CLI looks for `marketplace.json` at the repository root first,
+Claude Code reads `.claude-plugin/marketplace.json` only: the generator
+writes the same content at both places), Codex later
+(`.agents/plugins/marketplace.json`, the same generator).
 
 The existing marketplaces are curated by hand and age. This one is run
 by the repository: a contributor submits a plugin **once**, through
@@ -53,7 +55,8 @@ store.
 
 ```text
 .store/<plugin>.json                 one record per admitted plugin - the only source of truth
-.claude-plugin/marketplace.json      generated: the marketplace Claude Code and Copilot CLI read
+marketplace.json                     generated: the marketplace Copilot CLI reads first
+.claude-plugin/marketplace.json      generated: the same content, the one Claude Code reads
 .agents/plugins/marketplace.json     generated, later: the same for Codex
 marketplace/<plugin>/README.md       generated: the plugin's page
 README.md                            intro, then the generated table
@@ -96,8 +99,9 @@ creates it, the nightly workflow updates `ref`, `sha`, `version` and
 `scripts/build.py` reads `.store/` and writes, deterministically and
 idempotently:
 
-- `.claude-plugin/marketplace.json`: `name: otelyssey`, `owner:
-  {"name": "using-system", "url": ...}`, one entry per record with
+- `marketplace.json` and `.claude-plugin/marketplace.json`, the same
+  content: `name: otelyssey`, `owner: {"name": "using-system", "url":
+  ...}`, one entry per record with
   `source: {"source": "github", "repo": <repository>, "path": <path>
   when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
   accept; Copilot CLI rejects a `git-subdir` source, verified
