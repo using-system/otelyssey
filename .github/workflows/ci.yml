@@ -23,3 +23,5 @@ jobs:
           uvx ruff@0.16.4 format --check scripts tests
       - name: Tests
         run: uv run --no-project --with pytest pytest -q
+      - name: Store
+        run: python3 -m scripts.store --check
