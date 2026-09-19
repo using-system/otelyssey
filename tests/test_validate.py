@@ -58,6 +58,8 @@ def test_layout_notes_are_not_errors():
     assert any(".claude-plugin" in n for n in notes)
     assert any("commands" in n for n in notes)
     assert not any("com.example.tool" in n for n in notes)
+    # a file next to plugin.json is never a note: the format tolerates any of them
+    assert not any(n.startswith("Makefile") for n in notes)
 
 
 def test_validate_names_an_unreadable_repository(tmp_path: Path, monkeypatch):
