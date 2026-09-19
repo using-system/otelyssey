@@ -28,8 +28,13 @@ jobs:
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: python3 -m scripts.stats --failures work-stats.json
+      - name: Install the hosts
+        run: |
+          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278
+          copilot --version
+          claude --version
       - name: Releases
-        run: python3 -m scripts.releases --workdir work --json > work-releases.json
+        run: python3 -m scripts.releases --workdir work --smoke --json > work-releases.json
       - name: Issues for the releases that failed
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
