@@ -1,0 +1,103 @@
+name: intake
+
+on:
+  issues:
+    types: [opened, edited, reopened]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: intake-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  gates:
+    if: contains(github.event.issue.labels.*.name, 'submission')
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Install the hosts
+        run: |
+          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278
+          copilot --version
+          claude --version
+      - name: Parse the form
+        env:
+          BODY: ${{ github.event.issue.body }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          mkdir -p work
+          printf '%s' "$BODY" > work/body.md
+          python3 -m scripts.intake --body-file work/body.md --issue "$ISSUE" --json > work/candidate.json || true
+      - name: Validate at the tag
+        run: |
+          python3 - <<'PY'
+          import json, subprocess, sys
+          data = json.load(open("work/candidate.json"))
+          if data["errors"]:
+              sys.exit(0)
+          c = data["candidate"]
+          out = subprocess.run(
+              [sys.executable, "-m", "scripts.validate", "--repository", c["repository"],
+               "--tag", c["ref"], "--path", c["path"], "--name", c["name"],
+               "--version", c["submitted_version"], "--workdir", "work/validate", "--json"],
+              capture_output=True, text=True,
+          )
+          open("work/validation.json", "w").write(out.stdout)
+          PY
+      - name: Install on the hosts
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess, sys
+          if not os.path.exists("work/validation.json"):
+              sys.exit(0)
+          try:
+              v = json.load(open("work/validation.json"))
+          except ValueError:
+              sys.exit(0)
+          if v["errors"]:
+              sys.exit(0)
+          c = json.load(open("work/candidate.json"))["candidate"]
+          checkout = "work/validate/checkout"
+          plugin_dir = os.path.join(checkout, c["path"]) if c["path"] else checkout
+          out = subprocess.run(
+              [sys.executable, "-m", "scripts.smoke", "--name", c["name"], "--plugin-dir", plugin_dir,
+               "--workdir", "work/smoke", "--json"],
+              capture_output=True, text=True,
+          )
+          open("work/smoke.json", "w").write(out.stdout)
+          PY
+      - name: Report
+        id: report
+        run: |
+          verdict=$(python3 -m scripts.report --candidate work/candidate.json \
+            --validation work/validation.json --smoke work/smoke.json --out work/comment.md)
+          echo "verdict=$verdict" >> "$GITHUB_OUTPUT"
+      - name: Comment and label
+        env:
+          GH_TOKEN: ${{ secrets.OTELYSSEY_TOKEN }}
+          ISSUE: ${{ github.event.issue.number }}
+          VERDICT: ${{ steps.report.outputs.verdict }}
+          LABELS: ${{ join(github.event.issue.labels.*.name, ' ') }}
+        run: |
+          # one intake comment per issue: edit the previous one when it exists
+          previous=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate \
+            --jq '[.[] | select(.body | startswith("<!-- otelyssey-intake -->"))] | last | .id // empty')
+          if [ -n "$previous" ]; then
+            gh api -X PATCH "repos/${GITHUB_REPOSITORY}/issues/comments/${previous}" -F body=@work/comment.md >/dev/null
+          else
+            gh issue comment "$ISSUE" --body-file work/comment.md >/dev/null
+          fi
+          # relabel only when the verdict changed: a label event starts the review workflow
+          case " $LABELS " in
+            *" $VERDICT "*) echo "verdict unchanged: $VERDICT" ;;
+            *)
+              for old in format-ok needs-changes infra-error; do
+                [ "$old" = "$VERDICT" ] || gh issue edit "$ISSUE" --remove-label "$old" 2>/dev/null || true
+              done
+              gh issue edit "$ISSUE" --add-label "$VERDICT"
+              ;;
+          esac
