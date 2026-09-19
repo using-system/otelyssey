@@ -48,8 +48,8 @@ tests/test_*.py                        one module per script
 .github/ISSUE_TEMPLATE/submit-plugin.yml
 .github/workflows/ci.yml               ruff, pytest, store check, build --check, gh-aw compile drift
 .github/workflows/intake.yml           gates on the submission issue
-.github/workflows/review.md + .lock.yml   gh-aw review, conversation, admission
-.github/workflows/admit.yml            merge the admission PR, rebuild, close the issue
+.github/workflows/review.md + .lock.yml   gh-aw review, conversation, the ruling
+.github/workflows/admission.yml        write the record, open and merge the admission PR, rebuild, close the issue
 .github/workflows/nightly.yml          stats, releases, rebuild, commit
 .github/workflows/duplicates.md + .lock.yml   gh-aw weekly audit
 .github/workflows/agentics-maintenance.yml    written by gh aw compile only for workflows with expiring safe outputs, which this repository no longer has
@@ -60,7 +60,7 @@ marketplace/<name>/README.md           generated
 
 Every script exposes functions the tests import, and a `main(argv) -> int` used by the workflows; a script prints its result (JSON on stdout under `--json`, prose otherwise), errors on stderr, exit 1 on a failed check, 2 on a usage or infrastructure error.
 
-The flow, so a task's implementer knows where their piece sits: a contributor opens an issue with the form (`submission` label) → `intake.yml` parses it, validates the plugin at its tag, installs it, leaves one comment ending in a hidden candidate block, and sets one of `format-ok` / `needs-changes` / `infra-error` with the GitHub App's token → the `format-ok` label starts `review.md`, which rules on relevance and novelty, talks on the issue (`under-review`), and either opens a pull request holding `.store/<name>.json` (label `admission`, issue label `admission-opened`) or closes the issue (`rejected`) → `admit.yml` checks the pull request holds one valid record, waits for `ci`, squash-merges, rewrites the record canonically, rebuilds the artifacts, pushes to `main` and closes the issue (`admitted`) → `nightly.yml` refreshes the counts, follows the releases, rebuilds and commits → `duplicates.md` audits the store weekly.
+The flow, so a task's implementer knows where their piece sits: a contributor opens an issue with the form (`submission` label) → `intake.yml` parses it, validates the plugin at its tag, installs it, leaves one comment ending in a hidden candidate block, and sets one of `format-ok` / `needs-changes` / `infra-error` with the GitHub App's token → the `format-ok` label starts `review.md`, which rules on relevance and novelty, talks on the issue (`under-review`), and either labels the issue `admissible` or closes it (`rejected`) → `admission.yml` writes `.store/<name>.json` from the intake comment's candidate block (read through the REST API), opens the pull request (label `admission`, issue label `admission-opened`), waits for `ci`, squash-merges, rewrites the record canonically, rebuilds the artifacts, pushes to `main` and closes the issue (`admitted`) → `nightly.yml` refreshes the counts, follows the releases, rebuilds and commits → `duplicates.md` audits the store weekly.
 
 ---
 
@@ -3204,7 +3204,7 @@ git commit -m "feat(duplicates): the weekly agentic audit of the store"
 2. Create the labels:
 
 ```bash
-for l in submission format-ok needs-changes infra-error under-review admission-opened admission admitted rejected release-follow duplicate-review; do
+for l in submission format-ok needs-changes infra-error under-review admissible admission-opened admission admitted rejected release-follow duplicate-review; do
   gh label create "$l" --color 1D76DB --force
 done
 ```
@@ -3213,7 +3213,7 @@ done
 
 - [ ] **Step 2: Run the pipeline on the first plugin**
 
-Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings, opens a pull request labelled `admission` holding `.store/oddyssey.json` and sets `admission-opened`; `ci` passes on that pull request; the `admit` run merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
+Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings and sets `admissible`; the `admission` run opens a pull request labelled `admission` holding `.store/oddyssey.json`, sets `admission-opened`, waits for `ci` to pass on that pull request, merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
 
 - [ ] **Step 3: Install what the marketplace lists, from a clean HOME**
 
@@ -3230,6 +3230,8 @@ Steps 1 to 3 are repository operations and produce nothing to commit. When a sta
 **Spec coverage:** store and record (Task 2), generated artifacts and idempotence (Tasks 3-4), submission form (Task 5), intake gates with tag resolution, schema, layout and install (Tasks 6-9), the hidden candidate block the agent reads (Task 9), the agentic review with relevance, novelty, conversation and admission by pull request (Task 10), the admission merge, rebuild and issue closing (Task 11), nightly statistics, release follow with revalidation and contributor issues (Task 12), the weekly duplicate audit (Task 13), guard rails - pinned actions, minimal permissions, one named secret, isolated HOME for the install, gh-aw compile drift check (Tasks 1, 8, 10, 14), the first record through the pipeline itself (Task 14). Codex's manifest is out of scope as the spec says.
 
 **Spec amendments this plan carries** (recorded on the issue the plan's PR closes, and in the spec itself): the marketplace `source` is the `github` form with `path`, not `git-subdir`; the manifest's `owner` is an object; the smoke installs from a local copy of the checkout, not from the sha; one GitHub App (its private key the one secret) exists because GitHub emits no workflow event for what `GITHUB_TOKEN` does; the store ships empty and its first record comes from the pipeline; unknown layout entries are notes, not errors.
+
+**Amendments after the first end-to-end run** (#5, recorded on that issue and in the spec): the agentic workflows set `min-integrity: none` with an explicit read-only shell, because gh-aw's public-repository default filtered the pipeline's own comment and would filter every external submission (#11); the review rules and labels `admissible`, and `admission.yml` (which replaces `admit.yml`) writes the record from the intake comment read through the REST API, opens the pull request, merges it and closes the issue, because the GitHub MCP server strips HTML comments and escapes quotes in every body the agent reads, so the candidate block cannot reach the agent exactly (#15); the intake comment states the facts the review rules on in backticks. Tasks 10 and 11 above describe the shape before these amendments; the workflows on `main` are the reference.
 
 **Placeholders:** none; the only values an executor supplies are the token (never written) and the description of the first submission.
 

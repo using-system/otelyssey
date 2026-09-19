@@ -1,0 +1,146 @@
+name: admission
+
+# the review rules and labels `admissible`; this workflow writes: the store record from the
+# intake comment (read through the REST API, where its candidate block is intact), the
+# admission pull request, its merge once ci passes, the rebuilt artifacts, the closed issue
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: admission-${{ github.event.issue.number }}
+  cancel-in-progress: false
+
+jobs:
+  admit:
+    if: >-
+      github.event.label.name == 'admissible' &&
+      contains(github.event.issue.labels.*.name, 'submission') &&
+      contains(github.event.issue.labels.*.name, 'format-ok') &&
+      !contains(github.event.issue.labels.*.name, 'admitted')
+    runs-on: ubuntu-26.04
+    env:
+      ISSUE: ${{ github.event.issue.number }}
+    steps:
+      - name: App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+          permission-pull-requests: write
+          permission-checks: read
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: The record, from the intake comment
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          mkdir -p work
+          gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
+            --jq '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
+            > work/comment.md
+          [ -s work/comment.md ] || { echo "::error::no intake comment by otelyssey-bot[bot] on #${ISSUE}"; exit 1; }
+          record=$(python3 -m scripts.admission --comment-file work/comment.md --issue "$ISSUE" --root work) || { echo "::error::no record: ${record:-see above}"; exit 1; }
+          cp "$record" "$RUNNER_TEMP/record.json"
+          python3 - <<'PY'
+          import json, os
+          r = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "record.json")))
+          # the store refuses control characters in every string field, so one key=value line
+          # per value is safe; path is PLUGIN_PATH, never PATH
+          keys = {"repository": "REPOSITORY", "ref": "REF", "path": "PLUGIN_PATH",
+                  "name": "NAME", "version": "VERSION", "sha": "SHA"}
+          with open(os.environ["GITHUB_ENV"], "a") as env:
+              env.writelines(f"{var}={r[key]}\n" for key, var in keys.items())
+          PY
+      - name: The ruling is on this record
+        # the intake rewrites its comment on every edit of the issue: the review's ruling names
+        # what it ruled on, and a record the latest ruling does not name is not admitted; the
+        # ruling is found by its line, not by its position (the pipeline comments after it, and
+        # gh-aw may prepend a caution block to it)
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          ruling=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
+            --jq '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty')
+          [ -n "$ruling" ] || { echo "::error::no admissible ruling by the review on #${ISSUE}"; exit 1; }
+          printf '%s' "$ruling" | grep -q "\`${NAME}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${NAME}"; exit 1; }
+          printf '%s' "$ruling" | grep -q "\`${SHA}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${SHA}: the intake changed since"; exit 1; }
+      - name: Not admitted twice
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          [ ! -f ".store/${NAME}.json" ] || { echo "::error::${NAME} is in the store already"; exit 1; }
+          open=$(gh pr list --state open --label admission --head "admission/${NAME}" --json number --jq 'length')
+          [ "$open" = 0 ] || { echo "::error::an admission pull request for ${NAME} is open already"; exit 1; }
+      - name: The plugin validates at its tag, at the record's sha
+        run: |
+          out=$(python3 -m scripts.validate --repository "$REPOSITORY" --tag "$REF" --path "$PLUGIN_PATH" --name "$NAME" --version "$VERSION" --workdir work/validate) || { printf '%s\n' "$out"; echo "::error::$NAME does not validate at $REF"; exit 1; }
+          printf '%s\n' "$out"
+          printf '%s\n' "$out" | grep -qx "valid at $SHA" || { echo "::error::$REF of $REPOSITORY moved since the intake: not at $SHA"; exit 1; }
+      - name: Clean the workspace
+        # the plugin checkout sits next to no token-bearing step and never reaches git add -A
+        run: rm -rf work
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+      - name: The admission pull request
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          git config user.name "otelyssey-bot[bot]"
+          git config user.email "otelyssey-bot[bot]@users.noreply.github.com"
+          git checkout -b "admission/${NAME}"
+          cp "$RUNNER_TEMP/record.json" ".store/${NAME}.json"
+          python3 -m scripts.store --check
+          git add ".store/${NAME}.json"
+          git commit -m "chore(store): admit ${NAME}"
+          # the branch is the bot's own; a leftover of a run that died before its pull request
+          # existed must not block this one (the guard above refused an open pull request)
+          git push --force origin "admission/${NAME}"
+          url=$(gh pr create --base main --head "admission/${NAME}" --label admission \
+            --title "chore(store): admit ${NAME}" \
+            --body "Admits #${ISSUE}. The rulings on relevance and novelty are on the issue; this record is the intake's, dated today.")
+          echo "PR_URL=$url" >> "$GITHUB_ENV"
+          echo "HEAD_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+          gh issue edit "$ISSUE" --add-label admission-opened
+          gh issue comment "$ISSUE" --body "Admission opened: ${url}"
+      - name: Wait for the required checks (ci), then merge
+        # --required: the ruleset makes ci the one required check, and this run has no check
+        # run of its own on the pull request's commit
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          # ci's check run registers a few seconds after the push: a bounded wait for it
+          # (gh pr checks exits 8 while a registered check is pending, 0 once it passed)
+          for i in $(seq 1 12); do
+            gh pr checks "$PR_URL" --required >/dev/null 2>&1 && break
+            [ $? = 8 ] && break
+            sleep 10
+          done
+          gh pr checks "$PR_URL" --watch --fail-fast --required
+          # --match-head-commit: the merge is refused when the head moved after the guards ran
+          gh pr merge "$PR_URL" --squash --delete-branch --match-head-commit "$HEAD_SHA"
+      - name: Canonical record, rebuilt artifacts, pushed to main
+        run: |
+          git checkout main
+          git pull --ff-only origin main
+          python3 -m scripts.store --write
+          python3 -m scripts.build
+          git add -A
+          git diff --cached --quiet || git commit -m "chore(build): artifacts after the admission of ${NAME}.json"
+          git push origin main
+      - name: Close the submission
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          gh issue edit "$ISSUE" --add-label admitted --remove-label admission-opened --remove-label admissible --remove-label format-ok
+          gh issue close "$ISSUE" --comment "Admitted: https://github.com/${GITHUB_REPOSITORY}/blob/main/marketplace/${NAME}/README.md"

@@ -65,6 +65,14 @@ def render(
         return "\n".join(lines) + "\n", "needs-changes"
     lines.append("**Form**: pass")
     ref = candidate.get("ref", "")
+    # the review reads through a sanitizer that drops HTML comments and escapes quotes: the
+    # facts it rules on stand here in backticks, the full sha below, never in the block only
+    where = f"at `{candidate['path']}`" if candidate.get("path") else "at its root"
+    if validation and not validation["errors"]:
+        lines.append(
+            f"**Plugin**: `{candidate['name']}` `{validation['manifest']['version']}` "
+            f"in `{candidate['repository']}` {where}"
+        )
     verdict = "format-ok"
     if validation is None:
         lines.append("**Plugin at the tag**: not run")
@@ -75,7 +83,7 @@ def render(
         lines += [f"- {e}" for e in validation["errors"]]
         verdict = "needs-changes"
     else:
-        lines.append(f"**Plugin at the tag `{ref}`**: pass (commit `{validation['sha'][:12]}`)")
+        lines.append(f"**Plugin at the tag `{ref}`**: pass (commit `{validation['sha']}`)")
     if validation and validation.get("notes"):
         lines += ["", "Notes (informational):"] + [f"- {n}" for n in validation["notes"]]
     if verdict == "format-ok":
