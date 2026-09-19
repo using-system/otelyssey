@@ -73,6 +73,8 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
+          # the admission run can start before ci's check run is registered: a bounded wait for it
+          for i in $(seq 1 12); do gh pr checks "$NUMBER" --required >/dev/null 2>&1 && break; sleep 10; done
           gh pr checks "$NUMBER" --watch --fail-fast --required
           # --match-head-commit: the merge is refused when the head moved after the guards ran
           gh pr merge "$NUMBER" --squash --delete-branch --match-head-commit "$HEAD_SHA"
