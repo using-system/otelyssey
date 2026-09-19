@@ -88,6 +88,14 @@ def test_readme_table_of_an_empty_store_is_the_header():
     assert len(build.readme_table({}).splitlines()) == 2
 
 
+def test_readme_table_escapes_pipes_and_newlines():
+    record = dict(records()["oddyssey"])
+    record["description"] = "a | b\nc"
+    lines = build.readme_table({"oddyssey": record}).splitlines()
+    assert len(lines) == 3
+    assert "a \\| b c" in lines[2]
+
+
 def test_splice_replaces_only_between_markers():
     text = "intro\n\n<!-- otelyssey:table -->\nold\n<!-- /otelyssey:table -->\n\noutro\n"
     out = build.splice(text, "| new |\n")

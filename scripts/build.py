@@ -91,6 +91,11 @@ def plugin_page(record: dict) -> str:
     )
 
 
+def cell(text: str) -> str:
+    """One markdown table cell: whitespace collapsed to spaces, pipes escaped."""
+    return " ".join(text.split()).replace("|", "\\|")
+
+
 def readme_table(records: dict[str, dict]) -> str:
     lines = [
         "| Plugin | Description | Category | Repository | Stars | Forks | Watchers |",
@@ -101,7 +106,8 @@ def readme_table(records: dict[str, dict]) -> str:
         s = r["stats"]
         repo = f"[{r['repository']}](https://github.com/{r['repository']})"
         lines.append(
-            f"| [{name}](marketplace/{name}/README.md) | {r['description']} | {r['category']} | "
+            f"| [{name}](marketplace/{name}/README.md) | {cell(r['description'])} | "
+            f"{cell(r['category'])} | "
             f"{repo} | {s['stars']} | {s['forks']} | {s['watchers']} |"
         )
     return "\n".join(lines) + "\n"
