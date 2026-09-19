@@ -79,6 +79,8 @@ def render(
     if validation and validation.get("notes"):
         lines += ["", "Notes (informational):"] + [f"- {n}" for n in validation["notes"]]
     if verdict == "format-ok":
+        if lines[-1].startswith("- "):
+            lines.append("")  # closes the notes list: the next line is a paragraph, not a bullet
         if smoke is None:
             lines.append("**Install**: not run")
             verdict = "infra-error"
