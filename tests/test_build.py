@@ -6,7 +6,7 @@ import pytest
 from scripts import build, store
 
 FIXTURES = Path(__file__).parent / "fixtures"
-EMPTY_README = "# x\n\n<!-- otelyssey:table -->\n<!-- /otelyssey:table -->\n"
+EMPTY_README = "# x\n\n<!-- otelyssey:plugins -->\n<!-- /otelyssey:plugins -->\n"
 
 
 def records():
@@ -77,31 +77,54 @@ def test_plugin_page_carries_the_facts():
         assert fragment in page, fragment
 
 
-def test_readme_table_has_one_row_per_record():
-    lines = build.readme_table(records()).splitlines()
-    assert lines[0].startswith("| Plugin | Description | Category | Repository | Stars |")
-    assert lines[1].startswith("| --- |")
-    assert len(lines) == 3
-    assert "[oddyssey](marketplace/oddyssey/README.md)" in lines[2]
-    assert "[using-system/oddyssey](https://github.com/using-system/oddyssey)" in lines[2]
+def test_readme_list_groups_the_plugins_by_category_with_live_badges():
+    text = build.readme_list(records())
+    assert text.startswith("### Workflows\n\n")
+    (entry, badges, blank) = text.splitlines()[2:5]
+    assert entry.startswith("- [oddyssey](https://github.com/using-system/oddyssey) by ")
+    assert " - " in entry and entry.endswith("[install](marketplace/oddyssey/README.md)  ")
+    kinds = ("v/release", "created-at", "last-commit", "license", "stars", "forks", "watchers")
+    assert badges == "&nbsp;&nbsp;".join(build.badge(k, "using-system/oddyssey") for k in kinds)
+    assert blank == ""
+    assert text.endswith('alt="watchers">\n\n') and "\n\n\n" not in text
+    assert "Stars" not in text and "| " not in text
 
 
-def test_readme_table_of_an_empty_store_is_the_header():
-    assert len(build.readme_table({}).splitlines()) == 2
+def test_every_category_has_a_title():
+    assert set(build.CATEGORY_TITLES) == set(store.CATEGORIES)
 
 
-def test_readme_table_escapes_pipes_and_newlines():
+def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_ones():
+    first = records()["oddyssey"]
+    second = {**first, "name": "col-b", "category": "collector", "repository": "a/col-b"}
+    third = {**first, "name": "col-a", "category": "collector", "repository": "a/col-a"}
+    text = build.readme_list({"oddyssey": first, "col-b": second, "col-a": third})
+    headings = [line for line in text.splitlines() if line.startswith("### ")]
+    assert headings == ["### Collector", "### Workflows"]
+    # two entries in one category: name order, one blank line between them
+    lines = text.splitlines()
+    assert lines[2].startswith("- [col-a](") and lines[3].startswith("<img ") and lines[4] == ""
+    assert lines[5].startswith("- [col-b](") and lines[6].startswith("<img ") and lines[7] == ""
+    assert lines[8] == "### Workflows"
+
+
+def test_readme_list_of_an_empty_store_says_so():
+    assert build.readme_list({}) == "No plugin listed yet.\n"
+
+
+def test_readme_list_escapes_markdown_in_the_free_text():
     record = dict(records()["oddyssey"])
-    record["description"] = "a | b\nc"
-    lines = build.readme_table({"oddyssey": record}).splitlines()
-    assert len(lines) == 3
-    assert "a \\| b c" in lines[2]
+    record["description"] = "a [b](c) <d>\ne"
+    record["author"] = {"name": "x_y"}
+    entry = build.readme_list({"oddyssey": record}).splitlines()[2]
+    assert "a \\[b\\](c) \\<d\\> e" in entry
+    assert " by x\\_y - " in entry
 
 
 def test_splice_replaces_only_between_markers():
-    text = "intro\n\n<!-- otelyssey:table -->\nold\n<!-- /otelyssey:table -->\n\noutro\n"
-    out = build.splice(text, "| new |\n")
-    assert out == "intro\n\n<!-- otelyssey:table -->\n| new |\n<!-- /otelyssey:table -->\n\noutro\n"
+    text = "intro\n\n<!-- otelyssey:plugins -->\nold\n<!-- /otelyssey:plugins -->\n\noutro\n"
+    out = build.splice(text, "new\n")
+    assert out == text.replace("old", "new")
 
 
 def test_build_is_idempotent(tmp_path: Path):
@@ -168,11 +191,11 @@ def test_text_collapses_whitespace_and_escapes_markdown():
 
 
 @pytest.mark.parametrize(
-    "text", ["# x\n\n<!-- /otelyssey:table -->\n", "# x\n\n<!-- otelyssey:table -->\n"]
+    "text", ["# x\n\n<!-- /otelyssey:plugins -->\n", "# x\n\n<!-- otelyssey:plugins -->\n"]
 )
 def test_splice_names_a_missing_marker(text):
-    with pytest.raises(SystemExit, match="README.md: the table markers are missing"):
-        build.splice(text, "| new |\n")
+    with pytest.raises(SystemExit, match="README.md: the list markers are missing"):
+        build.splice(text, "new\n")
 
 
 def test_withdrawal_removes_a_page_directory_with_other_files(tmp_path: Path):
