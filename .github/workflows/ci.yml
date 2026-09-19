@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: ci # the status check the main ruleset requires, and admit.yml waits for
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@bec219d24cd3e171d82865faccec33120bb574f4 # v10.1.0
+      - name: Lint and format
+        run: |
+          uvx ruff@0.16.4 check scripts tests
+          uvx ruff@0.16.4 format --check scripts tests
+      - name: Tests
+        run: uv run --no-project --with pytest pytest -q
+      - name: Store
+        run: python3 -m scripts.store --check
+      - name: Generated artifacts
+        # an admission pull request carries one store record and nothing else: its artifacts
+        # are stale by design and admit.yml rebuilds them right after the merge, on main;
+        # on main the artifacts are kept fresh by the admission's rebuild and by the nightly,
+        # a push run checks nothing there
+        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'admission')
+        run: python3 -m scripts.build --check
+      - name: Agentic workflows compiled
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh extension install github/gh-aw --pin v0.88.7
+          gh aw compile
+          test -z "$(git status --porcelain .github .gitattributes)" || { git status --porcelain .github .gitattributes; exit 1; }

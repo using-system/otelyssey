@@ -1,0 +1,100 @@
+name: nightly
+
+on:
+  schedule:
+    - cron: "17 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-26.04
+    steps:
+      - name: App token
+        id: app-token
+        uses: actions/create-github-app-token@bcd2ba49218906704ab6c1aa796996da409d3eb1 # v3.2.0
+        with:
+          client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
+          private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-issues: write
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          token: ${{ steps.app-token.outputs.token }}
+      - name: Statistics
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: python3 -m scripts.stats --failures work-stats.json
+      - name: Install the hosts
+        run: |
+          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278
+          copilot --version
+          claude --version
+      - name: Releases
+        run: python3 -m scripts.releases --workdir work --smoke --json > work-releases.json
+      - name: Issues for the releases that failed
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: |
+          python3 - <<'PY'
+          import json, subprocess
+          result = json.load(open("work-releases.json"))
+          stats_failed = json.load(open("work-stats.json"))
+          for name, reason in stats_failed.items():
+              result.setdefault(name, {"status": "unchanged", "tag": "", "errors": []})
+              result[name]["stats_error"] = reason
+
+          def last_line(text):
+              return (text.strip().splitlines() or [""])[-1]
+
+          label = subprocess.run(
+              ["gh", "label", "create", "release-follow", "--color", "B60205",
+               "--description", "the nightly could not follow a release", "--force"],
+              capture_output=True, text=True, check=False,
+          )
+          if label.returncode != 0:
+              print(f"::warning::could not create the label release-follow: {last_line(label.stderr)}")
+          for name, r in result.items():
+              if r["status"] != "failed" and "stats_error" not in r:
+                  continue
+              if r["status"] == "failed":
+                  title = f"release-follow: {name} {r['tag']} does not validate"
+                  errors = r["errors"] + ([r["stats_error"]] if "stats_error" in r else [])
+                  opening = "The nightly follow of releases found this tag and could not re-pin it:"
+                  closing = "The marketplace keeps the previous release until a tag validates."
+              else:
+                  title = f"release-follow: {name} repository statistics unreadable"
+                  errors = [r["stats_error"]]
+                  opening = "The nightly refresh could not read the repository's statistics:"
+                  closing = "The listing keeps the last counts read until the repository answers again."
+              search = subprocess.run(
+                  ["gh", "issue", "list", "--label", "release-follow", "--state", "all",
+                   "--search", f'"{title}" in:title', "--json", "number", "--jq", "length"],
+                  capture_output=True, text=True, check=False,
+              )
+              if search.returncode != 0:
+                  print(f"::warning::could not search the issues for {title}")
+                  continue
+              if search.stdout.strip() not in ("", "0"):
+                  continue
+              body = opening + "\n\n" + "\n".join(f"- {e}" for e in errors) + "\n\n" + closing
+              created = subprocess.run(
+                  ["gh", "issue", "create", "--title", title, "--label", "release-follow", "--body", body],
+                  capture_output=True, text=True, check=False,
+              )
+              if created.returncode != 0:
+                  print(f"::warning::could not open the issue {title}: {last_line(created.stderr)}")
+              else:
+                  print(created.stdout.strip())
+          PY
+      - name: Rebuild and commit
+        run: |
+          rm -rf work work-releases.json work-stats.json
+          python3 -m scripts.build
+          git config user.name "otelyssey-bot[bot]"
+          git config user.email "otelyssey-bot[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet || { git commit -m "chore(store): nightly refresh"; git push origin main; }

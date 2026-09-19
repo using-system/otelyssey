@@ -27,9 +27,10 @@ store.
   request removes the plugin).
 - **Engine: GitHub Copilot** for every agentic workflow (gh-aw's
   default engine, billed in premium requests, no engine secret to
-  hold). One secret exists anyway: a maintainer token that chains the
-  workflows (see the guard rails), because GitHub emits no workflow
-  event for what the repository's own `GITHUB_TOKEN` does.
+  hold). One secret exists anyway: the private key of the GitHub App
+  that chains the workflows (see the guard rails), because GitHub
+  emits no workflow event for what the repository's own `GITHUB_TOKEN`
+  does.
 - **Scope: OpenTelemetry in the broad sense.** A plugin is admissible
   when its main subject touches OpenTelemetry: instrumentation, the
   Collector, the semantic conventions, or the exploitation of OTel
@@ -101,8 +102,8 @@ idempotently:
   when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
   accept; Copilot CLI rejects a `git-subdir` source, verified
   2026-09-19),
-  `description`, `version`, `category`, `keywords`, `homepage`,
-  `license`;
+  `description`, `version`, `category`, `keywords`, `license`,
+  `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
   category, repository link, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code and Copilot
@@ -197,9 +198,10 @@ plugin's page.
    the GitHub API (the workflow's token), `refreshed_at` set.
 2. `scripts/releases.py`: for each record, the latest release tag of
    the repository (`git ls-remote --tags`, semver-sorted, the reading
-   oddyssey-actions does); when it differs from `ref`, the format and
-   install validation is replayed on it (the same scripts as intake);
-   on pass, `ref`, `sha` and `version` are updated; on failure, an
+   oddyssey-actions does); when it differs from `ref`, the format
+   validation and the install on the hosts are replayed on it (the
+   same scripts as intake, `releases.py --smoke`); on pass, `ref`,
+   `sha` and `version` are updated; on failure, an
    issue is opened for the contributor (one per plugin and tag, never
    repeated) and the record stays.
 3. `build.py`, then one commit by the workflow's bot on `main`,
@@ -216,13 +218,19 @@ past issues are respected.
   contributor fixes the issue and the gates re-run.
 - Actions pinned by commit SHA with the version in a comment;
   permissions minimal per job; the install smoke runs under an
-  isolated HOME with no credential. One secret, the maintainer's
-  fine-grained token `OTELYSSEY_TOKEN` (this repository only:
-  Contents, Issues and Pull requests), labels the submission issue,
-  signs the agentic workflows' safe outputs, merges the admission and
-  pushes the bot commits: an event produced with `GITHUB_TOKEN` starts
-  no workflow, so the chain intake → review → admission needs it. Its
-  value is never written anywhere.
+  isolated HOME with no credential. A GitHub App installed on this
+  repository only (Contents, Issues and Pull requests read and write,
+  Checks read, Metadata read) is the pipeline's identity, `otelyssey-bot[bot]`:
+  `intake.yml`, `admit.yml` and `nightly.yml` mint a one-hour
+  installation token in their first step, the agentic workflows sign
+  their safe outputs with it, and it labels the submission issue,
+  merges the admission and pushes the bot commits as the `main`
+  ruleset's bypass actor, the app `otelyssey-bot` (the maintainer's
+  own pushes are refused): an event produced with `GITHUB_TOKEN` starts no
+  workflow, so the chain intake → review → admission needs it. Its
+  client id is the repository variable `OTELYSSEY_APP_CLIENT_ID`, its
+  private key the one secret, `OTELYSSEY_APP_PRIVATE_KEY`, whose value
+  is never written anywhere.
 - gh-aw workflows are compiled to `.lock.yml` and committed with their
   `.md`; `gh aw compile` in `ci.yml` refuses a drift.
 - A plugin's own code is never executed by the pipeline beyond the
