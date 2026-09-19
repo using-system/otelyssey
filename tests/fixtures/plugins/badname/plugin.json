@@ -1,0 +1,9 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "My_Plugin",
+  "version": "1.2.0",
+  "description": "Queries OpenTelemetry traces in Tempo.",
+  "author": {"name": "Contoso", "url": "https://github.com/contoso"},
+  "license": "Apache-2.0",
+  "keywords": ["opentelemetry", "tempo"]
+}
