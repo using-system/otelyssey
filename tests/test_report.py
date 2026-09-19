@@ -110,3 +110,9 @@ def test_a_manifest_url_is_copied_only_when_it_is_https():
     record = report.candidate_record(CANDIDATE, {**VALIDATION, "manifest": manifest})
     assert record["homepage"] == ""
     assert record["author"] == {"name": "x"}
+
+
+def test_the_install_lines_start_a_paragraph_after_the_notes_list():
+    body, _ = report.render(CANDIDATE, [], VALIDATION, SMOKE)
+    # a line right after a bullet is that bullet's continuation in Markdown
+    assert "format defines\n\n**Install on copilot**" in body
