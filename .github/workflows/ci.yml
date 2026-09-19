@@ -25,3 +25,8 @@ jobs:
         run: uv run --no-project --with pytest pytest -q
       - name: Store
         run: python3 -m scripts.store --check
+      - name: Generated artifacts
+        # an admission pull request carries one store record and nothing else: its artifacts
+        # are stale by design and admit.yml rebuilds them right after the merge, on main
+        if: ${{ !contains(github.event.pull_request.labels.*.name, 'admission') }}
+        run: python3 -m scripts.build --check

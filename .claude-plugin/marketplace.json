@@ -1,0 +1,9 @@
+{
+  "name": "otelyssey",
+  "owner": {
+    "name": "using-system",
+    "url": "https://github.com/using-system"
+  },
+  "description": "A self-run marketplace of OpenTelemetry agent plugins",
+  "plugins": []
+}
