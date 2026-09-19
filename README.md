@@ -12,6 +12,11 @@ claude plugin marketplace add using-system/otelyssey
 copilot plugin marketplace add using-system/otelyssey
 ```
 
+Claude Code clones a plugin's repository over SSH: it needs a GitHub SSH
+key, or `CLAUDE_CODE_PLUGIN_PREFER_HTTPS=1` in the environment, or
+`git config --global url.https://github.com/.insteadOf git@github.com:`,
+to clone over HTTPS instead. Copilot CLI needs none of these.
+
 ## Plugins
 
 <!-- otelyssey:table -->
