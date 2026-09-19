@@ -11,7 +11,7 @@ schema 1.0.0), readable by Claude Code and GitHub Copilot CLI first
 Codex later (`.agents/plugins/marketplace.json`, the same generator).
 
 The existing marketplaces are curated by hand and age. This one is run
-by the repository: a contributor registers a plugin **once**, through
+by the repository: a contributor submits a plugin **once**, through
 an issue; deterministic workflows validate its format and install it;
 an agentic workflow judges its relevance and its novelty, talks with
 the contributor on the issue, and admits it; a nightly workflow keeps

@@ -841,7 +841,7 @@ Replace `README.md` with:
 
 A marketplace of OpenTelemetry agent plugins in the
 [Agent Plugins](https://agent-plugins.org/) format, run by the repository:
-register a plugin once through an issue and the repository validates it,
+submit a plugin once through an issue and the repository validates it,
 admits it, follows its releases and lists it.
 
 Add the marketplace, then install a plugin:
@@ -856,7 +856,7 @@ copilot plugin marketplace add using-system/otelyssey # GitHub Copilot CLI
 <!-- otelyssey:table -->
 <!-- /otelyssey:table -->
 
-## Register a plugin
+## Submit a plugin
 
 Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml):
 a public GitHub repository holding a `plugin.json` in the Agent Plugins format,
@@ -900,7 +900,7 @@ git commit -m "feat(build): plugin pages, the readme table and the check mode"
 
 ```yaml
 name: Plugin submission
-description: Register an OpenTelemetry agent plugin hosted in a public GitHub repository.
+description: Submit an OpenTelemetry agent plugin hosted in a public GitHub repository.
 title: "[Plugin]: "
 labels: [submission]
 body:
@@ -2597,7 +2597,7 @@ git commit -m "feat(duplicates): the weekly agentic audit of the store"
 ### Task 14: Documentation and the first end-to-end run
 
 **Files:**
-- Modify: `README.md` (the "Register a plugin" section already written in Task 4 - verify it states the labels and the flow), `AGENTS.md` (the labels, the branch ruleset choice from Task 11, the gh-aw compile form from Task 10)
+- Modify: `README.md` (the "Submit a plugin" section already written in Task 4 - verify it states the labels and the flow), `AGENTS.md` (the labels, the branch ruleset choice from Task 11, the gh-aw compile form from Task 10)
 
 - [ ] **Step 1: Create the labels and the ruleset**
 
