@@ -24,6 +24,11 @@ follows your releases and refreshes your repository's statistics.
 ## Plugins
 
 <!-- otelyssey:plugins -->
+### Instrumentation
+
+- [stdtel](https://github.com/amiable-dev/skills-telemetry) by [amiable-dev](https://github.com/amiable-dev) - Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content. · [install](marketplace/stdtel/README.md)  
+<img src="https://img.shields.io/github/v/release/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="release">&nbsp;&nbsp;<img src="https://img.shields.io/github/created-at/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="created-at">&nbsp;&nbsp;<img src="https://img.shields.io/github/last-commit/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="last-commit">&nbsp;&nbsp;<img src="https://img.shields.io/github/license/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="license">&nbsp;&nbsp;<img src="https://img.shields.io/github/stars/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="stars">&nbsp;&nbsp;<img src="https://img.shields.io/github/forks/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="forks">&nbsp;&nbsp;<img src="https://img.shields.io/github/watchers/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="watchers">
+
 ### Workflows
 
 - [oddyssey](https://github.com/using-system/oddyssey) by [using-system](https://github.com/using-system) - A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5). · [install](marketplace/oddyssey/README.md)  

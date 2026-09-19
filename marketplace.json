@@ -29,6 +29,30 @@
         "url": "https://github.com/using-system"
       },
       "homepage": "https://github.com/using-system/oddyssey#readme"
+    },
+    {
+      "name": "stdtel",
+      "source": {
+        "source": "github",
+        "repo": "amiable-dev/skills-telemetry",
+        "ref": "v0.4.0",
+        "sha": "a95d23afc26150737a4eb6894b96a7235fa8f8da"
+      },
+      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
+      "version": "0.4.0",
+      "category": "instrumentation",
+      "keywords": [
+        "opentelemetry",
+        "telemetry",
+        "skills",
+        "otlp"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "amiable-dev",
+        "url": "https://github.com/amiable-dev"
+      },
+      "homepage": "https://github.com/amiable-dev/skills-telemetry"
     }
   ]
 }
