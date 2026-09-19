@@ -53,7 +53,10 @@ value of it is ever written down. The `main` ruleset requires a pull
 request and the `ci` check; its bypass actor is the app `otelyssey-bot`,
 for the two pushes (the admission's and the nightly's), and the
 maintainer's own pushes to `main` are refused. The pipeline's comments
-and commits appear as `otelyssey-bot[bot]`.
+and commits appear as `otelyssey-bot[bot]`: that login is written
+literally in `intake.yml`, `review.md` and, as the committer, in
+`admit.yml` and `nightly.yml`, and must match the app's slug; a
+renamed app is a change in those files.
 
 ## Labels
 

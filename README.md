@@ -5,7 +5,7 @@ A marketplace of OpenTelemetry agent plugins in the
 itself: a contributor submits a plugin once, through an issue, and the
 repository validates it, admits it, follows its releases and lists it.
 
-Add the marketplace, then install a plugin, from a shell:
+Add the marketplace; each plugin's page under `marketplace/` gives its install line:
 
 ```text
 claude plugin marketplace add using-system/otelyssey

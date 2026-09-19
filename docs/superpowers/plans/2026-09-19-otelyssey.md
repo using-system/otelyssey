@@ -4,7 +4,7 @@
 
 **Goal:** A repository that admits OpenTelemetry agent plugins through an issue, validates and installs them, judges them with an agentic workflow, lists them in a generated marketplace, and keeps them at their latest release nightly.
 
-**Architecture:** One store of JSON records under `.store/` is the only source of truth; deterministic Python scripts (standard library only) parse a submission, validate a plugin at a pinned commit, install it on the hosts, read repository statistics and generate every listing artifact; GitHub Actions workflows run those scripts on the submission issue, on the admission pull request and nightly; two gh-aw agentic workflows (engine copilot) carry the judgment, the conversation with the contributor, the admission and a weekly duplicate audit. One maintainer token chains the workflows, because GitHub emits no event for what the repository's own `GITHUB_TOKEN` does.
+**Architecture:** One store of JSON records under `.store/` is the only source of truth; deterministic Python scripts (standard library only) parse a submission, validate a plugin at a pinned commit, install it on the hosts, read repository statistics and generate every listing artifact; GitHub Actions workflows run those scripts on the submission issue, on the admission pull request and nightly; two gh-aw agentic workflows (engine copilot) carry the judgment, the conversation with the contributor, the admission and a weekly duplicate audit. One GitHub App chains the workflows, because GitHub emits no event for what the repository's own `GITHUB_TOKEN` does.
 
 **Tech Stack:** Python 3.11+ standard library, pytest, ruff 0.16.4, GitHub Actions pinned by SHA, gh-aw v0.88.7 (`gh extension install github/gh-aw --pin v0.88.7`), GitHub Copilot CLI 1.0.86 and Claude Code 2.1.278 on the runner for the install smoke.
 
@@ -60,7 +60,7 @@ marketplace/<name>/README.md           generated
 
 Every script exposes functions the tests import, and a `main(argv) -> int` used by the workflows; a script prints its result (JSON on stdout under `--json`, prose otherwise), errors on stderr, exit 1 on a failed check, 2 on a usage or infrastructure error.
 
-The flow, so a task's implementer knows where their piece sits: a contributor opens an issue with the form (`submission` label) → `intake.yml` parses it, validates the plugin at its tag, installs it, leaves one comment ending in a hidden candidate block, and sets one of `format-ok` / `needs-changes` / `infra-error` with the maintainer token → the `format-ok` label starts `review.md`, which rules on relevance and novelty, talks on the issue (`under-review`), and either opens a pull request holding `.store/<name>.json` (label `admission`, issue label `admission-opened`) or closes the issue (`rejected`) → `admit.yml` checks the pull request holds one valid record, waits for `ci`, squash-merges, rewrites the record canonically, rebuilds the artifacts, pushes to `main` and closes the issue (`admitted`) → `nightly.yml` refreshes the counts, follows the releases, rebuilds and commits → `duplicates.md` audits the store weekly.
+The flow, so a task's implementer knows where their piece sits: a contributor opens an issue with the form (`submission` label) → `intake.yml` parses it, validates the plugin at its tag, installs it, leaves one comment ending in a hidden candidate block, and sets one of `format-ok` / `needs-changes` / `infra-error` with the GitHub App's token → the `format-ok` label starts `review.md`, which rules on relevance and novelty, talks on the issue (`under-review`), and either opens a pull request holding `.store/<name>.json` (label `admission`, issue label `admission-opened`) or closes the issue (`rejected`) → `admit.yml` checks the pull request holds one valid record, waits for `ci`, squash-merges, rewrites the record canonically, rebuilds the artifacts, pushes to `main` and closes the issue (`admitted`) → `nightly.yml` refreshes the counts, follows the releases, rebuilds and commits → `duplicates.md` audits the store weekly.
 
 ---
 
@@ -2492,7 +2492,7 @@ jobs:
           fi
 ```
 
-The `Comment and label` step uses the maintainer token (Task 14 creates the secret): a label set with `GITHUB_TOKEN` fires no event, and the review workflow would never start.
+The `Comment and label` step uses the GitHub App's installation token (Task 14 creates the app, its client id variable and its private-key secret): a label set with `GITHUB_TOKEN` fires no event, and the review workflow would never start.
 
 - [ ] **Step 6: Run the whole suite, then commit**
 
@@ -2515,7 +2515,7 @@ git commit -m "feat(intake): the gates on a submission issue, one comment and on
 **Interfaces:**
 - Consumes: the `format-ok` label and the `<!-- otelyssey-candidate ... -->` block of the intake comment; the store; the submission issues.
 - Produces: comments and labels on the issue; an `admission` pull request carrying `.store/<name>.json` only; or `rejected` and a closed issue.
-- Frontmatter facts, verified against gh-aw v0.88.7: `on.roles: all` lets a contributor without write access trigger the `issue_comment` path (the default allowlist is `[admin, maintainer, write]` and cancels the run otherwise); `on.issues.names: [format-ok]` filters the label; the top-level `if:` keeps the run to issues carrying `format-ok` and to comments by humans; `safe-outputs.github-token` signs every safe output with the maintainer token so the pull request it creates triggers `ci.yml` and `admit.yml`; `create-pull-request.protected-files.exclude: [.store/]` lifts gh-aw's default protection of top-level dot folders, which would otherwise attach a `REQUEST_CHANGES` review to every admission pull request; the `if:` admits a comment only from the issue's author, so a stranger cannot start a billed run; `network.allowed` uses the `github` ecosystem identifier (`github.com`, `api.github.com`, `*.githubusercontent.com`).
+- Frontmatter facts, verified against gh-aw v0.88.7: `on.roles: all` lets a contributor without write access trigger the `issue_comment` path (the default allowlist is `[admin, maintainer, write]` and cancels the run otherwise); `on.issues.names: [format-ok]` filters the label; the top-level `if:` keeps the run to issues carrying `format-ok` and to comments by humans; `safe-outputs.github-app` signs every safe output with the GitHub App's installation token so the pull request it creates triggers `ci.yml` and `admit.yml`; `create-pull-request.protected-files.exclude: [.store/]` lifts gh-aw's default protection of top-level dot folders, which would otherwise attach a `REQUEST_CHANGES` review to every admission pull request; the `if:` admits a comment only from the issue's author, so a stranger cannot start a billed run; `network.allowed` uses the `github` ecosystem identifier (`github.com`, `api.github.com`, `*.githubusercontent.com`).
 
 - [ ] **Step 1: Install gh-aw and write the workflow**
 
@@ -2640,7 +2640,7 @@ git commit -m "feat(review): the agentic review of a submission - relevance, nov
 - Create: `.github/workflows/admit.yml`
 
 **Interfaces:**
-- Consumes: a pull request labelled `admission` opened by the review workflow with the maintainer token, carrying one file under `.store/`; `scripts.store --check` / `--write`; `scripts.build`.
+- Consumes: a pull request labelled `admission` opened by the review workflow with the GitHub App's token, carrying one file under `.store/`; `scripts.store --check` / `--write`; `scripts.build`.
 - Produces: the merge after the required check `ci` passed, the canonical record and the regenerated artifacts pushed to `main`, the submission issue closed with `admitted`.
 - `gh pr checks --required` waits on the ruleset's required checks only: this job's own check run is attached to the same commit and a wait on every check would never end. Task 14 makes `ci` the required check; without it the wait is a no-op. The pushes to `main` bypass the ruleset as its bypass actor, the app `otelyssey-bot` (Task 14 sets it).
 
@@ -3245,7 +3245,7 @@ Steps 1 to 3 are repository operations and produce nothing to commit. When a sta
 
 **Spec coverage:** store and record (Task 2), generated artifacts and idempotence (Tasks 3-4), submission form (Task 5), intake gates with tag resolution, schema, layout and install (Tasks 6-9), the hidden candidate block the agent reads (Task 9), the agentic review with relevance, novelty, conversation and admission by pull request (Task 10), the admission merge, rebuild and issue closing (Task 11), nightly statistics, release follow with revalidation and contributor issues (Task 12), the weekly duplicate audit (Task 13), guard rails - pinned actions, minimal permissions, one named secret, isolated HOME for the install, gh-aw compile drift check (Tasks 1, 8, 10, 14), the first record through the pipeline itself (Task 14). Codex's manifest is out of scope as the spec says.
 
-**Spec amendments this plan carries** (recorded on the issue the plan's PR closes, and in the spec itself): the marketplace `source` is the `github` form with `path`, not `git-subdir`; the manifest's `owner` is an object; the smoke installs from a local copy of the checkout, not from the sha; one maintainer token exists because GitHub emits no workflow event for what `GITHUB_TOKEN` does; the store ships empty and its first record comes from the pipeline; unknown layout entries are notes, not errors.
+**Spec amendments this plan carries** (recorded on the issue the plan's PR closes, and in the spec itself): the marketplace `source` is the `github` form with `path`, not `git-subdir`; the manifest's `owner` is an object; the smoke installs from a local copy of the checkout, not from the sha; one GitHub App (its private key the one secret) exists because GitHub emits no workflow event for what `GITHUB_TOKEN` does; the store ships empty and its first record comes from the pipeline; unknown layout entries are notes, not errors.
 
 **Placeholders:** none; the only values an executor supplies are the token (never written) and the description of the first submission.
 
