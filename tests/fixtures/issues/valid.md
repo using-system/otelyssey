@@ -14,14 +14,6 @@ contoso/my-otel-plugin
 
 _No response_
 
-### Release tag
-
-v1.2.0
-
-### Version
-
-1.2.0
-
 ### License
 
 Apache-2.0

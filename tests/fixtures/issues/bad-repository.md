@@ -14,14 +14,6 @@ contoso
 
 _No response_
 
-### Release tag
-
-_No response_
-
-### Version
-
-1.2.0
-
 ### License
 
 Apache-2.0
