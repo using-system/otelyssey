@@ -48,10 +48,14 @@ def _run(args: list[str], home: Path) -> tuple[int, str]:
 
 
 def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[str, str]:
-    """pass, fail or unavailable (the host CLI is not on this machine), with the output."""
+    """pass, fail or unavailable (the host CLI is not on this machine), with the output.
+
+    The HOME is recreated so a reused workdir never carries a previous registration.
+    """
     if shutil.which(host) is None:
         return "unavailable", f"the {host} CLI is not on this machine"
-    home.mkdir(parents=True, exist_ok=True)
+    shutil.rmtree(home, ignore_errors=True)
+    home.mkdir(parents=True)
     code, out = _run([host, "plugin", "marketplace", "add", str(marketplace_dir)], home)
     if code != 0:
         return "fail", f"marketplace add exited {code}\n{out}"
