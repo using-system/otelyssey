@@ -37,6 +37,47 @@ def source_of(record: dict) -> dict:
     return source
 
 
+def codex_source_of(record: dict) -> dict:
+    """The git-backed source Codex accepts: `url` for a plugin at its repository's root,
+    `git-subdir` with a `./`-prefixed path otherwise; `ref` and `sha` on both."""
+    url = f"https://github.com/{record['repository']}.git"
+    if record["path"]:
+        return {
+            "source": "git-subdir",
+            "url": url,
+            "path": f"./{record['path']}",
+            "ref": record["ref"],
+            "sha": record["sha"],
+        }
+    return {"source": "url", "url": url, "ref": record["ref"], "sha": record["sha"]}
+
+
+def codex_marketplace_json(records: dict[str, dict]) -> dict:
+    """The catalog `codex plugin marketplace add` reads at .agents/plugins/marketplace.json."""
+    plugins = []
+    for name in sorted(records):
+        record = records[name]
+        # the manifest fields Codex lists before the install, when it has no manifest yet
+        entry = {
+            "name": record["name"],
+            "description": record["description"],
+            "version": record["version"],
+            "keywords": record["keywords"],
+            "author": record["author"],
+            "source": codex_source_of(record),
+            "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
+            "category": CATEGORY_TITLES[record["category"]],
+        }
+        if record["homepage"]:
+            entry["homepage"] = record["homepage"]
+        plugins.append(entry)
+    return {
+        "name": MARKETPLACE_NAME,
+        "interface": {"displayName": MARKETPLACE_NAME},
+        "plugins": plugins,
+    }
+
+
 def marketplace_json(records: dict[str, dict]) -> dict:
     plugins = []
     for name in sorted(records):
@@ -108,7 +149,23 @@ def plugin_page(record: dict) -> str:
         "```text\n"
         f"copilot plugin marketplace add {MARKETPLACE_REPO}\n"
         f"copilot plugin install {record['name']}@{MARKETPLACE_NAME}\n"
+        "```\n\n"
+        "Codex CLI:\n\n"
+        "```text\n"
+        f"codex plugin marketplace add {MARKETPLACE_REPO}\n"
+        f"codex plugin add {record['name']}@{MARKETPLACE_NAME}\n"
+        "```\n\n"
+        "APM:\n\n"
+        "```text\n"
+        f"apm marketplace add {MARKETPLACE_REPO}\n"
+        f"apm install {record['name']}@{MARKETPLACE_NAME} --target copilot\n"
+        "```\n\n"
+        "VS Code, in `settings.json`:\n\n"
+        "```json\n"
+        f'"chat.plugins.marketplaces": ["{MARKETPLACE_REPO}"]\n'
         "```\n"
+        # Kiro imports a power from its repository's url: a plugin at the root only
+        + (f"\nKiro: Import power from GitHub, `{repo_url}`.\n" if not record["path"] else "")
     )
 
 
@@ -159,10 +216,11 @@ def build(root: Path, check: bool) -> list[str]:
     readme = (root / "README.md").read_text(encoding="utf-8")
     manifest = render_json(marketplace_json(records))
     wanted = {
-        # Copilot CLI looks at the root first, Claude Code in .claude-plugin/ only: one
-        # content, twice
+        # Copilot CLI looks at the root first, Claude Code and VS Code in .claude-plugin/:
+        # one content, twice; Codex reads its own catalog, with git-backed sources
         "marketplace.json": manifest,
         ".claude-plugin/marketplace.json": manifest,
+        ".agents/plugins/marketplace.json": render_json(codex_marketplace_json(records)),
         "README.md": splice(readme, readme_list(records)),
     }
     for name, record in records.items():

@@ -8,9 +8,13 @@ A marketplace of agent plugins whose subject is OpenTelemetry, in the
 [Agent Plugins](https://agent-plugins.org/) format (`plugin.json` at
 schema 1.0.0), readable by Claude Code and GitHub Copilot CLI today
 (Copilot CLI looks for `marketplace.json` at the repository root first,
-Claude Code reads `.claude-plugin/marketplace.json` only: the generator
-writes the same content at both places), Codex later
-(`.agents/plugins/marketplace.json`, the same generator).
+Claude Code and VS Code read `.claude-plugin/marketplace.json`: the
+generator writes the same content at both places), Codex CLI
+(`.agents/plugins/marketplace.json`, the same generator, with the
+git-backed sources Codex accepts), APM (`apm marketplace add`, the
+Claude Code schema, an Agent Plugins package for its `copilot` target)
+and Kiro (a plugin at its repository's root, imported by url) through
+the install lines on each plugin's page.
 
 The existing marketplaces are curated by hand and age. This one is run
 by the repository: a contributor submits a plugin **once**, through
@@ -57,7 +61,7 @@ store.
 .store/<plugin>.json                 one record per admitted plugin - the only source of truth
 marketplace.json                     generated: the marketplace Copilot CLI reads first
 .claude-plugin/marketplace.json      generated: the same content, the one Claude Code reads
-.agents/plugins/marketplace.json     generated, later: the same for Codex
+.agents/plugins/marketplace.json     generated: Codex's catalog, url and git-subdir sources at the sha
 marketplace/<plugin>/README.md       generated: the plugin's page
 README.md                            intro, then the generated plugin list
 scripts/                             the deterministic layer, Python 3.11+, standard library only
@@ -99,6 +103,12 @@ creates it, the nightly workflow updates `ref`, `sha`, `version` and
 `scripts/build.py` reads `.store/` and writes, deterministically and
 idempotently:
 
+- `.agents/plugins/marketplace.json`, Codex's catalog: one entry per
+  record with `source: {"source": "url" | "git-subdir", "url":
+  https://github.com/<repository>.git, "path": ./<path> when set,
+  "ref", "sha"}`, the default policy, the category's title, and
+  `description`, `version`, `keywords`, `author`, `homepage` as the
+  manifest fields Codex lists before the install;
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
   content: `name: otelyssey`, `owner: {"name": "using-system", "url":
   ...}`, one entry per record with
@@ -110,8 +120,9 @@ idempotently:
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
   category, repository link, version and tag, author, license,
-  keywords, statistics, the install lines for Claude Code and Copilot
-  CLI, the issue it was admitted from;
+  keywords, statistics, the install lines for Claude Code, Copilot
+  CLI, Codex CLI, APM, VS Code and, for a plugin at its repository's
+  root, Kiro, the issue it was admitted from;
 - the README's plugin list, between two markers: one subsection per
   category holding plugins, one entry per plugin (the plugin linked to
   its repository, the author, the description, a link to its page) and

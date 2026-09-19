@@ -27,3 +27,23 @@ GitHub Copilot CLI:
 copilot plugin marketplace add using-system/otelyssey
 copilot plugin install oddyssey@otelyssey
 ```
+
+Codex CLI:
+
+```text
+codex plugin marketplace add using-system/otelyssey
+codex plugin add oddyssey@otelyssey
+```
+
+APM:
+
+```text
+apm marketplace add using-system/otelyssey
+apm install oddyssey@otelyssey --target copilot
+```
+
+VS Code, in `settings.json`:
+
+```json
+"chat.plugins.marketplaces": ["using-system/otelyssey"]
+```
