@@ -41,22 +41,6 @@ body:
     validations:
       required: false
   - type: input
-    id: tag
-    attributes:
-      label: Release tag
-      description: The tag to review, a release of your repository. Only `X.Y.Z` and `vX.Y.Z` tags are followed.
-      placeholder: v1.0.0
-    validations:
-      required: true
-  - type: input
-    id: version
-    attributes:
-      label: Version
-      description: The version plugin.json carries at that tag.
-      placeholder: 1.0.0
-    validations:
-      required: true
-  - type: input
     id: license
     attributes:
       label: License
