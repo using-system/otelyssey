@@ -26,7 +26,10 @@ store.
   keeps a right of withdrawal (deleting a store record through a pull
   request removes the plugin).
 - **Engine: GitHub Copilot** for every agentic workflow (gh-aw's
-  default engine, billed in premium requests, no secret to hold).
+  default engine, billed in premium requests, no engine secret to
+  hold). One secret exists anyway: a maintainer token that chains the
+  workflows (see the guard rails), because GitHub emits no workflow
+  event for what the repository's own `GITHUB_TOKEN` does.
 - **Scope: OpenTelemetry in the broad sense.** A plugin is admissible
   when its main subject touches OpenTelemetry: instrumentation, the
   Collector, the semantic conventions, or the exploitation of OTel
@@ -93,9 +96,11 @@ creates it, the nightly workflow updates `ref`, `sha`, `version` and
 idempotently:
 
 - `.claude-plugin/marketplace.json`: `name: otelyssey`, `owner:
-  using-system`, one entry per record with `source: {"source":
-  "github", "repo": <repository>, "ref": <ref>, "sha": <sha>}` (the
-  `git-subdir` source form with `path` when `path` is set),
+  {"name": "using-system", "url": ...}`, one entry per record with
+  `source: {"source": "github", "repo": <repository>, "path": <path>
+  when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
+  accept; Copilot CLI rejects a `git-subdir` source, verified
+  2026-09-19),
   `description`, `version`, `category`, `keywords`, `homepage`,
   `license`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
@@ -128,11 +133,15 @@ is accepted from a contributor.
    `<path>/plugin.json` exists and validates against the Agent Plugins
    1.0.0 schema (fetched once, cached under `tests/fixtures/`), that
    the `name` matches the submission, that the version matches, and
-   that the layout is the standard's (optional `skills/`, `mcp.json`,
-   reverse-domain directories; a `.claude-plugin/` legacy layout is
-   reported as such).
-3. `scripts/smoke.py` writes a temporary marketplace pointing at the
-   sha and installs the plugin with Copilot CLI (`copilot plugin
+   that every `skills/<x>/` carries a `SKILL.md`; entries the format
+   does not define (`agents/`, `commands/`, `hooks/`, a lock file, a
+   `.claude-plugin/` carried next to `plugin.json`) are reported as
+   notes, never as errors: real plugins ship them. A `plugin.json`
+   missing at the root is an error, named as the legacy layout when
+   `.claude-plugin/plugin.json` exists.
+3. `scripts/smoke.py` writes a temporary marketplace holding a copy
+   of the checked-out plugin (a relative source: no second clone, no
+   network in the smoke) and installs the plugin with Copilot CLI (`copilot plugin
    marketplace add`, `copilot plugin install`) and with Claude Code's
    headless plugin install when one exists at that time; the install
    must exit 0 and list the plugin. No plugin code is executed beyond
@@ -206,8 +215,14 @@ past issues are respected.
 - Every deterministic failure names the rule and the value: the
   contributor fixes the issue and the gates re-run.
 - Actions pinned by commit SHA with the version in a comment;
-  permissions minimal per job; no secret in the repository; the
-  install smoke runs on an ephemeral runner with no credential.
+  permissions minimal per job; the install smoke runs under an
+  isolated HOME with no credential. One secret, the maintainer's
+  fine-grained token `OTELYSSEY_TOKEN` (this repository only:
+  Contents, Issues and Pull requests), labels the submission issue,
+  signs the agentic workflows' safe outputs, merges the admission and
+  pushes the bot commits: an event produced with `GITHUB_TOKEN` starts
+  no workflow, so the chain intake → review → admission needs it. Its
+  value is never written anywhere.
 - gh-aw workflows are compiled to `.lock.yml` and committed with their
   `.md`; `gh aw compile` in `ci.yml` refuses a drift.
 - A plugin's own code is never executed by the pipeline beyond the
@@ -220,9 +235,11 @@ past issues are respected.
   invalid, GitHub API answers, `ls-remote` outputs); `build.py`
   end-to-end on a fixture store, asserting the three artifacts
   byte-for-byte and idempotence.
-- The first store record is `oddyssey` (`using-system/oddyssey`, the
-  Agent Plugins manifest it ships in `marketplace/oddyssey/`), which is
-  also the fixture the intake workflow self-tests on.
+- The store ships empty. The first record, `oddyssey`
+  (`using-system/oddyssey`, the Agent Plugins manifest it ships in
+  `marketplace/oddyssey/`), is written by the pipeline itself on the
+  first real submission, which is the end-to-end test of the whole
+  chain; a fixture copy of it drives the unit tests.
 - `ci.yml`: ruff at a pinned version, pytest, `build.py --check`
   (regenerate and diff), gh-aw compile check.
 
