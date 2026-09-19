@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 
 from scripts import validate
@@ -14,6 +15,17 @@ def test_valid_manifest_has_no_errors():
 def test_empty_expected_version_skips_the_match():
     _, errors = validate.check_manifest(PLUGINS / "valid", "my-otel-plugin", "")
     assert errors == []
+
+
+def test_empty_expected_version_still_requires_a_version(tmp_path: Path):
+    manifest = json.loads((PLUGINS / "valid" / "plugin.json").read_text())
+    del manifest["version"]
+    (tmp_path / "plugin.json").write_text(json.dumps(manifest))
+    _, errors = validate.check_manifest(tmp_path, "my-otel-plugin", "")
+    assert errors == ["plugin.json: version missing"]
+    (tmp_path / "plugin.json").write_text(json.dumps({**manifest, "version": ""}))
+    _, errors = validate.check_manifest(tmp_path, "my-otel-plugin", "")
+    assert errors == ["plugin.json: version missing"]
 
 
 def test_name_and_version_must_match_the_submission():

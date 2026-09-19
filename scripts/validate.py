@@ -36,7 +36,11 @@ NAMESPACE_RE = re.compile(r"^[a-z0-9-]+(\.[a-z0-9-]+)+$")  # a reverse-domain ex
 def check_manifest(
     plugin_dir: Path, expected_name: str, expected_version: str
 ) -> tuple[dict, list[str]]:
-    """The manifest read and every error; an empty expected_version skips the version match."""
+    """The manifest read and every error.
+
+    An empty expected_version skips the version match; the manifest must still carry one,
+    it is the version the record takes.
+    """
     errors: list[str] = []
     manifest_path = plugin_dir / "plugin.json"
     if not manifest_path.is_file():
@@ -86,7 +90,10 @@ def check_manifest(
     if isinstance(name, str) and name != expected_name:
         errors.append(f"plugin.json: name is {name!r}, the submission says {expected_name!r}")
     version = manifest.get("version")
-    if expected_version and version != expected_version:
+    if not expected_version:
+        if not version:
+            errors.append("plugin.json: version missing")
+    elif version != expected_version:
         errors.append(
             f"plugin.json: version is {version!r}, the submission says {expected_version!r}"
         )
