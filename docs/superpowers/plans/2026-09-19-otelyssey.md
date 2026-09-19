@@ -1088,7 +1088,7 @@ git commit -m "feat(build): plugin pages, the readme table and the check mode"
 ### Task 5: The submission form and intake.py
 
 **Files:**
-- Create: `scripts/intake.py`, `tests/test_intake.py`, `tests/fixtures/issues/valid.md`, `tests/fixtures/issues/missing-tag.md`, `tests/fixtures/issues/comment-close.md`, `.github/ISSUE_TEMPLATE/submit-plugin.yml`, `.github/ISSUE_TEMPLATE/config.yml`
+- Create: `scripts/intake.py`, `tests/test_intake.py`, `tests/fixtures/issues/valid.md`, `tests/fixtures/issues/bad-repository.md`, `tests/fixtures/issues/comment-close.md`, `.github/ISSUE_TEMPLATE/submit-plugin.yml`, `.github/ISSUE_TEMPLATE/config.yml`
 
 **Interfaces:**
 - Consumes: `store.NAME_RE`, `store.REPO_RE`, `store.CATEGORIES`.
@@ -1252,7 +1252,7 @@ opentelemetry, tempo, traces
 backend
 ```
 
-`tests/fixtures/issues/missing-tag.md`: the same file with the `GitHub repository` value replaced by `contoso` and the `Release tag` value replaced by `_No response_`.
+`tests/fixtures/issues/bad-repository.md`: the same file with the `GitHub repository` value replaced by `contoso`.
 
 `tests/fixtures/issues/comment-close.md`: the same file with the `Description` value replaced by `Queries traces --> then closes the comment.`.
 
@@ -3213,7 +3213,7 @@ done
 
 - [ ] **Step 2: Run the pipeline on the first plugin**
 
-Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `Release tag` `v1.13.0`, `Version` `1.13.0`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings, opens a pull request labelled `admission` holding `.store/oddyssey.json` and sets `admission-opened`; `ci` passes on that pull request; the `admit` run merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
+Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings, opens a pull request labelled `admission` holding `.store/oddyssey.json` and sets `admission-opened`; `ci` passes on that pull request; the `admit` run merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
 
 - [ ] **Step 3: Install what the marketplace lists, from a clean HOME**
 
