@@ -214,6 +214,7 @@ permissions:
 
 jobs:
   checks:
+    name: ci # the status check the main ruleset requires, and admit.yml waits for
     runs-on: ubuntu-26.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -3038,10 +3039,14 @@ jobs:
                   continue
               if r["status"] == "failed":
                   title = f"release-follow: {name} {r['tag']} does not validate"
-                  errors = r["errors"]
+                  errors = r["errors"] + ([r["stats_error"]] if "stats_error" in r else [])
+                  opening = "The nightly follow of releases found this tag and could not re-pin it:"
+                  closing = "The marketplace keeps the previous release until a tag validates."
               else:
                   title = f"release-follow: {name} repository statistics unreadable"
                   errors = [r["stats_error"]]
+                  opening = "The nightly refresh could not read the repository's statistics:"
+                  closing = "The listing keeps the last counts read until the repository answers again."
               existing = subprocess.run(
                   ["gh", "issue", "list", "--label", "release-follow", "--state", "all",
                    "--search", f'"{title}" in:title', "--json", "number", "--jq", "length"],
@@ -3049,11 +3054,7 @@ jobs:
               ).stdout.strip()
               if existing not in ("", "0"):
                   continue
-              body = (
-                  "The nightly follow of releases found this tag and could not re-pin it:\n\n"
-                  + "\n".join(f"- {e}" for e in errors)
-                  + "\n\nThe marketplace keeps the previous release until a tag validates."
-              )
+              body = opening + "\n\n" + "\n".join(f"- {e}" for e in errors) + "\n\n" + closing
               subprocess.run(
                   ["gh", "issue", "create", "--title", title, "--label", "release-follow", "--body", body],
                   check=True,
@@ -3146,7 +3147,7 @@ for l in submission format-ok needs-changes infra-error under-review admission-o
 done
 ```
 
-3. Ruleset on `main`: require a pull request, require the `ci` status check, block force pushes and deletions, and add "Repository admin" as a bypass actor (the admission and the nightly push to `main` with the admin's token).
+3. Ruleset on `main`: require a pull request, require the status check named `ci` (a check is named after its job, and `ci.yml` names its one job `ci`), block force pushes and deletions, and add "Repository admin" as a bypass actor (the admission and the nightly push to `main` with the admin's token).
 
 - [ ] **Step 2: Run the pipeline on the first plugin**
 
