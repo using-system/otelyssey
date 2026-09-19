@@ -117,23 +117,29 @@ A run of `build.py` on a store that did not change produces no diff.
 
 `.github/ISSUE_TEMPLATE/submit-plugin.yml`, labels `submission`: plugin
 name, description, GitHub repository (`owner/repo`), path inside the
-repository (optional), tag to review (required: a release tag, the
-immutable form; the sha is derived), version, license, author name and
-URL, homepage (optional), keywords, category (dropdown). The template
-says what will be checked and that no pull request against `.store/`
-is accepted from a contributor.
+repository (optional), license, author name and URL, homepage
+(optional), keywords, category (dropdown). The form asks neither the
+tag nor the version: the tag reviewed is the repository's latest
+release (`X.Y.Z` or `vX.Y.Z`, the highest by semver), resolved by the
+intake, and the sha is derived from it; the version is read from
+`plugin.json` at that tag. The template says what will be checked and
+that no pull request against `.store/` is accepted from a contributor.
 
 ## Admission
 
 ### intake (deterministic, on `issues: opened, edited, reopened` carrying `submission`)
 
 1. `scripts/intake.py` parses the issue body into a candidate record
-   and names every missing or malformed field.
+   and names every missing or malformed field; on a clean form it
+   resolves the repository's latest release tag (`git ls-remote
+   --tags`, semver-sorted) and its sha into the candidate, and names
+   an unreadable repository or one without a release tag as an error.
 2. `scripts/validate.py` resolves the tag to a sha, clones the
    repository at that sha (shallow, no credentials), checks that
    `<path>/plugin.json` exists and validates against the Agent Plugins
    1.0.0 schema (fetched once, cached under `tests/fixtures/`), that
-   the `name` matches the submission, that the version matches, and
+   the `name` matches the submission, that it carries a `version` (the
+   record's version is read from `plugin.json`), and
    that every `skills/<x>/` carries a `SKILL.md`; entries the format
    does not define (`agents/`, `commands/`, `hooks/`, a lock file, a
    `.claude-plugin/` carried next to `plugin.json`) are reported as

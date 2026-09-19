@@ -1088,12 +1088,12 @@ git commit -m "feat(build): plugin pages, the readme table and the check mode"
 ### Task 5: The submission form and intake.py
 
 **Files:**
-- Create: `scripts/intake.py`, `tests/test_intake.py`, `tests/fixtures/issues/valid.md`, `tests/fixtures/issues/missing-tag.md`, `tests/fixtures/issues/comment-close.md`, `.github/ISSUE_TEMPLATE/submit-plugin.yml`, `.github/ISSUE_TEMPLATE/config.yml`
+- Create: `scripts/intake.py`, `tests/test_intake.py`, `tests/fixtures/issues/valid.md`, `tests/fixtures/issues/bad-repository.md`, `tests/fixtures/issues/comment-close.md`, `.github/ISSUE_TEMPLATE/submit-plugin.yml`, `.github/ISSUE_TEMPLATE/config.yml`
 
 **Interfaces:**
 - Consumes: `store.NAME_RE`, `store.REPO_RE`, `store.CATEGORIES`.
-- Produces: `parse_form(body: str) -> dict[str, str]` (label to value, `_No response_` read as empty), `candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str]]` (a record without `sha`, `admitted_at`, `stats`, carrying `submitted_version` instead of `version`, plus the errors), `main(argv) -> int` with `--body-file`, `--issue N`, `--json`.
-- The form's labels, exactly: `Plugin name`, `Description`, `GitHub repository`, `Path inside the repository`, `Release tag`, `Version`, `License`, `Author name`, `Author URL`, `Homepage`, `Keywords`, `Category`. A value containing `-->` is refused: the candidate travels inside an HTML comment (Task 9).
+- Produces: `parse_form(body: str) -> dict[str, str]` (label to value, `_No response_` read as empty), `candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str]]` (a record without `ref`, `sha`, `version`, `admitted_at`, `stats`, plus the errors), `main(argv) -> int` with `--body-file`, `--issue N`, `--json`, `--no-resolve`.
+- The form's labels, exactly: `Plugin name`, `Description`, `GitHub repository`, `Path inside the repository`, `License`, `Author name`, `Author URL`, `Homepage`, `Keywords`, `Category`. Neither the tag nor the version is asked: `main` resolves the repository's latest release (`resolve_ref(repository) -> (tag, sha, errors)`, through `gitrepo.list_tags` and `gitrepo.latest_release`) into the candidate's `ref` and `sha`, and the version is read from `plugin.json` by the validation (issue #7). A value containing `-->` is refused: the candidate travels inside an HTML comment (Task 9).
 
 - [ ] **Step 1: Write the issue form**
 
@@ -1108,7 +1108,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        The repository checks the format of your plugin at the tag you name, installs it,
+        The repository checks the format of your plugin at your repository's latest release tag (X.Y.Z or vX.Y.Z), installs it,
         judges its relevance to OpenTelemetry and its novelty, and answers here.
         Do not open a pull request against `.store/`: the pipeline writes it.
   - type: input
@@ -1142,22 +1142,6 @@ body:
       placeholder: plugins/my-otel-plugin
     validations:
       required: false
-  - type: input
-    id: tag
-    attributes:
-      label: Release tag
-      description: The tag to review, a release of your repository. Only `X.Y.Z` and `vX.Y.Z` tags are followed.
-      placeholder: v1.0.0
-    validations:
-      required: true
-  - type: input
-    id: version
-    attributes:
-      label: Version
-      description: The version plugin.json carries at that tag.
-      placeholder: 1.0.0
-    validations:
-      required: true
   - type: input
     id: license
     attributes:
@@ -1268,7 +1252,7 @@ opentelemetry, tempo, traces
 backend
 ```
 
-`tests/fixtures/issues/missing-tag.md`: the same file with the `GitHub repository` value replaced by `contoso` and the `Release tag` value replaced by `_No response_`.
+`tests/fixtures/issues/bad-repository.md`: the same file with the `GitHub repository` value replaced by `contoso`.
 
 `tests/fixtures/issues/comment-close.md`: the same file with the `Description` value replaced by `Queries traces --> then closes the comment.`.
 
@@ -2419,7 +2403,7 @@ jobs:
           out = subprocess.run(
               [sys.executable, "-m", "scripts.validate", "--repository", c["repository"],
                "--tag", c["ref"], "--path", c["path"], "--name", c["name"],
-               "--version", c["submitted_version"], "--workdir", "work/validate", "--json"],
+               "--workdir", "work/validate", "--json"],
               capture_output=True, text=True,
           )
           open("work/validation.json", "w").write(out.stdout)
@@ -3229,7 +3213,7 @@ done
 
 - [ ] **Step 2: Run the pipeline on the first plugin**
 
-Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `Release tag` `v1.13.0`, `Version` `1.13.0`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings, opens a pull request labelled `admission` holding `.store/oddyssey.json` and sets `admission-opened`; `ci` passes on that pull request; the `admit` run merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
+Open a submission issue with the form: `Plugin name` `oddyssey`, `GitHub repository` `using-system/oddyssey`, `Path inside the repository` `marketplace/oddyssey`, `License` `MIT`, `Author name` `using-system`, `Author URL` `https://github.com/using-system`, `Keywords` `opentelemetry, observability, mcp`, `Category` `workflow`, and a description of the plugin. Expected, in order: the `intake` run leaves one comment ending with the candidate block and sets `format-ok`; the `review` run comments its two rulings, opens a pull request labelled `admission` holding `.store/oddyssey.json` and sets `admission-opened`; `ci` passes on that pull request; the `admit` run merges it, pushes `chore(build): artifacts after the admission of oddyssey.json` to `main` and closes the issue with `admitted`; `main` then carries `.store/oddyssey.json`, `marketplace/oddyssey/README.md`, a one-row README table and a one-entry `.claude-plugin/marketplace.json`. Then `gh workflow run nightly.yml` and check its run ends with a `chore(store): nightly refresh` commit carrying the real counts (a record admitted with zero counts always moves on its first refresh).
 
 - [ ] **Step 3: Install what the marketplace lists, from a clean HOME**
 
