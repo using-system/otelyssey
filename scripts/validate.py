@@ -101,19 +101,21 @@ def check_manifest(
 
 
 def check_layout(plugin_dir: Path) -> tuple[list[str], list[str]]:
-    """Errors (a skill without SKILL.md) and notes (entries the format does not define).
+    """Errors (a skill without SKILL.md) and notes (directories the format does not define).
 
     Known: plugin.json, skills/, mcp.json, README, LICENSE, CHANGELOG, dotfiles, and a
-    reverse-domain directory (an extension namespace, `com.example.tool`).
+    reverse-domain directory (an extension namespace, `com.example.tool`). A plain file next
+    to plugin.json is never a note: the format tolerates any file, and a plugin at its
+    repository's root sits next to all of the repository's files.
     """
     errors: list[str] = []
     notes: list[str] = []
     for entry in sorted(plugin_dir.iterdir()):
         if entry.name == ".claude-plugin":
             notes.append(".claude-plugin: pre-standard layout carried next to plugin.json")
-        elif entry.name.startswith(".") or entry.name in KNOWN_ENTRIES:
+        elif not entry.is_dir() or entry.name.startswith(".") or entry.name in KNOWN_ENTRIES:
             continue
-        elif entry.is_dir() and NAMESPACE_RE.match(entry.name):
+        elif NAMESPACE_RE.match(entry.name):
             continue
         else:
             notes.append(f"{entry.name}: not an entry the Agent Plugins format defines")
