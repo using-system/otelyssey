@@ -8,8 +8,13 @@ permissions:
   copilot-requests: write
 engine: copilot
 tools:
+  # read-only shell, for the store's records; gh-aw's strict mode requires it to be explicit at none
+  bash: [cat, ls, find, grep, head, tail, wc]
   github:
     toolsets: [repos, issues]
+    # the audit reads its own past issues, opened by the app (author association NONE) and
+    # holding the owner's rulings; gh-aw's public-repo default, approved, would filter them out
+    min-integrity: none
 safe-outputs:
   github-app:
     client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
