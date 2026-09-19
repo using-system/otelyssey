@@ -60,6 +60,36 @@ def test_render_json_is_stable():
     assert build.render_json(payload) == json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 
 
+def test_codex_marketplace_uses_git_backed_sources_pinned_at_the_sha():
+    # Codex reads .agents/plugins/marketplace.json: url for a plugin at its repository's
+    # root, git-subdir with a ./-prefixed path otherwise, ref and sha on both
+    payload = build.codex_marketplace_json(records())
+    assert payload["name"] == "otelyssey"
+    assert payload["interface"] == {"displayName": "otelyssey"}
+    [entry] = payload["plugins"]
+    assert entry["name"] == "oddyssey"
+    assert entry["source"] == {
+        "source": "git-subdir",
+        "url": "https://github.com/using-system/oddyssey.git",
+        "path": "./marketplace/oddyssey",
+        "ref": "v1.13.0",
+        "sha": records()["oddyssey"]["sha"],
+    }
+    assert entry["policy"] == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}
+    assert entry["category"] == "Workflows"
+    assert entry["description"] == records()["oddyssey"]["description"]
+    assert entry["version"] == "1.13.0" and entry["keywords"] == records()["oddyssey"]["keywords"]
+    assert entry["author"] == records()["oddyssey"]["author"]
+    root_plugin = {**records()["oddyssey"], "path": ""}
+    [entry] = build.codex_marketplace_json({"oddyssey": root_plugin})["plugins"]
+    assert entry["source"] == {
+        "source": "url",
+        "url": "https://github.com/using-system/oddyssey.git",
+        "ref": "v1.13.0",
+        "sha": root_plugin["sha"],
+    }
+
+
 def test_plugin_page_carries_the_facts():
     page = build.plugin_page(records()["oddyssey"])
     assert page.startswith("# oddyssey\n")
@@ -72,9 +102,20 @@ def test_plugin_page_carries_the_facts():
         "claude plugin marketplace add using-system/otelyssey",
         "claude plugin install oddyssey@otelyssey",
         "copilot plugin install oddyssey@otelyssey",
+        "codex plugin marketplace add using-system/otelyssey",
+        "codex plugin add oddyssey@otelyssey",
+        '"chat.plugins.marketplaces": ["using-system/otelyssey"]',
+        "apm marketplace add using-system/otelyssey",
+        "apm install oddyssey@otelyssey --target copilot",
         "https://github.com/using-system/otelyssey/issues/1",
     ):
         assert fragment in page, fragment
+    # Kiro imports a power from a repository url: only a plugin at the repository's root
+    assert "Import power from GitHub" not in page
+    root_plugin = {**records()["oddyssey"], "path": ""}
+    assert "Import power from GitHub, `https://github.com/using-system/oddyssey`" in (
+        build.plugin_page(root_plugin)
+    )
 
 
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
@@ -133,11 +174,14 @@ def test_build_is_idempotent(tmp_path: Path):
     assert set(first) == {
         "marketplace.json",
         ".claude-plugin/marketplace.json",
+        ".agents/plugins/marketplace.json",
         "marketplace/oddyssey/README.md",
         "README.md",
     }
+    codex = json.loads((root / ".agents" / "plugins" / "marketplace.json").read_text())
+    assert codex["plugins"][0]["source"]["source"] == "git-subdir"
     assert build.build(root, check=True) == []
-    # Copilot CLI looks at the root first, Claude Code in .claude-plugin/ only: one content, twice
+    # Copilot CLI looks at the root first, Claude Code and VS Code in .claude-plugin/: one content
     assert (root / "marketplace.json").read_bytes() == (
         root / ".claude-plugin" / "marketplace.json"
     ).read_bytes()
@@ -148,6 +192,7 @@ def test_build_on_an_empty_store(tmp_path: Path):
     (tmp_path / ".store").mkdir()
     (tmp_path / "README.md").write_text(EMPTY_README)
     assert build.build(tmp_path, check=False) == [
+        ".agents/plugins/marketplace.json",
         ".claude-plugin/marketplace.json",
         "README.md",
         "marketplace.json",
@@ -164,6 +209,9 @@ def test_check_fails_when_an_artifact_is_stale(tmp_path: Path):
     assert build.main(["--check", "--root", str(root)]) == 1
     build.build(root, check=False)
     (root / "marketplace.json").write_text("{}\n")
+    assert build.main(["--check", "--root", str(root)]) == 1
+    build.build(root, check=False)
+    (root / ".agents" / "plugins" / "marketplace.json").write_text("{}\n")
     assert build.main(["--check", "--root", str(root)]) == 1
 
 
