@@ -91,3 +91,14 @@ def test_manifest_content_cannot_close_the_candidate_block():
     assert tail.count("-->") == 1
     block = tail.split(" -->", 1)[0]
     assert json.loads(block)["author"]["name"] == "x --> injected"
+
+
+def test_a_manifest_url_is_copied_only_when_it_is_https():
+    manifest = {
+        **VALIDATION["manifest"],
+        "homepage": "javascript:alert(1)",
+        "author": {"name": "x", "url": "http://insecure"},
+    }
+    record = report.candidate_record(CANDIDATE, {**VALIDATION, "manifest": manifest})
+    assert record["homepage"] == ""
+    assert record["author"] == {"name": "x"}
