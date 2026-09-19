@@ -136,3 +136,18 @@ def test_build_removes_the_page_of_a_withdrawn_plugin(tmp_path: Path):
     (root / ".store" / "oddyssey.json").unlink()
     assert "marketplace/oddyssey/README.md" in build.build(root, check=False)
     assert not (root / "marketplace" / "oddyssey").exists()
+
+
+def test_plugin_page_escapes_markdown_in_the_author_and_the_description():
+    record = dict(records()["oddyssey"])
+    record["author"] = {"name": "x [y] <z>"}
+    record["description"] = "a  *b*\n_c_ `d`"
+    page = build.plugin_page(record)
+    assert page.count("x \\[y\\] \\<z\\>") == 1
+    assert "x [y] <z>" not in page
+    assert "a \\*b\\* \\_c\\_ \\`d\\`\n" in page
+
+
+def test_text_collapses_whitespace_and_escapes_markdown():
+    assert build.text(" a\n\tb ") == "a b"
+    assert build.text("[<*_`>]") == "\\[\\<\\*\\_\\`\\>\\]"

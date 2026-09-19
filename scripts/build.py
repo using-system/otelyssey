@@ -55,18 +55,28 @@ def render_json(payload: dict) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 
 
+MARKDOWN_ESCAPES = str.maketrans({c: f"\\{c}" for c in "[]<>*_`"})
+
+
+def text(value: str) -> str:
+    """Free text in a page: whitespace collapsed; link, tag and emphasis marks escaped."""
+    return " ".join(value.split()).translate(MARKDOWN_ESCAPES)
+
+
 def plugin_page(record: dict) -> str:
+    """The urls (homepage, author url) passed the store's https rule; the free text is escaped."""
     repo_url = f"https://github.com/{record['repository']}"
     where = f"`{record['path']}` in" if record["path"] else "the root of"
     keywords = ", ".join(f"`{k}`" for k in record["keywords"]) or "none"
     author = record["author"]
-    author_text = f"[{author['name']}]({author['url']})" if author.get("url") else author["name"]
+    author_name = text(author["name"])
+    author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
     homepage = f"\n- Homepage: <{record['homepage']}>" if record["homepage"] else ""
     stats = record["stats"]
     issue_url = f"https://github.com/{MARKETPLACE_REPO}/issues/{record['submitted_in']}"
     return (
         f"# {record['name']}\n\n"
-        f"{record['description']}\n\n"
+        f"{text(record['description'])}\n\n"
         f"- Category: `{record['category']}`\n"
         f"- Repository: [{record['repository']}]({repo_url}), the plugin at {where} it\n"
         f"- Version: {record['version']} (tag `{record['ref']}`, commit `{record['sha'][:12]}`)\n"

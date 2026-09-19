@@ -36,6 +36,13 @@ def test_valid_record_has_no_errors():
         ("repository", "not-a-repo", "repository"),
         ("sha", "abc", "sha"),
         ("stats", {"stars": 1}, "stats"),
+        ("homepage", "javascript:alert(1)", "homepage"),
+        ("homepage", "https://contoso.example/a b", "homepage"),
+        ("author", {"name": "x", "url": "javascript:alert(1)"}, "author.url"),
+        ("author", {"name": "x", "email": "a b@example"}, "author.email"),
+        ("author", {"name": "x", "email": ""}, "author.email"),
+        ("author", {"name": "x", "url": 1}, "author.url"),
+        ("author", {"name": "x", "email": None}, "author.email"),
     ],
 )
 def test_invalid_field_is_named(field, value, fragment):
@@ -87,3 +94,9 @@ def test_write_rewrites_a_valid_record_canonically(tmp_path: Path):
 def test_check_refuses_a_root_without_a_store(tmp_path: Path, capsys):
     assert store.main(["--check", "--root", str(tmp_path)]) == 2
     assert ".store" in capsys.readouterr().err
+
+
+def test_author_email_and_url_are_optional():
+    author = {"name": "x", "email": "x@example.com", "url": "https://contoso.example"}
+    assert store.validate_record({**RECORD, "author": author}) == []
+    assert store.validate_record({**RECORD, "homepage": ""}) == []

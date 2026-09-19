@@ -14,6 +14,7 @@ REPO_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/[A-Za-z0-9._-]+
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 STAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
+URL_RE = re.compile(r"^https://\S+$")
 FIELDS = (
     "name",
     "description",
@@ -68,10 +69,18 @@ def validate_record(record: dict) -> list[str]:
         errors.append("author: needs a name")
     elif set(author) - {"name", "email", "url"}:
         errors.append("author: only name, email, url")
+    else:
+        url, email = author.get("url"), author.get("email")
+        if "url" in author and (not isinstance(url, str) or not URL_RE.match(url)):
+            errors.append("author.url: not an https URL")
+        if "email" in author and (not _is_text(email) or any(c.isspace() for c in email)):
+            errors.append("author.email: empty or carries whitespace")
     if not _is_text(record["license"]):
         errors.append("license: empty")
-    if not isinstance(record["homepage"], str):
-        errors.append("homepage: not a string (empty allowed)")
+    if not isinstance(record["homepage"], str) or (
+        record["homepage"] and not URL_RE.match(record["homepage"])
+    ):
+        errors.append("homepage: not an https URL (empty allowed)")
     keywords = record["keywords"]
     if not isinstance(keywords, list) or not all(isinstance(k, str) for k in keywords):
         errors.append("keywords: not a list of strings")
