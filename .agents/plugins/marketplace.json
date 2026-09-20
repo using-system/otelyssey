@@ -5,6 +5,39 @@
   },
   "plugins": [
     {
+      "name": "dynatrace-managed-mcp",
+      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters, the telemetry Dynatrace ingests from OneAgent and over OTLP.",
+      "version": "1.1.1",
+      "keywords": [
+        "dynatrace",
+        "dynatrace-managed",
+        "mcp",
+        "observability",
+        "monitoring",
+        "apm",
+        "logs",
+        "metrics",
+        "slo",
+        "opentelemetry"
+      ],
+      "author": {
+        "name": "Dynatrace",
+        "url": "https://www.dynatrace.com"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/dynatrace-oss/dynatrace-managed-mcp.git",
+        "ref": "main",
+        "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://github.com/dynatrace-oss/dynatrace-managed-mcp#readme"
+    },
+    {
       "name": "langwatch",
       "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
       "version": "1.2.0",
