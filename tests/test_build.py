@@ -199,6 +199,7 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     assert entry.startswith("- [oddyssey](marketplace/oddyssey/README.md) by ")
     assert " - " in entry and entry.endswith(" · also in Instrumentation  ")
     assert "https://github.com/using-system/oddyssey" not in entry
+    assert "[install]" not in text
     assert badges.count('<a href="#">') == 7 and badges.endswith('alt="watchers"></a>')
     single = {**records()["oddyssey"], "categories": ["observability"]}
     assert "also" not in build.readme_entry(single)

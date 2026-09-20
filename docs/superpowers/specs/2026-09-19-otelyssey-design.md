@@ -154,11 +154,9 @@ idempotently:
   linked to its page, the author, the description, its other
   categories) and a line of live shields.io badges below it, anchored
   at `#` (GitHub links a bare image to itself, and drops an anchor
-  without href): release, created, last commit, license, stars, forks,
-  watchers. The
-  counts the store carries
-  refresh the plugin's page, not the README, which changes only when a
-  record does.
+  without href): version, created, last commit, license, stars, forks,
+  watchers. The counts the store carries refresh the plugin's page, not
+  the README, which changes only when a record does.
 
 A run of `build.py` on a store that did not change produces no diff.
 
