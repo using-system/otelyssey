@@ -43,6 +43,19 @@ def test_parse_form_maps_labels_to_values():
             ("contoso/skills", "plugins/otel"),
         ),
         ("https://www.github.com/contoso/skills.git/blob/main/plugin.json", ("contoso/skills", "")),
+        # GitHub's Raw button: refs/heads/<branch> and refs/tags/<tag> are the ref
+        (
+            "https://github.com/contoso/skills/raw/refs/heads/main/plugins/otel/plugin.json",
+            ("contoso/skills", "plugins/otel"),
+        ),
+        (
+            "https://raw.githubusercontent.com/contoso/skills/refs/tags/v1.2.0/plugins/otel/plugin.json",
+            ("contoso/skills", "plugins/otel"),
+        ),
+        (
+            "https://raw.githubusercontent.com/contoso/skills/refs/heads/main/plugin.json",
+            ("contoso/skills", ""),
+        ),
         # a percent-encoded path is decoded; the store accepts a space, the pages quote it
         (
             "https://github.com/contoso/skills/blob/main/my%20plugins/otel/plugin.json",
@@ -74,6 +87,13 @@ def test_parse_url_gives_the_repository_and_the_path(url, expected):
         "https://github.com/contoso/my-otel-plugin/blob/main/PLUGIN.JSON",
         "https://github.com/-contoso/my-otel-plugin/blob/main/plugin.json",
         "https://github.com/contoso/my-otel-plugin/blob/main/a%0ab/plugin.json",
+        # a percent-encoded slash would smuggle a dotdot or an absolute path into a segment
+        "https://github.com/contoso/my-otel-plugin/blob/main/a%2F..%2Fb/plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/%2Fetc/plugin.json",
+        # a backtick would forge the line the review rules on
+        "https://github.com/contoso/my-otel-plugin/blob/main/x%60%20in%20%60evil/plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/plugin.json?raw=true",
+        "https://github.com/contoso/skills/raw/refs/heads/plugin.json",
         "",
     ],
 )
@@ -90,7 +110,7 @@ def test_candidate_from_a_valid_form():
 
 
 def test_candidate_names_a_bad_url():
-    fields = intake.parse_form((FIXTURES / "bad-repository.md").read_text())
+    fields = intake.parse_form((FIXTURES / "bad-url.md").read_text())
     _, errors = intake.candidate(fields, issue_number=7)
     assert len(errors) == 1 and errors[0].startswith("plugin.json URL: the URL of plugin.json")
 
@@ -175,7 +195,7 @@ def test_main_does_not_resolve_a_form_with_errors(tmp_path: Path, capsys, monkey
 
     monkeypatch.setattr(intake.gitrepo, "list_tags", must_not_be_called)
     body = tmp_path / "body.md"
-    body.write_text((FIXTURES / "bad-repository.md").read_text())
+    body.write_text((FIXTURES / "bad-url.md").read_text())
     assert intake.main(["--body-file", str(body), "--issue", "7", "--json"]) == 1
     [error] = json.loads(capsys.readouterr().out)["errors"]
     assert error.startswith("plugin.json URL")
@@ -189,4 +209,4 @@ def test_main_no_resolve_keeps_the_form_only(tmp_path: Path, capsys, monkeypatch
     body = tmp_path / "body.md"
     body.write_text((FIXTURES / "valid.md").read_text())
     assert intake.main(["--body-file", str(body), "--issue", "7", "--no-resolve"]) == 0
-    assert capsys.readouterr().out == "candidate at contoso/my-otel-plugin '' \n"
+    assert capsys.readouterr().out == "candidate at contoso/my-otel-plugin ''\n"

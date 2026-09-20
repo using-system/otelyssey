@@ -81,7 +81,7 @@ jobs:
                "--validation", "work/validation.json", "--out", "work/derived.json"],
               capture_output=True, text=True,
           )
-          if out.returncode == 2:
+          if out.returncode != 0 and out.stderr:
               print(out.stderr)
           PY
       - name: Install on the hosts

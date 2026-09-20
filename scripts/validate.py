@@ -31,6 +31,7 @@ OPTIONAL_STRINGS = ("version", "description", "homepage", "repository", "license
 AUTHOR_KEYS = {"name", "email", "url"}
 KNOWN_ENTRIES = {"plugin.json", "skills", "mcp.json", "README.md", "LICENSE", "CHANGELOG.md"}
 NAMESPACE_RE = re.compile(r"^[a-z0-9-]+(\.[a-z0-9-]+)+$")  # a reverse-domain extension directory
+VERSION_RE = re.compile(r"^[^\s`]+$")
 
 
 def check_manifest(
@@ -90,6 +91,9 @@ def check_manifest(
     if expected_name and isinstance(name, str) and name != expected_name:
         errors.append(f"plugin.json: name is {name!r}, the submission says {expected_name!r}")
     version = manifest.get("version")
+    if isinstance(version, str) and version and not VERSION_RE.match(version):
+        # the version stands in backticks on the line the review rules on
+        errors.append("plugin.json: version carries whitespace or a backtick")
     if not expected_version:
         if not version:
             errors.append("plugin.json: version missing")

@@ -104,12 +104,35 @@ def test_what_neither_gives_is_an_error_the_contributor_fixes_in_the_manifest():
     assert record["keywords"] == [] and filled == []
 
 
-def test_an_author_or_a_homepage_url_the_store_refuses_is_dropped_not_copied():
-    manifest = {**MANIFEST, "homepage": "ftp://x", "author": {"name": "C", "url": "http://x"}}
+def test_an_author_url_the_store_refuses_is_dropped_not_copied():
+    manifest = {**MANIFEST, "author": {"name": "C", "url": "http://x"}}
     record, errors, _ = derive.derive(CANDIDATE, validation(manifest), derive.metadata(RAW))
     assert errors == []
-    assert record["homepage"] == ""
     assert record["author"] == {"name": "C"}
+
+
+def test_a_homepage_is_an_https_url_from_either_source_or_nothing():
+    # a manifest homepage that is not https does not win the fallback: the repository's does
+    manifest = {**MANIFEST, "homepage": "http://old.example"}
+    record, _, filled = derive.derive(CANDIDATE, validation(manifest), derive.metadata(RAW))
+    assert record["homepage"] == "https://contoso.example" and filled == ["homepage"]
+    # GitHub's field is free text: one without a scheme is nothing, and not "from the repository"
+    bare = {k: v for k, v in MANIFEST.items() if k != "homepage"}
+    meta = derive.metadata({**RAW, "homepage": "contoso.example"})
+    record, _, filled = derive.derive(CANDIDATE, validation(bare), meta)
+    assert record["homepage"] == "" and filled == []
+
+
+def test_the_stores_rules_are_errors_here_not_a_failed_admission_later():
+    manifest = {
+        **MANIFEST,
+        "description": "red \x1b[31m",
+        "author": {"name": "C", "email": "a b@x"},
+    }
+    _, errors, _ = derive.derive(CANDIDATE, validation(manifest), derive.metadata(RAW))
+    assert errors and all(e.startswith("plugin.json: ") for e in errors)
+    assert any("description" in e for e in errors)
+    assert any("email" in e for e in errors)
 
 
 def test_metadata_reads_the_api_object_defensively():

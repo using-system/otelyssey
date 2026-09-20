@@ -9,19 +9,21 @@ enters the record.
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import sys
-import urllib.error
 from pathlib import Path
 
 from scripts import stats, store
 
 # the store's field, the manifest's key, the repository metadata's key
-FALLBACKS = (
-    ("description", "description", "description"),
-    ("license", "license", "license"),
-    ("homepage", "homepage", "homepage"),
-)
+FALLBACKS = (("description", "description", "description"), ("license", "license", "license"))
+# what the store adds at the admission, so its rules can be run on the record here
+PLACEHOLDERS = {
+    "category": store.CATEGORIES[0],
+    "admitted_at": "1970-01-01",
+    "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "1970-01-01T00:00:00Z"},
+}
 
 
 def metadata(raw: dict) -> dict:
@@ -50,6 +52,11 @@ def _text(value: object) -> str:
     return " ".join(value.split()) if isinstance(value, str) else ""
 
 
+def _url(value: object) -> str:
+    text = _text(value)
+    return text if store.URL_RE.match(text) else ""
+
+
 def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[str], list[str]]:
     """The record (without category, admitted_at, stats), its errors, and one line per field
     that the repository's metadata gave instead of the manifest."""
@@ -71,8 +78,11 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
             value = _text(meta[meta_key])
             from_repository.append(field)
         record[field] = value
-    if record["homepage"] and not store.URL_RE.match(record["homepage"]):
-        record["homepage"] = ""
+    # a homepage is an https url or nothing, from either source: GitHub's field is free text
+    record["homepage"] = _url(manifest.get("homepage"))
+    if not record["homepage"] and _url(meta.get("homepage")):
+        record["homepage"] = _url(meta["homepage"])
+        from_repository.append("homepage")
     author = manifest.get("author")
     if isinstance(author, dict) and _text(author.get("name")):
         record["author"] = {"name": _text(author["name"])}
@@ -103,6 +113,12 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
     if not record["author"]["name"]:
         errors.append("plugin.json: no author, and the repository's owner could not be read")
     ordered = {field: record[field] for field in store.FIELDS if field in record}
+    # the store's own rules (a control character, a version, an email), so a record the
+    # admission would refuse is a needs-changes here, not a failed admission after a ruling
+    if not errors:
+        errors += [
+            f"plugin.json: {line}" for line in store.validate_record({**ordered, **PLACEHOLDERS})
+        ]
     return ordered, errors, from_repository
 
 
@@ -119,7 +135,8 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     try:
         meta = fetch_metadata(candidate["repository"], stats.token_from_env())
-    except (urllib.error.URLError, TimeoutError, ValueError) as error:
+    except (OSError, http.client.HTTPException, ValueError) as error:
+        # URLError and timeouts are OSErrors; a dropped response is an HTTPException
         print(f"{candidate['repository']}: metadata unreadable ({error})", file=sys.stderr)
         return 2
     record, errors, from_repository = derive(candidate, validation, meta)

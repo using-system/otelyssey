@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts import validate
 
 PLUGINS = Path(__file__).parent / "fixtures" / "plugins"
@@ -26,6 +28,15 @@ def test_empty_expected_version_still_requires_a_version(tmp_path: Path):
     (tmp_path / "plugin.json").write_text(json.dumps({**manifest, "version": ""}))
     _, errors = validate.check_manifest(tmp_path, "my-otel-plugin", "")
     assert errors == ["plugin.json: version missing"]
+
+
+@pytest.mark.parametrize("version", ["1.2.0` in `evil", "1.2 .0"])
+def test_a_version_with_a_backtick_or_whitespace_is_refused(tmp_path: Path, version):
+    # the version stands in backticks on the line the review rules on: one token, no backtick
+    manifest = {"$schema": validate.SCHEMA_URL, "name": "x", "version": version}
+    (tmp_path / "plugin.json").write_text(json.dumps(manifest))
+    _, errors = validate.check_manifest(tmp_path, "", "")
+    assert any("backtick" in e for e in errors)
 
 
 def test_name_and_version_must_match_the_submission():

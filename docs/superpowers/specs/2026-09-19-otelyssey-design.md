@@ -95,7 +95,7 @@ tests/                               pytest on recorded fixtures
 | --- | --- |
 | `name` | the `plugin.json` name (the Agent Plugins pattern) |
 | `description` | `plugin.json`'s, else the repository's description; neither is a `needs-changes` |
-| `category` | one of a short closed list (instrumentation, collector, conventions, backend, workflow), ruled by the review from the plugin's content; the form's, when it carries one, is a suggestion |
+| `category` | one of a short closed list (instrumentation, collector, conventions, backend, workflow), ruled by the review from the plugin's content |
 | `repository` | `owner/repo`, public GitHub |
 | `path` | the plugin's directory inside the repository, empty at the root |
 | `ref` | the admitted tag |
@@ -164,15 +164,17 @@ A run of `build.py` on a store that did not change produces no diff.
 field, the URL of the plugin's `plugin.json` on GitHub
 (`https://github.com/<owner>/<repo>/blob/<ref>/<path>/plugin.json`, or
 the `raw.githubusercontent.com` form). It gives the repository and the
-path, nothing else: no text of the contributor enters the store, the
-pages or the catalogs. The URL's ref is ignored: the ref reviewed is
+path, nothing else: nothing typed into the form enters the store, the
+pages or the catalogs, only the manifest and the repository's metadata,
+validated. The URL's ref is ignored: the ref reviewed is
 the repository's latest release (`X.Y.Z` or `vX.Y.Z`, the highest by
 semver) carrying the plugin, else its default branch, resolved by the
 intake, and the sha is derived from it; every other field is read from
 `plugin.json` at that sha, the repository's metadata filling the gaps.
 The category is the review's. A branch whose name carries a slash
-cannot be told from the path: the ref is one segment, and a wrong
-split is a `needs-changes` naming the missing directory.
+cannot be told from the path: the ref is one segment (or GitHub's
+`refs/heads/<branch>` and `refs/tags/<tag>`), and a wrong split is a
+`needs-changes` naming the missing directory.
 
 ## Admission
 

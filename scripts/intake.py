@@ -25,7 +25,8 @@ BAD_URL = (
     "plugin.json URL: the URL of plugin.json on GitHub, as GitHub shows it "
     "(https://github.com/owner/repo/blob/main/plugin.json), on a branch or tag without a slash"
 )
-SEGMENT_RE = re.compile(r"^[^\x00-\x1f\x7f]+$")
+# no control character, no backtick: the path stands in backticks on the line the review rules on
+SEGMENT_RE = re.compile(r"^[^\x00-\x1f\x7f`/]+$")
 
 
 def parse_form(body: str) -> dict[str, str]:
@@ -50,26 +51,27 @@ def parse_url(url: str) -> tuple[str, str]:
     """The repository (owner/repo) and the plugin's directory the URL points at, or ValueError.
 
     github.com/<owner>/<repo>/blob|raw/<ref>/<path>/plugin.json and
-    raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>/plugin.json; the ref is one segment
-    (a branch with a slash cannot be told from the path) and is not used.
+    raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>/plugin.json, the ref one segment or
+    GitHub's refs/heads/<branch> and refs/tags/<tag> (a branch with a slash cannot be told
+    from the path); the ref is not used.
     """
     parts = urlsplit(url.strip())
     if parts.scheme != "https" or parts.netloc.lower() not in HOSTS or parts.query:
         raise ValueError(BAD_URL)
+    # decoded after the split: a percent-encoded slash stays inside its segment, and is refused
     segments = [unquote(s) for s in parts.path.split("/") if s]
-    if parts.netloc.lower() == "raw.githubusercontent.com":
-        head, rest = segments[:2], segments[2:]
-    else:
-        head, rest = segments[:2], segments[2:]
-        if len(rest) < 1 or rest[0] not in ("blob", "raw"):
+    head, rest = segments[:2], segments[2:]
+    if parts.netloc.lower() != "raw.githubusercontent.com":
+        if rest[:1] not in (["blob"], ["raw"]):
             raise ValueError(BAD_URL)
         rest = rest[1:]
-    # after owner and repo: the ref, then the path, then plugin.json
-    if len(head) != 2 or len(rest) < 2 or rest[-1] != "plugin.json":
+    # the ref, then the path, then plugin.json
+    ref_length = 3 if rest[:1] == ["refs"] and rest[1:2] in (["heads"], ["tags"]) else 1
+    if len(head) != 2 or len(rest) < ref_length + 1 or rest[-1] != "plugin.json":
         raise ValueError(BAD_URL)
     repository = "/".join(head)
     repository = repository[:-4] if repository.endswith(".git") else repository
-    path_segments = rest[1:-1]
+    path_segments = rest[ref_length:-1]
     if not store.REPO_RE.match(repository) or any(
         s in (".", "..") or not SEGMENT_RE.match(s) for s in path_segments
     ):
@@ -120,7 +122,19 @@ def main(argv: list[str] | None = None) -> int:
         for error in errors:
             print(error)
         if not errors:
-            print(f"candidate at {record['repository']} {record['path']!r} {record.get('ref', '')}")
+            print(
+                " ".join(
+                    filter(
+                        None,
+                        [
+                            "candidate at",
+                            record["repository"],
+                            repr(record["path"]),
+                            record.get("ref", ""),
+                        ],
+                    )
+                )
+            )
     return 1 if errors else 0
 
 
