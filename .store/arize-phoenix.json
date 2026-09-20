@@ -1,0 +1,36 @@
+{
+  "name": "arize-phoenix",
+  "description": "Connect to your Phoenix instance to debug, evaluate, and improve LLM applications.",
+  "categories": [
+    "backend"
+  ],
+  "repository": "Arize-ai/phoenix",
+  "path": "plugins/codex/arize-phoenix",
+  "ref": "main",
+  "sha": "767847c3386492f9783b623cf78e3eee47d0cea3",
+  "version": "0.1.0",
+  "author": {
+    "name": "Arize AI",
+    "email": "oss@arize.com",
+    "url": "https://arize.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://arize.com/docs/phoenix",
+  "keywords": [
+    "phoenix",
+    "arize",
+    "observability",
+    "tracing",
+    "evals",
+    "llm",
+    "mcp"
+  ],
+  "submitted_in": 103,
+  "admitted_at": "2026-09-20",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-20T15:29:33Z"
+  }
+}
