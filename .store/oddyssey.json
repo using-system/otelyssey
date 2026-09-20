@@ -2,7 +2,9 @@
   "name": "oddyssey",
   "description": "Observability-Driven Development for CLI coding agents",
   "categories": [
-    "observability"
+    "observability",
+    "instrumentation",
+    "backend"
   ],
   "repository": "using-system/oddyssey",
   "path": "marketplace/oddyssey",
