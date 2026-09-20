@@ -58,6 +58,7 @@ VS Code, in `settings.json`:
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref e7fd9fa96bf752f1caf31d4abce207fa6b40c107
 hermes plugins enable oddyssey
 ```

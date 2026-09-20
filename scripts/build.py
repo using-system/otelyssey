@@ -14,6 +14,7 @@ from scripts import store
 
 MARKETPLACE_NAME = "otelyssey"
 MARKETPLACE_REPO = "using-system/otelyssey"
+HERMES_PACK_URL = f"https://raw.githubusercontent.com/{MARKETPLACE_REPO}/main/hermes-pack.yaml"
 OWNER = {"name": "using-system", "url": "https://github.com/using-system"}
 LIST_START = "<!-- otelyssey:plugins -->"
 LIST_END = "<!-- /otelyssey:plugins -->"
@@ -219,8 +220,10 @@ def repository_install_lines(record: dict) -> str:
     else:
         openclaw = f"openclaw plugins install git:{repository}@{sha} --force\n"
     return (
+        # the pack line first, like the marketplace line of the other blocks
         "\nHermes Agent:\n\n"
         "```text\n"
+        f"hermes plugins pack install {HERMES_PACK_URL}\n"
         f"hermes plugins install {hermes_source} --ref {sha}\n"
         f"hermes plugins enable {name}\n"
         "```\n\n"

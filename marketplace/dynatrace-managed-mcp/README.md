@@ -60,6 +60,7 @@ Kiro: Import power from GitHub, `https://github.com/dynatrace-oss/dynatrace-mana
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install dynatrace-oss/dynatrace-managed-mcp --ref 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
 hermes plugins enable dynatrace-managed-mcp
 ```

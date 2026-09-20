@@ -60,6 +60,7 @@ Kiro: Import power from GitHub, `https://github.com/langwatch/agent-plugin`.
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install langwatch/agent-plugin --ref 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
 hermes plugins enable langwatch
 ```

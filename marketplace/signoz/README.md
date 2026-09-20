@@ -58,6 +58,7 @@ VS Code, in `settings.json`:
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
 hermes plugins enable signoz
 ```
