@@ -16,9 +16,8 @@ You can expect an acknowledgement within a few days.
 ## Scope
 
 - The pipeline: the intake, review, admission, nightly and duplicates
-  workflows,
-  the scripts they run, the GitHub App and its token, the agentic
-  workflows' bounds.
+  workflows, the scripts they run, the GitHub App and its token, the
+  agentic workflows' bounds.
 - The generated artifacts: the catalogs the clients read
   (`marketplace.json`, `.claude-plugin/`, `.agents/plugins/`,
   `.grok-plugin/`, `hermes-pack.yaml`) and the pages under
