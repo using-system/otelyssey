@@ -2,15 +2,14 @@
 
 Observability-Driven Development for CLI coding agents
 
-- Categories: `observability`, `instrumentation`, `backend`
 - Repository: [using-system/oddyssey](https://github.com/using-system/oddyssey), the plugin at `marketplace/oddyssey` in it
+- Categories: `observability`, `instrumentation`, `backend`
 - Version: 1.13.0 (`v1.13.0`, commit `e7fd9fa96bf7`)
 - Author: [using-system](https://github.com/using-system)
 - License: MIT
 - Keywords: `claude-code`, `claude-code-plugin`, `claude-skills`, `mcp`, `ai-agents`, `observability`, `opentelemetry`, `developer-tools`
 - Homepage: <https://github.com/using-system/oddyssey#readme>
 - Stars 9, forks 2, watchers 0 (refreshed 2026-09-19T20:41:13Z)
-- Admitted from [issue #9](https://github.com/using-system/otelyssey/issues/9) on 2026-09-19
 
 ## Install
 

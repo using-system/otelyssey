@@ -150,20 +150,17 @@ def plugin_page(record: dict) -> str:
     author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
     homepage = f"\n- Homepage: <{record['homepage']}>" if record["homepage"] else ""
     stats = record["stats"]
-    issue_url = f"https://github.com/{MARKETPLACE_REPO}/issues/{record['submitted_in']}"
     return (
         f"# {record['name']}\n\n"
         f"{text(record['description'])}\n\n"
-        f"- Categories: {', '.join(f'`{c}`' for c in record['categories'])}\n"
         f"- Repository: [{record['repository']}]({repo_url}), the plugin at {where} it\n"
+        f"- Categories: {', '.join(f'`{c}`' for c in record['categories'])}\n"
         f"- Version: {record['version']} (`{record['ref']}`, commit `{record['sha'][:12]}`)\n"
         f"- Author: {author_text}\n"
         f"- License: {record['license']}\n"
         f"- Keywords: {keywords}{homepage}\n"
         f"- Stars {stats['stars']}, forks {stats['forks']}, watchers {stats['watchers']}"
-        f" (refreshed {stats['refreshed_at']})\n"
-        f"- Admitted from [issue #{record['submitted_in']}]({issue_url})"
-        f" on {record['admitted_at']}\n\n"
+        f" (refreshed {stats['refreshed_at']})\n\n"
         "## Install\n\n"
         "Claude Code:\n\n"
         "```text\n"
