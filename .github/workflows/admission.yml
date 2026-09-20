@@ -111,7 +111,7 @@ jobs:
           git push --force origin "admission/${NAME}"
           url=$(gh pr create --base main --head "admission/${NAME}" --label admission \
             --title "chore(store): admit ${NAME}" \
-            --body "Admits #${ISSUE}. The rulings on relevance and novelty are on the issue; this record is the intake's, dated today.")
+            --body "Admits #${ISSUE}. The rulings on relevance and resubmission are on the issue; this record is the intake's, dated today.")
           echo "PR_URL=$url" >> "$GITHUB_ENV"
           echo "HEAD_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
           gh issue edit "$ISSUE" --add-label admission-opened
