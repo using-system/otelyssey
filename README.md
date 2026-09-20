@@ -2,10 +2,12 @@
 
 A marketplace of OpenTelemetry agent plugins in the
 [Agent Plugins](https://agent-plugins.org/) format, run by the repository
-itself: a contributor submits a plugin once, through an issue, and the
-repository validates it, admits it, follows its releases and lists it.
+itself: submit a plugin once, the repository checks it, lists it and
+follows its releases.
 
-Add the marketplace; each plugin's page under `marketplace/` gives its install line:
+## Install
+
+Add the marketplace to your client, then install any plugin from the list below:
 
 ```text
 claude plugin marketplace add using-system/otelyssey
@@ -15,32 +17,27 @@ grok plugin marketplace add using-system/otelyssey
 apm marketplace add using-system/otelyssey
 ```
 
-VS Code: `"chat.plugins.marketplaces": ["using-system/otelyssey"]` in `settings.json`.
-
-Hermes Agent, OpenClaw and Mistral Vibe take no marketplace url: their lines are on
-each plugin's page. Hermes Agent also installs every listed plugin at once, pinned,
-from the pack, after its review screen (Hermes from its main branch: the pack command
-is newer than the 0.19.0 release):
-
-```text
-hermes plugins pack show https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-```
+Another client (VS Code, Kiro, Hermes Agent, OpenClaw, Mistral Vibe)? Each
+plugin's page, linked from the list, has its install lines.
 
 ## Submit a plugin
 
-Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml):
-a public GitHub repository holding a `plugin.json` in the Agent Plugins
-format and a subject that is OpenTelemetry: its instrumentation, the
-Collector, or a backend that ingests its telemetry. The
-repository checks the format, installs the plugin, judges its relevance
-to OpenTelemetry and whether it is a plugin already listed, talks to you
-on the issue, and lists it. Every night it follows your releases: your
-latest `X.Y.Z` or `vX.Y.Z` tag when it carries the plugin, otherwise a
-new `version` in `plugin.json` on your default branch. It also refreshes
-your repository's statistics. Plugins that compete on the same
-scope are all listed: the marketplace never arbitrates between
-competitors.
+**[Open a plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml)**
+— one form, the repository does the rest.
+
+Your plugin needs:
+
+- a public GitHub repository;
+- a `plugin.json` in the [Agent Plugins](https://agent-plugins.org/) format,
+  at the repository's root or in a subdirectory;
+- OpenTelemetry as its subject: instrumentation, semantic conventions, the
+  Collector, or a backend that ingests OpenTelemetry telemetry.
+
+Then the repository checks the format, installs the plugin, reviews its
+relevance, talks to you on the issue and lists it. Every night it follows
+your releases (your latest `X.Y.Z` or `vX.Y.Z` tag, or a new `version` in
+`plugin.json`) and refreshes your repository's statistics. Plugins that
+compete on the same scope are all listed.
 
 ## Plugins
 
