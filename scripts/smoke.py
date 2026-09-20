@@ -71,7 +71,7 @@ def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[st
         return "unavailable", f"the {host} CLI is not on this machine"
     shutil.rmtree(home, ignore_errors=True)
     # Codex refuses a CODEX_HOME that does not exist
-    (home / ".codex").mkdir(parents=True)
+    (home / ".codex").mkdir(parents=True, exist_ok=True)
     code, out = _run([host, "plugin", "marketplace", "add", str(marketplace_dir)], home)
     if code != 0:
         return "fail", f"marketplace add exited {code}\n{out}"
