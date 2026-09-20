@@ -175,10 +175,12 @@ that no pull request against `.store/` is accepted from a contributor.
 3. `scripts/smoke.py` writes a temporary marketplace holding a copy
    of the checked-out plugin (a relative source: no second clone, no
    network in the smoke) and installs the plugin with Copilot CLI (`copilot plugin
-   marketplace add`, `copilot plugin install`) and with Claude Code's
-   headless plugin install when one exists at that time; the install
-   must exit 0 and list the plugin. No plugin code is executed beyond
-   the host's install.
+   marketplace add`, `copilot plugin install`), with Claude Code's
+   headless plugin install and with Codex CLI (`codex plugin
+   marketplace add`, `codex plugin add`, reading the marketplace's
+   `.agents/plugins/marketplace.json` with a local source), each under
+   an isolated HOME (and CODEX_HOME); the install must exit 0 and list
+   the plugin. No plugin code is executed beyond the host's install.
 4. The workflow comments one result on the issue: each check with pass
    or the exact reason, and sets `format-ok` or `needs-changes`. A
    re-edit re-runs it (concurrency per issue, cancel in progress).

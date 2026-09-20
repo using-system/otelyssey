@@ -30,9 +30,10 @@ jobs:
         run: python3 -m scripts.stats --failures work-stats.json
       - name: Install the hosts
         run: |
-          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278
+          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278 @openai/codex@0.155.1
           copilot --version
           claude --version
+          codex --version
       - name: Releases
         run: python3 -m scripts.releases --workdir work --smoke --json > work-releases.json
       - name: Issues for the releases that failed
