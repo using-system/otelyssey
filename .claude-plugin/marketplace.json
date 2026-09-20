@@ -190,6 +190,36 @@
         "url": "https://github.com/amiable-dev"
       },
       "homepage": "https://github.com/amiable-dev/skills-telemetry"
+    },
+    {
+      "name": "sumo-logic",
+      "source": {
+        "source": "github",
+        "repo": "SumoLogic/sumologic-ai-plugins",
+        "ref": "v1.0.1",
+        "sha": "f905b914984fabb5e0571290eafd3013c277d9b1"
+      },
+      "description": "Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.",
+      "version": "1.0.1",
+      "category": "backend",
+      "keywords": [
+        "sumo-logic",
+        "observability",
+        "logs",
+        "mcp",
+        "monitoring",
+        "alerts",
+        "copilot",
+        "devops",
+        "search",
+        "security"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "Sumo Logic",
+        "url": "https://www.sumologic.com"
+      },
+      "homepage": "https://www.sumologic.com/help/docs/api/mcp-server/"
     }
   ]
 }

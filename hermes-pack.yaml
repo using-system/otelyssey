@@ -18,3 +18,5 @@ plugins:
     ref: "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
   - repo: amiable-dev/skills-telemetry
     ref: "a95d23afc26150737a4eb6894b96a7235fa8f8da"
+  - repo: SumoLogic/sumologic-ai-plugins
+    ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
