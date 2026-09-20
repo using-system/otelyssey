@@ -91,11 +91,11 @@
         "source": "github",
         "repo": "using-system/oddyssey",
         "path": "marketplace/oddyssey",
-        "ref": "v1.13.0",
-        "sha": "e7fd9fa96bf752f1caf31d4abce207fa6b40c107"
+        "ref": "v1.13.1",
+        "sha": "e030f6114a35c433c9f826acd453898b42c978ec"
       },
-      "description": "Observability-Driven Development for CLI coding agents",
-      "version": "1.13.0",
+      "description": "CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack - or remote ones on any OpenTelemetry backend - and feed the next spec-driven improvement loop.",
+      "version": "1.13.1",
       "category": "observability",
       "keywords": [
         "claude-code",

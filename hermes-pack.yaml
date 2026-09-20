@@ -10,7 +10,7 @@ plugins:
     ref: "9dfab1713cb24ccb515563de166def3239e92f1a"
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
-    ref: "e7fd9fa96bf752f1caf31d4abce207fa6b40c107"
+    ref: "e030f6114a35c433c9f826acd453898b42c978ec"
   - repo: getsentry/agent-plugin
     ref: "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
   - repo: SigNoz/agent-skills
