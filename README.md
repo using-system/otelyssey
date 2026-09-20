@@ -23,10 +23,10 @@ a public GitHub repository holding a `plugin.json` in the Agent Plugins
 format and a subject that is OpenTelemetry. The
 repository checks the format, installs the plugin, judges its relevance
 to OpenTelemetry and whether it is a plugin already listed, talks to you
-on the issue, and lists it. Every night it follows your releases (a
-new `X.Y.Z` or `vX.Y.Z` tag or, without tags, a new `version` in
-`plugin.json` on your default branch) and refreshes your repository's
-statistics. Plugins that compete on the same
+on the issue, and lists it. Every night it follows your releases: your
+latest `X.Y.Z` or `vX.Y.Z` tag when it carries the plugin, otherwise a
+new `version` in `plugin.json` on your default branch. It also refreshes
+your repository's statistics. Plugins that compete on the same
 scope are all listed: the marketplace never arbitrates between
 competitors.
 

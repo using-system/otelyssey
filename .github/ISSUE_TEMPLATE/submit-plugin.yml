@@ -6,8 +6,8 @@ body:
   - type: markdown
     attributes:
       value: |
-        The repository checks the format of your plugin at your repository's latest release tag (X.Y.Z or vX.Y.Z), or at
-        the head of its default branch when it has none, installs it,
+        The repository checks the format of your plugin at your repository's latest release tag (X.Y.Z or vX.Y.Z) when
+        it carries the plugin, otherwise at the head of your default branch, installs it,
         judges its relevance to OpenTelemetry and whether it is a plugin already listed, and answers here.
         Plugins that compete on the same scope are all listed.
         Do not open a pull request against `.store/`: the pipeline writes it.

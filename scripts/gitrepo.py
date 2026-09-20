@@ -1,11 +1,15 @@
 """Read a public GitHub repository through git: its tags, its default branch, a ref's commit,
-a shallow checkout."""
+a shallow checkout; and the ref the marketplace follows."""
 
 from __future__ import annotations
 
+import http.client
 import os
 import re
 import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
 from pathlib import Path
 
 SEMVER_RE = re.compile(r"^v?(\d+)\.(\d+)\.(\d+)$")
@@ -108,6 +112,38 @@ def resolve(repository: str, ref: str) -> str:
         if len(parts) == 2 and parts[1] == f"refs/heads/{ref}":
             return parts[0]
     raise LookupError(f"{repository} has no tag or branch {ref}")
+
+
+def has_file(repository: str, sha: str, path: str) -> bool:
+    """Whether the file is at the commit, asked of raw.githubusercontent.com without a clone."""
+    url = f"https://raw.githubusercontent.com/{repository}/{sha}/{urllib.parse.quote(path)}"
+    request = urllib.request.Request(url, method="HEAD")
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return response.status == 200
+    except urllib.error.HTTPError as error:
+        if error.code == 404:
+            return False
+        raise RepositoryError(f"{url}: HTTP {error.code}") from error
+    except (OSError, http.client.HTTPException) as error:
+        # URLError, timeouts and ssl errors are OSErrors; a dropped or malformed response is
+        # an HTTPException: every network failure is the repository's, never a crash
+        raise RepositoryError(f"{url}: {error}") from error
+
+
+def release(repository: str, path: str) -> tuple[str, str, bool]:
+    """The ref the marketplace follows and its commit, and whether it is a tag.
+
+    The latest release tag, when the plugin's manifest is at it; otherwise the default
+    branch and its head: a repository whose tags predate the plugin is followed on its
+    branch until a tag carries it.
+    """
+    latest = latest_release(list_tags(repository))
+    manifest = f"{path}/plugin.json" if path else "plugin.json"
+    if latest is not None and has_file(repository, latest[1], manifest):
+        return latest[0], latest[1], True
+    branch, sha = default_branch(repository)
+    return branch, sha, False
 
 
 def clone_at(repository: str, sha: str, dest: Path) -> None:

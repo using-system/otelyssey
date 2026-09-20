@@ -1,4 +1,4 @@
-"""Follow every admitted plugin's releases: a newer tag, or on an untagged repository a new
+"""Follow every admitted plugin's releases: a newer tag carrying the plugin, otherwise a new
 manifest version on the default branch; revalidate it, re-pin the record on a pass."""
 
 from __future__ import annotations
@@ -27,19 +27,18 @@ def _install_errors(result: dict[str, dict]) -> list[str]:
 def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[str, dict]:
     """Per record name: status unchanged, updated or failed; the ref looked at; the errors.
 
-    A repository with a release tag is followed by tag: a tag other than the record's is a
-    release. Without one, the default branch is followed by manifest version: a head with
-    the record's version, or none, is not a release, valid or not, and the record keeps its
-    commit.
+    A repository with a release tag carrying the plugin is followed by tag: a tag other than
+    the record's is a release. Without one, the default branch is followed by manifest
+    version: a head with the record's version, or none, is not a release, valid or not, and
+    the record keeps its commit. A record on a tag whose plugin is at neither the latest tag
+    nor the head is a failure: the plugin vanished.
     With smoke_fn, a release that validates is also installed on the hosts (the intake's
     smoke replayed on the checkout) and is re-pinned only when every host passes.
     """
     result: dict[str, dict] = {}
     for name, record in store.load_store(root).items():
         try:
-            latest = gitrepo.latest_release(gitrepo.list_tags(record["repository"]))
-            tagged = latest is not None
-            ref, sha = latest if tagged else gitrepo.default_branch(record["repository"])
+            ref, sha, tagged = gitrepo.release(record["repository"], record["path"])
         except gitrepo.RepositoryError as error:
             errors = [f"repository: unreadable ({error})"]
             result[name] = {"status": "failed", "ref": record["ref"], "errors": errors}
@@ -51,6 +50,11 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
             record["repository"], sha, record["path"], name, "", workdir / name
         )
         version = check["manifest"].get("version")
+        if not tagged and version is None and record["ref"] != ref:
+            # the record was on a tag, and the plugin is at neither the latest tag nor the head
+            errors = ["plugin.json: at neither the latest release tag nor the default branch"]
+            result[name] = {"status": "failed", "ref": ref, "errors": errors + check["errors"]}
+            continue
         if not tagged and version in (record["version"], None):
             # the head moved without a release: a work-in-progress commit, valid or not
             result[name] = {"status": "unchanged", "ref": ref, "errors": []}
