@@ -195,18 +195,22 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     assert text.startswith("### Observability\n\n")
     assert "### Instrumentation" not in text
     (entry, badges, blank) = text.splitlines()[2:5]
-    assert entry.startswith("- [oddyssey](https://github.com/using-system/oddyssey) by ")
-    assert " - " in entry and entry.endswith(
-        " · also in Instrumentation · [install](marketplace/oddyssey/README.md)  "
-    )
+    # the name links to the page, not to the repository; the badges link nowhere
+    assert entry.startswith("- [oddyssey](marketplace/oddyssey/README.md) by ")
+    assert " - " in entry and entry.endswith(" · also in Instrumentation  ")
+    assert "https://github.com/using-system/oddyssey" not in entry
+    assert "[install]" not in text
+    assert badges.count('<a href="#">') == 7 and badges.endswith('alt="watchers"></a>')
     single = {**records()["oddyssey"], "categories": ["observability"]}
     assert "also" not in build.readme_entry(single)
     kinds = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
     record = records()["oddyssey"]
     assert badges == "&nbsp;&nbsp;".join(build.badge(k, record) for k in kinds)
-    assert badges.startswith('<img src="https://img.shields.io/badge/version-1.13.0-6b6b6b?')
+    assert badges.startswith(
+        '<a href="#"><img src="https://img.shields.io/badge/version-1.13.0-6b6b6b?'
+    )
     assert blank == ""
-    assert text.endswith('alt="watchers">\n\n') and "\n\n\n" not in text
+    assert text.endswith('alt="watchers"></a>\n\n') and "\n\n\n" not in text
     assert "Stars" not in text and "| " not in text
 
 
@@ -231,8 +235,8 @@ def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_one
     assert headings == ["### Collector", "### Observability"]
     # two entries in one category: name order, one blank line between them
     lines = text.splitlines()
-    assert lines[2].startswith("- [col-a](") and lines[3].startswith("<img ") and lines[4] == ""
-    assert lines[5].startswith("- [col-b](") and lines[6].startswith("<img ") and lines[7] == ""
+    assert lines[2].startswith("- [col-a](") and lines[3].startswith("<a ") and lines[4] == ""
+    assert lines[5].startswith("- [col-b](") and lines[6].startswith("<a ") and lines[7] == ""
     assert lines[8] == "### Observability"
 
 

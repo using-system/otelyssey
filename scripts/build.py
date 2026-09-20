@@ -240,28 +240,29 @@ def repository_install_lines(record: dict) -> str:
 
 
 def badge(kind: str, record: dict) -> str:
+    """A badge that goes nowhere: GitHub links a bare image to itself (and drops an anchor
+    without href), so the anchor points at `#`, the nearest thing to no link."""
     if kind == "version":
         # shields' static badge: a dash or an underscore in the message is doubled
         message = record["version"].replace("-", "--").replace("_", "__")
         src = f"https://img.shields.io/badge/version-{quote(message)}-6b6b6b?{BADGE_STYLE}"
     else:
         src = f"https://img.shields.io/github/{kind}/{record['repository']}?{BADGE_STYLE}"
-    return f'<img src="{src}" alt="{kind}">'
+    return f'<a href="#"><img src="{src}" alt="{kind}"></a>'
 
 
 def readme_entry(record: dict) -> str:
-    """One list item: the plugin, its author, its description, its page; its badges below."""
+    """One list item: the plugin linked to its page, its author, its description; its badges
+    below."""
     author = record["author"]
     author_name = text(author["name"])
     author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
-    repo = record["repository"]
     # listed once, under the principal category; the others named in the line
     others = ", ".join(CATEGORY_TITLES[c] for c in record["categories"][1:])
     also = f" · also in {others}" if others else ""
     return (
-        f"- [{record['name']}](https://github.com/{repo}) by {author_text} - "
-        f"{text(record['description'])}{also}"
-        f" · [install](marketplace/{record['name']}/README.md)  \n"
+        f"- [{record['name']}](marketplace/{record['name']}/README.md) by {author_text} - "
+        f"{text(record['description'])}{also}  \n"
         + "&nbsp;&nbsp;".join(badge(kind, record) for kind in BADGES)
         + "\n\n"
     )
