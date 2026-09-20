@@ -1,0 +1,43 @@
+name: Bug report
+description: The marketplace does something wrong - an intake, a review, a page, a host's install - or a plugin of yours to withdraw
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. State what you **confirmed** with a command and its output versus what you only **observed** once: self-contained reports get fixed fastest. A problem in a listed plugin belongs to that plugin's repository.
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: The issue, page, workflow run or command concerned - a link when there is one.
+      placeholder: "an issue or workflow-run link, or a command such as `claude plugin install sentry@otelyssey`"
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: When a host is involved - OS, the host CLI and its version.
+      placeholder: "macOS 15, claude 2.1.278"
+  - type: dropdown
+    id: status
+    attributes:
+      label: Status
+      options:
+        - "confirmed - reproduced with a command and its output"
+        - "observed - seen once, not yet isolated"
+    validations:
+      required: true
+  - type: textarea
+    id: what
+    attributes:
+      label: What happens, and what you expected
+      description: Include the commands and their real output where possible.
+    validations:
+      required: true
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else
+      description: A suggested fix, a workaround, related issues.
