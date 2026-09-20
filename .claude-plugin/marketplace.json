@@ -7,6 +7,32 @@
   "description": "A self-run marketplace of OpenTelemetry agent plugins",
   "plugins": [
     {
+      "name": "langwatch",
+      "source": {
+        "source": "github",
+        "repo": "langwatch/agent-plugin",
+        "ref": "v1.2.0",
+        "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
+      },
+      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+      "version": "1.2.0",
+      "category": "instrumentation",
+      "keywords": [
+        "langwatch",
+        "observability",
+        "telemetry",
+        "traces",
+        "coding-agent",
+        "otlp"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "LangWatch",
+        "url": "https://langwatch.ai"
+      },
+      "homepage": "https://docs.langwatch.ai"
+    },
+    {
       "name": "oddyssey",
       "source": {
         "source": "github",

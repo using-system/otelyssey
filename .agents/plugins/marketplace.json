@@ -5,6 +5,35 @@
   },
   "plugins": [
     {
+      "name": "langwatch",
+      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+      "version": "1.2.0",
+      "keywords": [
+        "langwatch",
+        "observability",
+        "telemetry",
+        "traces",
+        "coding-agent",
+        "otlp"
+      ],
+      "author": {
+        "name": "LangWatch",
+        "url": "https://langwatch.ai"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/langwatch/agent-plugin.git",
+        "ref": "v1.2.0",
+        "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://docs.langwatch.ai"
+    },
+    {
       "name": "oddyssey",
       "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
       "version": "1.13.0",
