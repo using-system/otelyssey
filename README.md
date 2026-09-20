@@ -40,7 +40,7 @@ Your plugin needs:
   Collector, or a backend that ingests its telemetry.
 
 The repository answers on the issue. Once listed, it follows your releases
-every night.
+every night. Bugs, ideas, code: see [CONTRIBUTING](CONTRIBUTING.md).
 
 ## Plugins
 
