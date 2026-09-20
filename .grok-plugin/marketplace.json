@@ -5,6 +5,38 @@
   },
   "plugins": [
     {
+      "name": "arize-phoenix",
+      "description": "Connect to your Phoenix instance to debug, evaluate, and improve LLM applications.",
+      "version": "0.1.0",
+      "keywords": [
+        "phoenix",
+        "arize",
+        "observability",
+        "tracing",
+        "evals",
+        "llm",
+        "mcp"
+      ],
+      "author": {
+        "name": "Arize AI",
+        "email": "oss@arize.com",
+        "url": "https://arize.com"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/Arize-ai/phoenix.git",
+        "path": "./plugins/codex/arize-phoenix",
+        "ref": "main",
+        "sha": "767847c3386492f9783b623cf78e3eee47d0cea3"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://arize.com/docs/phoenix"
+    },
+    {
       "name": "dynatrace-managed-mcp",
       "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
       "version": "1.1.1",

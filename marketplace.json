@@ -7,6 +7,35 @@
   "description": "A self-run marketplace of OpenTelemetry agent plugins",
   "plugins": [
     {
+      "name": "arize-phoenix",
+      "source": {
+        "source": "github",
+        "repo": "Arize-ai/phoenix",
+        "path": "plugins/codex/arize-phoenix",
+        "ref": "main",
+        "sha": "767847c3386492f9783b623cf78e3eee47d0cea3"
+      },
+      "description": "Connect to your Phoenix instance to debug, evaluate, and improve LLM applications.",
+      "version": "0.1.0",
+      "category": "backend",
+      "keywords": [
+        "phoenix",
+        "arize",
+        "observability",
+        "tracing",
+        "evals",
+        "llm",
+        "mcp"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "Arize AI",
+        "email": "oss@arize.com",
+        "url": "https://arize.com"
+      },
+      "homepage": "https://arize.com/docs/phoenix"
+    },
+    {
       "name": "dynatrace-managed-mcp",
       "source": {
         "source": "github",

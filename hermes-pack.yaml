@@ -1,6 +1,9 @@
 name: otelyssey
 description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits
 plugins:
+  - repo: Arize-ai/phoenix
+    subdir: "plugins/codex/arize-phoenix"
+    ref: "767847c3386492f9783b623cf78e3eee47d0cea3"
   - repo: dynatrace-oss/dynatrace-managed-mcp
     ref: "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
   - repo: langwatch/agent-plugin
