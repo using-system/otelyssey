@@ -247,7 +247,7 @@ only, at most twenty files, two hundred lines and 64 KB each), the
 store, the open and closed submission issues. The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
-  plugin's own description, skills and README, and states the
+  plugin's own description, skills, `mcp.json` and README, and states the
   evidence;
 - rules on **duplication** against the store and the other
   submissions: same repository, same plugin under another name, or a
