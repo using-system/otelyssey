@@ -53,7 +53,9 @@ jobs:
           jq -r '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
             work/comments.json > work/comment.md
           [ -s work/comment.md ] || { echo "::error::no intake comment by otelyssey-bot[bot] on #${ISSUE}"; exit 1; }
-          jq -r '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty' \
+          # never the intake comment itself: it carries contributor text (a layout note) and
+          # the record's name and sha in backticks, the two things the ruling check looks for
+          jq -r '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | startswith("<!-- otelyssey-intake -->") | not) and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty' \
             work/comments.json > work/ruling.md
           [ -s work/ruling.md ] || { echo "::error::no admissible ruling by the review on #${ISSUE}"; exit 1; }
           record=$(python3 -m scripts.admission --comment-file work/comment.md --ruling-file work/ruling.md --issue "$ISSUE" --root work) || { echo "::error::no record: ${record:-see above}"; exit 1; }

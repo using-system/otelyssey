@@ -114,6 +114,8 @@ def check_layout(plugin_dir: Path) -> list[str]:
     repository's root sits next to all of the repository's files.
     """
     notes: list[str] = []
+    # a name is the contributor's and goes into a comment the pipeline signs: quoted through
+    # repr(), a control character in it is escaped and the note stays on one line
     for entry in sorted(plugin_dir.iterdir()):
         if entry.name == ".claude-plugin":
             notes.append(".claude-plugin: pre-standard layout carried next to plugin.json")
@@ -122,12 +124,12 @@ def check_layout(plugin_dir: Path) -> list[str]:
         elif NAMESPACE_RE.match(entry.name):
             continue
         else:
-            notes.append(f"{entry.name}: not an entry the Agent Plugins format defines")
+            notes.append(f"{entry.name!r}: not an entry the Agent Plugins format defines")
     skills = plugin_dir / "skills"
     if skills.is_dir():
         for skill in sorted(skills.iterdir()):
             if skill.is_dir() and not (skill / "SKILL.md").is_file():
-                notes.append(f"skills/{skill.name}: not a skill, no SKILL.md")
+                notes.append(f"skills/{skill.name!r}: not a skill, no SKILL.md")
     return notes
 
 

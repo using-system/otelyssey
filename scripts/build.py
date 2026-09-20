@@ -132,7 +132,9 @@ def render_json(payload: dict) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 
 
-MARKDOWN_ESCAPES = str.maketrans({c: f"\\{c}" for c in "[]<>*_`"})
+# the backslash first among them: unescaped, a contributor's `\[` would come out `\\[`, an
+# escaped backslash and a live bracket
+MARKDOWN_ESCAPES = str.maketrans({c: f"\\{c}" for c in "\\[]<>*_`"})
 
 
 def text(value: str) -> str:
@@ -141,7 +143,8 @@ def text(value: str) -> str:
 
 
 def plugin_page(record: dict) -> str:
-    """The urls (homepage, author url) passed the store's https rule; the free text is escaped."""
+    """The urls (homepage, author url) passed the store's https rule; the free text is escaped;
+    what stands in a code span (path, ref, keywords) carries no backtick, the store refuses it."""
     repo_url = f"https://github.com/{record['repository']}"
     where = f"`{record['path']}` in" if record["path"] else "the root of"
     keywords = ", ".join(f"`{k}`" for k in record["keywords"]) or "none"
@@ -155,9 +158,9 @@ def plugin_page(record: dict) -> str:
         f"{text(record['description'])}\n\n"
         f"- Repository: [{record['repository']}]({repo_url}), the plugin at {where} it\n"
         f"- Categories: {', '.join(f'`{c}`' for c in record['categories'])}\n"
-        f"- Version: {record['version']} (`{record['ref']}`, commit `{record['sha'][:12]}`)\n"
+        f"- Version: {text(record['version'])} (`{record['ref']}`, commit `{record['sha'][:12]}`)\n"
         f"- Author: {author_text}\n"
-        f"- License: {record['license']}\n"
+        f"- License: {text(record['license'])}\n"
         f"- Keywords: {keywords}{homepage}\n"
         f"- Stars {stats['stars']}, forks {stats['forks']}, watchers {stats['watchers']}"
         f" (refreshed {stats['refreshed_at']})\n\n"

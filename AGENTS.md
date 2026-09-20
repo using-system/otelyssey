@@ -9,14 +9,24 @@ messages, PR titles and issue titles follow Conventional Commits,
 per PR; every PR references an existing issue (`Closes #N`). Every
 committed artifact is in English.
 
-## Every implementation is reviewed by a sub-agent
+## Every implementation is reviewed by two sub-agents
 
-Mandatory, before a change is pushed: dispatch one code-reviewer
-sub-agent on the diff, with the change's intent and the issue it
-answers, and nothing from the session's history. Fix what it reports,
-then send the fixed diff back to the same reviewer; repeat until it
-reports nothing left to fix. Its verdict gates the push; a push-back
-against a finding is written with its reasoning, never silent.
+Mandatory, before a change is pushed, two reviews in parallel on the
+same diff, each with the change's intent and the issue it answers, and
+nothing from the session's history:
+
+- a code-reviewer sub-agent: correctness, tests, conventions;
+- a security-review sub-agent, running the `/security-review` skill
+  on the diff: the exploitable, by a contributor who opens or comments on
+  a submission or controls the plugin repository the pipeline clones,
+  or by anyone who opens a pull request; not hardening, not style.
+
+Fix what each reports, then send the fixed diff back to the same
+reviewer; repeat until both report nothing left to fix. Their verdicts
+gate the push; a push-back against a finding is written with its
+reasoning, never silent. A change that touches only prose the
+maintainer decided (the README's wording, an issue or pull request
+body) needs neither.
 
 ## The README is the shop window
 

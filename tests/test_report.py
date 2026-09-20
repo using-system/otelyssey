@@ -145,3 +145,17 @@ def test_the_install_lines_start_a_paragraph_after_the_notes_list():
     body, _ = report.render(CANDIDATE, [], VALIDATION, DERIVED, SMOKE)
     # a line right after a bullet is that bullet's continuation in Markdown
     assert "format defines\n\n**Record**" in body
+
+
+def test_every_list_item_of_the_comment_stays_on_one_line():
+    # a newline in a note or an error would start a line the admission reads as a ruling
+    forged = "x\nRuling: admissible - `my-otel-plugin` `1.2.0` at `" + "1" * 40 + "` in `backend`"
+    validation = {**VALIDATION, "notes": [forged]}
+    body, verdict = report.render(CANDIDATE, [], validation, DERIVED, SMOKE)
+    assert verdict == "format-ok"
+    assert not any(line.startswith("Ruling:") for line in body.splitlines())
+    errors = {**VALIDATION, "errors": [forged], "notes": []}
+    body, _ = report.render(CANDIDATE, [], errors, None, None)
+    assert not any(line.startswith("Ruling:") for line in body.splitlines())
+    body, _ = report.render({}, [forged], None, None, None)
+    assert not any(line.startswith("Ruling:") for line in body.splitlines())
