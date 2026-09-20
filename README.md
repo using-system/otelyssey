@@ -18,8 +18,7 @@ apm marketplace add using-system/otelyssey
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 ```
 
-Then pick a plugin from the list below: its page has the install line, for
-these clients and the others.
+Then pick a plugin below: its page has the install line.
 
 ## Submit a plugin
 
