@@ -256,8 +256,8 @@ def readme_entry(record: dict) -> str:
     author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
     repo = record["repository"]
     # listed once, under the principal category; the others named in the line
-    others = ", ".join(f"`{c}`" for c in record["categories"][1:])
-    also = f" · also {others}" if others else ""
+    others = ", ".join(CATEGORY_TITLES[c] for c in record["categories"][1:])
+    also = f" · also in {others}" if others else ""
     return (
         f"- [{record['name']}](https://github.com/{repo}) by {author_text} - "
         f"{text(record['description'])}{also}"

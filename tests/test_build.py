@@ -197,7 +197,7 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     (entry, badges, blank) = text.splitlines()[2:5]
     assert entry.startswith("- [oddyssey](https://github.com/using-system/oddyssey) by ")
     assert " - " in entry and entry.endswith(
-        " · also `instrumentation` · [install](marketplace/oddyssey/README.md)  "
+        " · also in Instrumentation · [install](marketplace/oddyssey/README.md)  "
     )
     single = {**records()["oddyssey"], "categories": ["observability"]}
     assert "also" not in build.readme_entry(single)

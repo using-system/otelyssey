@@ -57,6 +57,24 @@ def test_a_ruling_outside_the_documented_shape_or_the_four_is_refused(body):
         admission.categories_from_ruling(body)
 
 
+def test_the_candidate_is_read_back_from_the_intake_comment():
+    candidate = admission.candidate_from_comment(intake_comment())
+    assert candidate["name"] == "my-otel-plugin"
+    assert candidate["sha"] == "1" * 40
+    assert candidate["submitted_in"] == 7
+
+
+def test_a_comment_without_the_block_is_refused():
+    with pytest.raises(ValueError, match="candidate block"):
+        admission.candidate_from_comment("## Intake\n\n**Form**: needs changes\n")
+
+
+def test_the_last_block_wins_when_the_comment_carries_two():
+    first = intake_comment()
+    second = first.replace('"version": "1.2.0"', '"version": "1.3.0"')
+    assert admission.candidate_from_comment(first + second)["version"] == "1.3.0"
+
+
 def test_the_record_adds_the_admission_date_and_zero_stats():
     candidate = admission.candidate_from_comment(intake_comment())
     record = admission.admitted(

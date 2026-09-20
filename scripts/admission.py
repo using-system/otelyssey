@@ -46,7 +46,7 @@ def categories_from_ruling(body: str) -> list[str]:
     none twice; the last such line wins."""
     found = RULING_RE.findall(body)
     if not found:
-        raise ValueError("the ruling names no category")
+        raise ValueError("the ruling's first line names no category in the documented shape")
     categories = re.findall(r"`([^`\n]*)`", found[-1])
     unknown = [c for c in categories if c not in store.CATEGORIES]
     if unknown:
