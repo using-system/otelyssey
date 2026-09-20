@@ -45,7 +45,7 @@
       },
       "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
       "version": "1.2.0",
-      "category": "instrumentation",
+      "category": "backend",
       "keywords": [
         "langwatch",
         "observability",

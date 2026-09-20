@@ -2,7 +2,7 @@
 
 Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.
 
-- Categories: `instrumentation`
+- Categories: `backend`
 - Repository: [langwatch/agent-plugin](https://github.com/langwatch/agent-plugin), the plugin at the root of it
 - Version: 1.2.0 (`v1.2.0`, commit `5ca4f7addc97`)
 - Author: [LangWatch](https://langwatch.ai)

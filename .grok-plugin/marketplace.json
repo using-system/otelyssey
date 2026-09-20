@@ -61,7 +61,7 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Instrumentation",
+      "category": "Backends",
       "homepage": "https://docs.langwatch.ai"
     },
     {
