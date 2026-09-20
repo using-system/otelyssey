@@ -37,7 +37,8 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
     With smoke_fn, a release that validates is also installed on the hosts (the intake's
     smoke replayed on the checkout) and is re-pinned only when every host passes.
     A re-pin reads the derived fields again from the new manifest, the repository's
-    metadata filling the gaps as the intake does; a field neither gives keeps its value.
+    metadata filling the gaps as the intake does; a field neither gives keeps its value, and
+    the record's values stand in for the repository's when its API cannot be read.
     """
     result: dict[str, dict] = {}
     for name, record in store.load_store(root).items():
@@ -77,13 +78,15 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
         try:
             meta = derive.fetch_metadata(record["repository"], stats.token_from_env())
         except (OSError, http.client.HTTPException, ValueError):
-            # the manifest alone then: an unreadable API does not hold a release back
-            meta = derive.metadata({})
+            # the record's values stand in for the repository's: an unreadable API neither
+            # holds a release back nor empties what the repository had given
+            meta = derive.from_record(record)
         repinned, _ = derive.resync(repinned, check["manifest"], meta)
         try:
             store.write_record(root, repinned)
         except ValueError as error:
-            result[name] = {"status": "failed", "ref": ref, "errors": [f"record: {error}"]}
+            # the value the store refuses is the manifest's: the contributor fixes plugin.json
+            result[name] = {"status": "failed", "ref": ref, "errors": [f"plugin.json: {error}"]}
             continue
         result[name] = {"status": "updated", "ref": ref, "errors": []}
     return result

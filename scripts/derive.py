@@ -44,6 +44,20 @@ def metadata(raw: dict) -> dict:
     }
 
 
+def from_record(record: dict) -> dict:
+    """The metadata shape from what an admitted record carries: the repository's last answer
+    stands in when its API cannot be read (an email it once gave is not carried, the shape
+    has none)."""
+    author = record["author"]
+    return {
+        "description": record["description"],
+        "license": record["license"],
+        "homepage": record["homepage"],
+        "topics": list(record["keywords"]),
+        "owner": {"name": author["name"], "url": author.get("url", "")},
+    }
+
+
 def fetch_metadata(repository: str, token: str | None) -> dict:
     return metadata(stats.fetch_raw(repository, token))
 

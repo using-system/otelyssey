@@ -105,7 +105,9 @@ def test_a_repin_keeps_a_field_the_new_manifest_and_the_repository_lack(
     assert releases.follow(root, tmp_path / "work")["oddyssey"]["status"] == "updated"
     record = json.loads((root / ".store" / "oddyssey.json").read_text())
     assert (record["ref"], record["sha"], record["version"]) == ("v1.14.0", "2" * 40, "1.14.0")
-    for field in ("description", "license", "author"):
+    # the record's values stood in for the repository's: nothing the repository had given is
+    # emptied by an API that could not be read
+    for field in ("description", "license", "author", "homepage", "keywords"):
         assert record[field] == before[field]
 
 
@@ -302,6 +304,18 @@ def test_main_smoke_flag_passes_the_install(tmp_path: Path, monkeypatch, capsys)
     assert result["errors"] == [
         "install on claude: unavailable: the claude CLI is not on this machine"
     ]
+
+
+def test_a_new_manifest_the_store_refuses_is_named_as_the_manifests(tmp_path: Path, monkeypatch):
+    root = store_with(tmp_path)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    bad = {"name": "oddyssey", "version": "1.14.0", "description": "red \x1b"}
+    passing = {"sha": "2" * 40, "manifest": bad, "errors": [], "notes": []}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(passing))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert result["status"] == "failed"
+    assert result["errors"] == ["plugin.json: description: control character"]
+    assert json.loads((root / ".store" / "oddyssey.json").read_text())["ref"] == "v1.13.0"
 
 
 def test_a_record_the_store_refuses_is_a_failed_follow(tmp_path: Path, monkeypatch):

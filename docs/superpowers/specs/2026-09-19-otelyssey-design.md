@@ -301,8 +301,9 @@ listens to every pull request event to find the admission one.
    `sha` and `version` are updated and the derived fields read again
    from the new manifest, the repository's metadata filling the gaps
    as the intake does (a field neither gives keeps its value; an
-   unreadable API leaves the manifest alone, never holds a release
-   back); on failure, an issue is opened for the contributor (one per
+   unreadable API lets the record's values stand in for the
+   repository's, never holds a release back); on failure, an issue is
+   opened for the contributor (one per
    plugin and tag, never repeated) and the record stays.
 3. `build.py`, then one commit by the workflow's bot on `main`,
    `chore(store): nightly refresh`, only when something changed.
