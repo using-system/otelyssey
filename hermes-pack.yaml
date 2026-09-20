@@ -1,0 +1,18 @@
+name: otelyssey
+description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits
+plugins:
+  - repo: dynatrace-oss/dynatrace-managed-mcp
+    ref: 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+  - repo: langwatch/agent-plugin
+    ref: 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
+  - repo: BastiDood/skills
+    subdir: plugins/observability
+    ref: 9dfab1713cb24ccb515563de166def3239e92f1a
+  - repo: using-system/oddyssey
+    subdir: marketplace/oddyssey
+    ref: e7fd9fa96bf752f1caf31d4abce207fa6b40c107
+  - repo: SigNoz/agent-skills
+    subdir: plugins/signoz
+    ref: 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+  - repo: amiable-dev/skills-telemetry
+    ref: a95d23afc26150737a4eb6894b96a7235fa8f8da

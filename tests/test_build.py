@@ -90,6 +90,32 @@ def test_codex_marketplace_uses_git_backed_sources_pinned_at_the_sha():
     }
 
 
+def test_hermes_pack_pins_every_plugin_at_its_sha():
+    # Hermes refuses a tag or a branch in ref: the sha, never the record's ref
+    record = records()["oddyssey"]
+    assert build.hermes_pack(records()) == (
+        "name: otelyssey\n"
+        "description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits\n"
+        "plugins:\n"
+        "  - repo: using-system/oddyssey\n"
+        "    subdir: marketplace/oddyssey\n"
+        f"    ref: {record['sha']}\n"
+    )
+    root_plugin = {**record, "path": ""}
+    assert "subdir" not in build.hermes_pack({"oddyssey": root_plugin})
+
+
+def test_hermes_pack_is_not_written_for_an_empty_store(tmp_path: Path):
+    root = tmp_path
+    (root / ".store").mkdir()
+    (root / "README.md").write_text(EMPTY_README)
+    (root / "hermes-pack.yaml").write_text("name: stale\nplugins: []\n")
+    assert "hermes-pack.yaml" in build.build(root, check=True)
+    build.build(root, check=False)
+    assert not (root / "hermes-pack.yaml").exists()
+    assert build.build(root, check=True) == []
+
+
 def test_plugin_page_carries_the_facts():
     page = build.plugin_page(records()["oddyssey"])
     assert page.startswith("# oddyssey\n")
@@ -213,11 +239,13 @@ def test_build_is_idempotent(tmp_path: Path):
         "marketplace.json",
         ".claude-plugin/marketplace.json",
         ".agents/plugins/marketplace.json",
+        "hermes-pack.yaml",
         "marketplace/oddyssey/README.md",
         "README.md",
     }
     codex = json.loads((root / ".agents" / "plugins" / "marketplace.json").read_text())
     assert codex["plugins"][0]["source"]["source"] == "git-subdir"
+    assert (root / "hermes-pack.yaml").read_text().startswith("name: otelyssey\n")
     assert build.build(root, check=True) == []
     # Copilot CLI looks at the root first, Claude Code and VS Code in .claude-plugin/: one content
     assert (root / "marketplace.json").read_bytes() == (

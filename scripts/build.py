@@ -106,6 +106,24 @@ def marketplace_json(records: dict[str, dict]) -> dict:
     }
 
 
+def hermes_pack(records: dict[str, dict]) -> str:
+    """The plugin pack `hermes plugins pack install` reads: every plugin pinned at its sha (a
+    tag or a branch is refused), `subdir` for a plugin in a subdirectory. Written by hand:
+    the file is small and flat, the values are the store's (owner/repo, a path, a sha)."""
+    lines = [
+        f"name: {MARKETPLACE_NAME}",
+        "description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits",
+        "plugins:",
+    ]
+    for name in sorted(records):
+        record = records[name]
+        lines.append(f"  - repo: {record['repository']}")
+        if record["path"]:
+            lines.append(f"    subdir: {record['path']}")
+        lines.append(f"    ref: {record['sha']}")
+    return "\n".join(lines) + "\n"
+
+
 def render_json(payload: dict) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 
@@ -268,6 +286,10 @@ def build(root: Path, check: bool) -> list[str]:
         ".agents/plugins/marketplace.json": render_json(codex_marketplace_json(records)),
         "README.md": splice(readme, readme_list(records)),
     }
+    if records:
+        # Hermes Agent installs the whole pack, pinned, after a review screen; it refuses
+        # an empty one, so an empty store has no pack
+        wanted["hermes-pack.yaml"] = hermes_pack(records)
     for name, record in records.items():
         wanted[f"marketplace/{name}/README.md"] = plugin_page(record)
     changed: list[str] = []
@@ -279,6 +301,11 @@ def build(root: Path, check: bool) -> list[str]:
             if not check:
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text(content, encoding="utf-8")
+    pack = root / "hermes-pack.yaml"
+    if not records and pack.exists():
+        changed.append(pack.name)
+        if not check:
+            pack.unlink()
     pages = (root / "marketplace").glob("*/README.md") if (root / "marketplace").is_dir() else []
     for path in pages:
         if path.parent.name in records:

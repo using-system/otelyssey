@@ -17,7 +17,13 @@ apm marketplace add using-system/otelyssey
 VS Code: `"chat.plugins.marketplaces": ["using-system/otelyssey"]` in `settings.json`.
 
 Hermes Agent, OpenClaw and Mistral Vibe take no marketplace url: their lines are on
-each plugin's page.
+each plugin's page. Hermes Agent also installs every listed plugin at once, pinned,
+from the pack, after its review screen:
+
+```text
+hermes plugins pack show https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
+```
 
 ## Submit a plugin
 
