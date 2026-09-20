@@ -10,20 +10,24 @@ Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?
 one field, the URL of your plugin's `plugin.json` on GitHub. The
 repository reads everything else from that file and from your
 repository, installs the plugin on the hosts, judges its relevance to
-OpenTelemetry and its category, and answers on the issue. Your plugin
+OpenTelemetry and its categories, and answers on the issue. Your plugin
 needs a public GitHub repository, a `plugin.json` in the
 [Agent Plugins](https://agent-plugins.org/) format, and OpenTelemetry as
-its subject: instrumentation, the Collector, or a backend that ingests
+its subject: instrumentation, the Collector, a backend that ingests
 OpenTelemetry telemetry, or observability on top of it. Competing plugins
 are all listed; the marketplace never arbitrates between them.
 
 Once listed, the repository follows your releases every night: your
 latest `X.Y.Z` or `vX.Y.Z` tag when it carries the plugin, otherwise a
-new `version` in `plugin.json` on your default branch. To withdraw a
-plugin, open an issue; the record is deleted in a pull request.
+new `version` in `plugin.json` on your default branch. A release that
+does not validate or install on the hosts stays unlisted, the previous
+one remains, and a `release-follow` issue says why.
 
-Never open a pull request against `.store/` or the generated files: the
-pipeline writes them.
+To withdraw a plugin, say so in a
+[bug report](https://github.com/using-system/otelyssey/issues/new?template=bug_report.yml);
+the maintainer deletes the record in a pull request. That is the only
+hand edit the store ever gets: never open a pull request against
+`.store/` or the generated files, the pipeline writes them.
 
 ## Report a bug, ask for a feature
 
@@ -48,9 +52,7 @@ path, and you remain responsible for what your agent commits, opens or
 comments under your name. In short:
 
 - **An issue first.** Every pull request references an existing issue
-  (`Closes #N`); open the issue when none exists. The issue is the
-  decision record: a choice that deviates from it is written there
-  before the pull request.
+  (`Closes #N`); open the issue when none exists.
 - **A branch, never `main`.** `type/short-description`. Commit messages
   and pull request titles follow
   [Conventional Commits](https://www.conventionalcommits.org/),

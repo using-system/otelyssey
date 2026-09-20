@@ -15,18 +15,19 @@ You can expect an acknowledgement within a few days.
 
 ## Scope
 
-- The pipeline: the intake, review, admission and nightly workflows,
+- The pipeline: the intake, review, admission, nightly and duplicates
+  workflows,
   the scripts they run, the GitHub App and its token, the agentic
   workflows' bounds.
 - The generated artifacts: the catalogs the clients read
   (`marketplace.json`, `.claude-plugin/`, `.agents/plugins/`,
   `.grok-plugin/`, `hermes-pack.yaml`) and the pages under
   `marketplace/`.
-- The smoke: the hosts' own install of a submitted plugin under an
-  isolated HOME on the runner.
+- The smoke: the hosts' own install of a submitted plugin, and of each
+  release the nightly follows, under an isolated HOME on the runner.
 
 A vulnerability in a **listed plugin** belongs to that plugin's
 repository: the marketplace pins a commit and installs what the hosts
-install, it does not audit the plugin's code. A plugin whose repository
+install; it does not audit the plugin's code. A plugin whose repository
 is compromised can be withdrawn: report it here, privately, and the
 record is deleted.

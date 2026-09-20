@@ -1,5 +1,5 @@
 name: Bug report
-description: The marketplace does something wrong - an intake, a review, a page, a host's install
+description: The marketplace does something wrong - an intake, a review, a page, a host's install - or a plugin of yours to withdraw
 labels: [bug]
 body:
   - type: markdown
@@ -11,7 +11,7 @@ body:
     attributes:
       label: Where
       description: The issue, page, workflow run or command concerned - a link when there is one.
-      placeholder: "https://github.com/using-system/otelyssey/issues/75, or `claude plugin install sentry@otelyssey`"
+      placeholder: "an issue or workflow-run link, or a command such as `claude plugin install sentry@otelyssey`"
     validations:
       required: true
   - type: input
