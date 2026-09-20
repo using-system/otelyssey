@@ -17,7 +17,7 @@ nothing from the session's history:
 
 - a code-reviewer sub-agent: correctness, tests, conventions;
 - a security-review sub-agent, running the `/security-review` skill
-  on the diff: the exploitable, by a contributor who opens or comments
+  on the diff: the exploitable, by a contributor who opens or comments on
   a submission or controls the plugin repository the pipeline clones,
   or by anyone who opens a pull request; not hardening, not style.
 

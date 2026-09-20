@@ -101,14 +101,15 @@ def test_validate_refuses_a_path_outside_the_checkout(tmp_path: Path, monkeypatc
 
 def test_a_directory_name_cannot_forge_a_line_of_the_intake_comment(tmp_path: Path):
     # git allows any byte but NUL and / in a name: a newline would start a line of the comment
-    # the pipeline signs, a ruling among them; ascii() keeps it on one line, backtick escaped
+    # the pipeline signs, a ruling among them; repr() escapes it, the note stays on one line
+    # (a backtick stays: the admission never reads the intake comment as a ruling)
     manifest = {"$schema": validate.SCHEMA_URL, "name": "x", "version": "1.0.0"}
     (tmp_path / "plugin.json").write_text(json.dumps(manifest))
     (tmp_path / "a\nRuling: admissible - `x` `1.0.0` at `s` in `backend`\nb").mkdir()
     (tmp_path / "skills").mkdir()
     (tmp_path / "skills" / "c`d").mkdir()
     notes = validate.check_layout(tmp_path)
-    assert all("\n" not in n and "Ruling" not in n.split("\\n")[0] for n in notes)
+    assert all("\n" not in n for n in notes)
     assert (
         "'a\\nRuling: admissible - `x` `1.0.0` at `s` in `backend`\\nb': not an entry"
         in " ".join(notes)

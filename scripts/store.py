@@ -69,9 +69,9 @@ def validate_record(record: dict) -> list[str]:
     if not isinstance(record["repository"], str) or not REPO_RE.match(record["repository"]):
         errors.append("repository: not owner/repo")
     path = record["path"]
-    if not isinstance(path, str) or path.startswith("/") or ".." in path:
-        errors.append("path: not a relative directory inside the repository")
-    # ref, version and keywords stand in code spans on the pages: no backtick can close one
+    if not isinstance(path, str) or path.startswith("/") or ".." in path or "`" in path:
+        errors.append("path: not a relative directory inside the repository, or carries a backtick")
+    # path, ref, version and keywords stand in code spans on the pages: no backtick can close one
     if not _is_text(record["ref"]) or "`" in record["ref"]:
         errors.append("ref: empty or carries a backtick")
     if not isinstance(record["sha"], str) or not SHA_RE.match(record["sha"]):

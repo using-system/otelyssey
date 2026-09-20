@@ -37,6 +37,7 @@ def test_valid_record_has_no_errors():
         ("categories", ["backend", "backend"], "categories"),
         ("categories", "backend", "categories"),
         # a backtick would close the code span the pages put these in
+        ("path", "plugins/a`b", "path"),
         ("ref", "v1.0.0`x", "ref"),
         ("version", "1.0.0`x", "version"),
         ("keywords", ["otel", "a`b"], "keywords"),

@@ -314,7 +314,8 @@ listens to every pull request event to find the admission one.
    `chore(store): nightly refresh`, only when something changed. The
    checkout persists no credential: the plugins are cloned and
    installed in the same job; the push authenticates through `gh`
-   once the plugin checkouts are gone, as the admission does.
+   once the plugin checkouts are gone; the admission, likewise, checks
+   out with the token only after its `rm -rf work`.
 
 `duplicates.md` (gh-aw, weekly): audits the store for the same plugin
 listed twice, on the review's definition (the same repository, the

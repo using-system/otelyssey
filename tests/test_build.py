@@ -341,6 +341,12 @@ def test_plugin_page_escapes_markdown_in_the_license_and_the_version():
     assert "\\[Download the installer\\](https://evil.example/x.sh) \\<img src=x\\>" in page
     assert "1.0.1\\[changelog\\](https://evil.example/c)\\<img/src=y\\>" in page
     assert " [Download" not in page and " <img" not in page and ")<img" not in page
+    # a backslash in the input is escaped too: `\[` would otherwise come out as `\\[`, an
+    # escaped backslash and a live bracket (checked with GitHub's renderer)
+    evil = {**records()["oddyssey"], "license": "MIT \\[Download\\](https://evil.example/x.sh)"}
+    page = build.plugin_page(evil)
+    assert "MIT \\\\\\[Download\\\\\\](https://evil.example/x.sh)" in page
+    assert "\\\\[" not in page.replace("\\\\\\[", "")
 
 
 def test_plugin_page_escapes_markdown_in_the_author_and_the_description():

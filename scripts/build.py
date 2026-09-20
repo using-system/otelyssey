@@ -132,7 +132,9 @@ def render_json(payload: dict) -> str:
     return json.dumps(payload, indent=2, ensure_ascii=False) + "\n"
 
 
-MARKDOWN_ESCAPES = str.maketrans({c: f"\\{c}" for c in "[]<>*_`"})
+# the backslash first among them: unescaped, a contributor's `\[` would come out `\\[`, an
+# escaped backslash and a live bracket
+MARKDOWN_ESCAPES = str.maketrans({c: f"\\{c}" for c in "\\[]<>*_`"})
 
 
 def text(value: str) -> str:
@@ -142,7 +144,7 @@ def text(value: str) -> str:
 
 def plugin_page(record: dict) -> str:
     """The urls (homepage, author url) passed the store's https rule; the free text is escaped;
-    what stands in a code span (ref, keywords) carries no backtick, the store refuses it."""
+    what stands in a code span (path, ref, keywords) carries no backtick, the store refuses it."""
     repo_url = f"https://github.com/{record['repository']}"
     where = f"`{record['path']}` in" if record["path"] else "the root of"
     keywords = ", ".join(f"`{k}`" for k in record["keywords"]) or "none"
