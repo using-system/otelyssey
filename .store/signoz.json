@@ -1,0 +1,33 @@
+{
+  "name": "signoz",
+  "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+  "category": "backend",
+  "repository": "SigNoz/agent-skills",
+  "path": "plugins/signoz",
+  "ref": "main",
+  "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6",
+  "version": "2026.9.200",
+  "author": {
+    "name": "SigNoz",
+    "url": "https://signoz.io"
+  },
+  "license": "MIT",
+  "homepage": "https://signoz.io",
+  "keywords": [
+    "signoz",
+    "opentelemetry",
+    "observability",
+    "mcp",
+    "clickhouse",
+    "tracing",
+    "logging"
+  ],
+  "submitted_in": 50,
+  "admitted_at": "2026-09-20",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-20T00:44:57Z"
+  }
+}
