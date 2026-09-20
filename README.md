@@ -5,6 +5,10 @@ A marketplace of OpenTelemetry agent plugins in the
 itself: submit a plugin once; the repository checks it, lists it and
 follows its releases.
 
+<p align="center">
+  <img src="assets/images/otelyssey-banner.jpg" alt="otelyssey: a Greek warship crossing a sea of telemetry toward lighthouses" width="800">
+</p>
+
 ## Install
 
 Add the marketplace to your client:
