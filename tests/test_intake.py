@@ -1,6 +1,8 @@
 import json
 from pathlib import Path
 
+import pytest
+
 from scripts import intake
 
 FIXTURES = Path(__file__).parent / "fixtures" / "issues"
@@ -50,13 +52,16 @@ def test_resolve_ref_picks_the_latest_release(monkeypatch):
     assert intake.resolve_ref("contoso/my-otel-plugin") == ("v1.2.0", "b" * 40, [])
 
 
-def test_resolve_ref_no_release_tag(monkeypatch):
+def test_resolve_ref_without_a_release_tag_takes_the_default_branch(monkeypatch):
     monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: {"nightly": "c" * 40})
-    tag, sha, errors = intake.resolve_ref("contoso/my-otel-plugin")
-    assert (tag, sha) == ("", "")
-    assert errors == [
-        "GitHub repository: no release tag (the pipeline follows X.Y.Z or vX.Y.Z tags)"
-    ]
+    monkeypatch.setattr(intake.gitrepo, "default_branch", lambda repository: ("main", "d" * 40))
+    assert intake.resolve_ref("contoso/my-otel-plugin") == ("main", "d" * 40, [])
+
+
+def test_resolve_ref_prefers_a_release_tag_over_the_default_branch(monkeypatch):
+    monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: TAGS)
+    monkeypatch.setattr(intake.gitrepo, "default_branch", lambda *a: pytest.fail("asked"))
+    assert intake.resolve_ref("contoso/my-otel-plugin") == ("v1.2.0", "b" * 40, [])
 
 
 def test_resolve_ref_unreadable(monkeypatch):
@@ -88,14 +93,15 @@ def test_main_resolves_the_latest_release(tmp_path: Path, capsys, monkeypatch):
 
 
 def test_main_reports_the_resolution_errors(tmp_path: Path, capsys, monkeypatch):
-    monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: {})
+    def gone(repository):
+        raise intake.gitrepo.RepositoryError("repository not found")
+
+    monkeypatch.setattr(intake.gitrepo, "list_tags", gone)
     body = tmp_path / "body.md"
     body.write_text((FIXTURES / "valid.md").read_text())
     assert intake.main(["--body-file", str(body), "--issue", "7", "--json"]) == 1
     data = json.loads(capsys.readouterr().out)
-    assert data["errors"] == [
-        "GitHub repository: no release tag (the pipeline follows X.Y.Z or vX.Y.Z tags)"
-    ]
+    assert data["errors"] == ["GitHub repository: cannot be read (repository not found)"]
     assert "ref" not in data["candidate"]
 
 

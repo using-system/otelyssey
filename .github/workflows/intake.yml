@@ -39,7 +39,7 @@ jobs:
           mkdir -p work
           printf '%s' "$BODY" > work/body.md
           python3 -m scripts.intake --body-file work/body.md --issue "$ISSUE" --json > work/candidate.json || true
-      - name: Validate at the tag
+      - name: Validate at the commit
         run: |
           python3 - <<'PY'
           import json, subprocess, sys
@@ -52,7 +52,7 @@ jobs:
           c = data["candidate"]
           out = subprocess.run(
               [sys.executable, "-m", "scripts.validate", "--repository", c["repository"],
-               "--tag", c["ref"], "--path", c["path"], "--name", c["name"],
+               "--ref", c["sha"], "--path", c["path"], "--name", c["name"],
                "--workdir", "work/validate", "--json"],
               capture_output=True, text=True,
           )

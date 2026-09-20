@@ -4,7 +4,7 @@ Records which repository and branch each coding-agent session worked in, and tea
 
 - Category: `instrumentation`
 - Repository: [langwatch/agent-plugin](https://github.com/langwatch/agent-plugin), the plugin at the root of it
-- Version: 1.2.0 (tag `v1.2.0`, commit `5ca4f7addc97`)
+- Version: 1.2.0 (`v1.2.0`, commit `5ca4f7addc97`)
 - Author: [LangWatch](https://langwatch.ai)
 - License: MIT
 - Keywords: `langwatch`, `observability`, `telemetry`, `traces`, `coding-agent`, `otlp`

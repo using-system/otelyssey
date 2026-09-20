@@ -44,7 +44,7 @@ jobs:
           result = json.load(open("work-releases.json"))
           stats_failed = json.load(open("work-stats.json"))
           for name, reason in stats_failed.items():
-              result.setdefault(name, {"status": "unchanged", "tag": "", "errors": []})
+              result.setdefault(name, {"status": "unchanged", "ref": "", "errors": []})
               result[name]["stats_error"] = reason
 
           def last_line(text):
@@ -61,10 +61,10 @@ jobs:
               if r["status"] != "failed" and "stats_error" not in r:
                   continue
               if r["status"] == "failed":
-                  title = f"release-follow: {name} {r['tag']} does not validate"
+                  title = f"release-follow: {name} at {r['ref']} does not validate"
                   errors = r["errors"] + ([r["stats_error"]] if "stats_error" in r else [])
-                  opening = "The nightly follow of releases found this tag and could not re-pin it:"
-                  closing = "The marketplace keeps the previous release until a tag validates."
+                  opening = "The nightly follow of releases found this release and could not re-pin it:"
+                  closing = "The marketplace keeps the previous release until one validates."
               else:
                   title = f"release-follow: {name} repository statistics unreadable"
                   errors = [r["stats_error"]]

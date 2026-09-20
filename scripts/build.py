@@ -7,6 +7,7 @@ import json
 import shutil
 import sys
 from pathlib import Path
+from urllib.parse import quote
 
 from scripts import store
 
@@ -22,8 +23,9 @@ CATEGORY_TITLES = {
     "backend": "Backends",
     "workflow": "Workflows",
 }
-# live, from GitHub through shields.io: the README needs no refresh when a count moves
-BADGES = ("v/release", "created-at", "last-commit", "license", "stars", "forks", "watchers")
+# live, from GitHub through shields.io: the README needs no refresh when a count moves; the
+# version is the record's, a repository releases with or without a tag
+BADGES = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
 BADGE_STYLE = "style=flat-square&labelColor=2b2b2b&color=6b6b6b"
 
 
@@ -131,7 +133,7 @@ def plugin_page(record: dict) -> str:
         f"{text(record['description'])}\n\n"
         f"- Category: `{record['category']}`\n"
         f"- Repository: [{record['repository']}]({repo_url}), the plugin at {where} it\n"
-        f"- Version: {record['version']} (tag `{record['ref']}`, commit `{record['sha'][:12]}`)\n"
+        f"- Version: {record['version']} (`{record['ref']}`, commit `{record['sha'][:12]}`)\n"
         f"- Author: {author_text}\n"
         f"- License: {record['license']}\n"
         f"- Keywords: {keywords}{homepage}\n"
@@ -169,10 +171,14 @@ def plugin_page(record: dict) -> str:
     )
 
 
-def badge(kind: str, repository: str) -> str:
-    alt = kind.rsplit("/", 1)[-1]
-    src = f"https://img.shields.io/github/{kind}/{repository}?{BADGE_STYLE}"
-    return f'<img src="{src}" alt="{alt}">'
+def badge(kind: str, record: dict) -> str:
+    if kind == "version":
+        # shields' static badge: a dash or an underscore in the message is doubled
+        message = record["version"].replace("-", "--").replace("_", "__")
+        src = f"https://img.shields.io/badge/version-{quote(message)}-6b6b6b?{BADGE_STYLE}"
+    else:
+        src = f"https://img.shields.io/github/{kind}/{record['repository']}?{BADGE_STYLE}"
+    return f'<img src="{src}" alt="{kind}">'
 
 
 def readme_entry(record: dict) -> str:
@@ -184,7 +190,7 @@ def readme_entry(record: dict) -> str:
     return (
         f"- [{record['name']}](https://github.com/{repo}) by {author_text} - "
         f"{text(record['description'])} · [install](marketplace/{record['name']}/README.md)  \n"
-        + "&nbsp;&nbsp;".join(badge(kind, repo) for kind in BADGES)
+        + "&nbsp;&nbsp;".join(badge(kind, record) for kind in BADGES)
         + "\n\n"
     )
 

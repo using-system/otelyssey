@@ -42,7 +42,7 @@ def test_green_report_carries_the_candidate_block_in_store_order():
     assert candidate["sha"] == "1" * 40
     assert candidate["version"] == "1.2.0"
     assert candidate["homepage"] == "https://contoso.example/plugin"
-    assert "**Plugin at the tag `v1.2.0`**: pass (commit `" + "1" * 40 + "`)" in body
+    assert "**Plugin at `v1.2.0`**: pass (commit `" + "1" * 40 + "`)" in body
     assert "Notes (informational)" in body and "commands:" in body
 
 
@@ -74,7 +74,7 @@ def test_validation_errors_make_needs_changes():
     validation = {**VALIDATION, "sha": None, "errors": ["repository: not found"], "notes": []}
     body, verdict = report.render(CANDIDATE, [], validation, None)
     assert verdict == "needs-changes"
-    assert "**Plugin at the tag `v1.2.0`**: needs changes (commit `unresolved`)" in body
+    assert "**Plugin at `v1.2.0`**: needs changes (commit `unresolved`)" in body
 
 
 def test_unavailable_host_is_an_infra_error():

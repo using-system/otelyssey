@@ -83,11 +83,12 @@ jobs:
           [ ! -f ".store/${NAME}.json" ] || { echo "::error::${NAME} is in the store already"; exit 1; }
           open=$(gh pr list --state open --label admission --head "admission/${NAME}" --json number --jq 'length')
           [ "$open" = 0 ] || { echo "::error::an admission pull request for ${NAME} is open already"; exit 1; }
-      - name: The plugin validates at its tag, at the record's sha
+      - name: The plugin validates at the record's sha
+        # the sha, not the ref: a branch moves between the intake and the admission, the record's
+        # commit is the one the review ruled on and the one the marketplace pins
         run: |
-          out=$(python3 -m scripts.validate --repository "$REPOSITORY" --tag "$REF" --path "$PLUGIN_PATH" --name "$NAME" --version "$VERSION" --workdir work/validate) || { printf '%s\n' "$out"; echo "::error::$NAME does not validate at $REF"; exit 1; }
+          out=$(python3 -m scripts.validate --repository "$REPOSITORY" --ref "$SHA" --path "$PLUGIN_PATH" --name "$NAME" --version "$VERSION" --workdir work/validate) || { printf '%s\n' "$out"; echo "::error::$NAME does not validate at $SHA"; exit 1; }
           printf '%s\n' "$out"
-          printf '%s\n' "$out" | grep -qx "valid at $SHA" || { echo "::error::$REF of $REPOSITORY moved since the intake: not at $SHA"; exit 1; }
       - name: Clean the workspace
         # the plugin checkout sits next to no token-bearing step and never reaches git add -A
         run: rm -rf work
