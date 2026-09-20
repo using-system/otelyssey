@@ -98,11 +98,14 @@ def test_hermes_pack_pins_every_plugin_at_its_sha():
         "description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits\n"
         "plugins:\n"
         "  - repo: using-system/oddyssey\n"
-        "    subdir: marketplace/oddyssey\n"
+        '    subdir: "marketplace/oddyssey"\n'
         f"    ref: {record['sha']}\n"
     )
     root_plugin = {**record, "path": ""}
     assert "subdir" not in build.hermes_pack({"oddyssey": root_plugin})
+    # a path the store accepts that a plain YAML scalar would cut at the comment
+    odd = build.hermes_pack({"oddyssey": {**record, "path": "plugins #x"}})
+    assert '    subdir: "plugins #x"\n' in odd
 
 
 def test_hermes_pack_is_not_written_for_an_empty_store(tmp_path: Path):
@@ -278,6 +281,9 @@ def test_check_fails_when_an_artifact_is_stale(tmp_path: Path):
     assert build.main(["--check", "--root", str(root)]) == 1
     build.build(root, check=False)
     (root / ".agents" / "plugins" / "marketplace.json").write_text("{}\n")
+    assert build.main(["--check", "--root", str(root)]) == 1
+    build.build(root, check=False)
+    (root / "hermes-pack.yaml").write_text("name: x\n")
     assert build.main(["--check", "--root", str(root)]) == 1
 
 

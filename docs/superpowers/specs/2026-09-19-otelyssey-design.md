@@ -120,7 +120,9 @@ idempotently:
   manifest fields Codex lists before the install;
 - `hermes-pack.yaml`, Hermes Agent's plugin pack (`hermes plugins pack
   install <url>` installs every entry after a review screen): one entry
-  per record with `repo: <repository>`, `subdir: <path>` when set,
+  per record with `repo: <repository>`, `subdir: "<path>"` when set
+  (double-quoted: the store's path rule is loose, a JSON string is a
+  YAML one),
   `ref: <sha>` (a tag or a branch is refused); not written for an empty
   store, which Hermes refuses;
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
