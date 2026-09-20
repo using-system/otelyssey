@@ -1,8 +1,8 @@
 """Turn a submission issue's body (the rendered issue form) into a candidate record.
 
 The form names neither the ref nor the version: the ref is the repository's latest release
-tag or, without one, its default branch, resolved here; the version is read from plugin.json
-by the validation.
+tag when it carries the plugin, otherwise its default branch, resolved here; the version is
+read from plugin.json by the validation.
 """
 
 from __future__ import annotations
@@ -95,15 +95,12 @@ def candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str
     return record, errors
 
 
-def resolve_ref(repository: str) -> tuple[str, str, list[str]]:
-    """The latest release tag and its commit; without one, the default branch and its head."""
+def resolve_ref(repository: str, path: str) -> tuple[str, str, list[str]]:
+    """The ref the marketplace follows (see gitrepo.release) and its commit, or the error."""
     try:
-        latest = gitrepo.latest_release(gitrepo.list_tags(repository))
-        if latest is None:
-            latest = gitrepo.default_branch(repository)
+        ref, sha, _ = gitrepo.release(repository, path)
     except gitrepo.RepositoryError as error:
         return "", "", [f"GitHub repository: cannot be read ({error})"]
-    ref, sha = latest
     return ref, sha, []
 
 
@@ -119,7 +116,7 @@ def main(argv: list[str] | None = None) -> int:
     body = Path(args.body_file).read_text(encoding="utf-8")
     record, errors = candidate(parse_form(body), args.issue)
     if not errors and not args.no_resolve:
-        ref, sha, errors = resolve_ref(record["repository"])
+        ref, sha, errors = resolve_ref(record["repository"], record["path"])
         if not errors:
             record["ref"] = ref
             record["sha"] = sha

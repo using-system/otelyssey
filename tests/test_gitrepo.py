@@ -58,6 +58,69 @@ def test_resolve_a_branch_by_name(monkeypatch):
         gitrepo.resolve("contoso/plugin", "develop")
 
 
+class FakeResponse:
+    status = 200
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+
+def http_error(code: int):
+    def urlopen(request, timeout):
+        raise gitrepo.urllib.error.HTTPError(request.full_url, code, "x", {}, None)
+
+    return urlopen
+
+
+def test_has_file_maps_the_probe(monkeypatch):
+    seen = []
+
+    def ok(request, timeout):
+        seen.append((request.method, request.full_url))
+        return FakeResponse()
+
+    monkeypatch.setattr(gitrepo.urllib.request, "urlopen", ok)
+    assert gitrepo.has_file("contoso/plugin", "a" * 40, "plugins/my plugin/plugin.json") is True
+    assert seen == [
+        (
+            "HEAD",
+            "https://raw.githubusercontent.com/contoso/plugin/"
+            + "a" * 40
+            + "/plugins/my%20plugin/plugin.json",
+        )
+    ]
+    monkeypatch.setattr(gitrepo.urllib.request, "urlopen", http_error(404))
+    assert gitrepo.has_file("contoso/plugin", "a" * 40, "plugin.json") is False
+    monkeypatch.setattr(gitrepo.urllib.request, "urlopen", http_error(503))
+    with pytest.raises(gitrepo.RepositoryError):
+        gitrepo.has_file("contoso/plugin", "a" * 40, "plugin.json")
+
+    def dropped(request, timeout):
+        raise gitrepo.http.client.RemoteDisconnected("gone")
+
+    monkeypatch.setattr(gitrepo.urllib.request, "urlopen", dropped)
+    with pytest.raises(gitrepo.RepositoryError):
+        gitrepo.has_file("contoso/plugin", "a" * 40, "plugin.json")
+
+
+def test_release_is_the_latest_tag_carrying_the_manifest(monkeypatch):
+    monkeypatch.setattr(gitrepo, "list_tags", lambda repository: {"v1.0.0": "a" * 40})
+    monkeypatch.setattr(gitrepo, "has_file", lambda repository, sha, path: path == "plugin.json")
+    monkeypatch.setattr(gitrepo, "default_branch", lambda repository: ("main", "b" * 40))
+    assert gitrepo.release("contoso/plugin", "") == ("v1.0.0", "a" * 40, True)
+    assert gitrepo.release("contoso/plugin", "plugins/x") == ("main", "b" * 40, False)
+
+
+def test_release_without_a_tag_is_the_default_branch(monkeypatch):
+    monkeypatch.setattr(gitrepo, "list_tags", lambda repository: {})
+    monkeypatch.setattr(gitrepo, "has_file", lambda *a: pytest.fail("asked"))
+    monkeypatch.setattr(gitrepo, "default_branch", lambda repository: ("main", "b" * 40))
+    assert gitrepo.release("contoso/plugin", "") == ("main", "b" * 40, False)
+
+
 def test_an_unreadable_repository_is_a_named_error(tmp_path: Path):
     with pytest.raises(gitrepo.RepositoryError):
         gitrepo.clone_at("contoso/does-not-exist", "1" * 40, tmp_path / "x")

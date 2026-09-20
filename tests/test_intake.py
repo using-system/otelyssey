@@ -9,6 +9,12 @@ FIXTURES = Path(__file__).parent / "fixtures" / "issues"
 TAGS = {"v1.0.0": "a" * 40, "v1.2.0": "b" * 40}
 
 
+@pytest.fixture(autouse=True)
+def the_tag_carries_the_manifest(monkeypatch):
+    """No network: a tag carries plugin.json unless a test says otherwise."""
+    monkeypatch.setattr(intake.gitrepo, "has_file", lambda repository, sha, path: True)
+
+
 def test_parse_form_maps_labels_to_values():
     fields = intake.parse_form((FIXTURES / "valid.md").read_text())
     assert fields["Plugin name"] == "my-otel-plugin"
@@ -49,19 +55,30 @@ def test_candidate_names_a_bad_repository():
 
 def test_resolve_ref_picks_the_latest_release(monkeypatch):
     monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: TAGS)
-    assert intake.resolve_ref("contoso/my-otel-plugin") == ("v1.2.0", "b" * 40, [])
+    assert intake.resolve_ref("contoso/my-otel-plugin", "") == ("v1.2.0", "b" * 40, [])
 
 
 def test_resolve_ref_without_a_release_tag_takes_the_default_branch(monkeypatch):
     monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: {"nightly": "c" * 40})
     monkeypatch.setattr(intake.gitrepo, "default_branch", lambda repository: ("main", "d" * 40))
-    assert intake.resolve_ref("contoso/my-otel-plugin") == ("main", "d" * 40, [])
+    assert intake.resolve_ref("contoso/my-otel-plugin", "") == ("main", "d" * 40, [])
 
 
 def test_resolve_ref_prefers_a_release_tag_over_the_default_branch(monkeypatch):
     monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: TAGS)
     monkeypatch.setattr(intake.gitrepo, "default_branch", lambda *a: pytest.fail("asked"))
-    assert intake.resolve_ref("contoso/my-otel-plugin") == ("v1.2.0", "b" * 40, [])
+    assert intake.resolve_ref("contoso/my-otel-plugin", "") == ("v1.2.0", "b" * 40, [])
+
+
+def test_resolve_ref_skips_a_tag_without_the_manifest(monkeypatch):
+    monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: TAGS)
+    monkeypatch.setattr(intake.gitrepo, "default_branch", lambda repository: ("main", "d" * 40))
+    asked = []
+    monkeypatch.setattr(
+        intake.gitrepo, "has_file", lambda repository, sha, path: asked.append((sha, path))
+    )
+    assert intake.resolve_ref("contoso/my-otel-plugin", "plugins/x") == ("main", "d" * 40, [])
+    assert asked == [("b" * 40, "plugins/x/plugin.json")]
 
 
 def test_resolve_ref_unreadable(monkeypatch):
@@ -69,7 +86,7 @@ def test_resolve_ref_unreadable(monkeypatch):
         raise intake.gitrepo.RepositoryError("repository not found")
 
     monkeypatch.setattr(intake.gitrepo, "list_tags", failing)
-    tag, sha, errors = intake.resolve_ref("contoso/gone")
+    tag, sha, errors = intake.resolve_ref("contoso/gone", "")
     assert (tag, sha) == ("", "")
     assert errors == ["GitHub repository: cannot be read (repository not found)"]
 

@@ -8,6 +8,12 @@ from scripts import releases
 TAGS = {"v1.13.0": "1" * 40, "v1.14.0": "2" * 40}
 
 
+@pytest.fixture(autouse=True)
+def the_tag_carries_the_manifest(monkeypatch):
+    """No network: a tag carries plugin.json unless a test says otherwise."""
+    monkeypatch.setattr(releases.gitrepo, "has_file", lambda repository, sha, path: True)
+
+
 def store_with(tmp_path: Path) -> Path:
     src = Path(__file__).parent / "fixtures" / "store-root" / ".store" / "oddyssey.json"
     (tmp_path / ".store").mkdir()
@@ -123,6 +129,36 @@ def test_untagged_updated_when_the_manifest_version_changed(tmp_path: Path, monk
     assert (result["status"], result["ref"]) == ("updated", "main")
     record = json.loads((root / ".store" / "oddyssey.json").read_text())
     assert (record["ref"], record["sha"], record["version"]) == ("main", "4" * 40, "1.14.0")
+
+
+def test_a_tag_without_the_manifest_is_followed_on_the_branch(tmp_path: Path, monkeypatch):
+    # the repository's tags predate the plugin: the record stays on main, by version
+    root = store_with(tmp_path)
+    branch_record(root)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    monkeypatch.setattr(releases.gitrepo, "default_branch", lambda repository: ("main", "3" * 40))
+    asked = []
+    monkeypatch.setattr(
+        releases.gitrepo, "has_file", lambda repository, sha, path: asked.append((sha, path))
+    )
+    monkeypatch.setattr(releases.validate, "validate", lambda *a: pytest.fail("validated"))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert (result["status"], result["ref"]) == ("unchanged", "main")
+    assert asked == [("2" * 40, "marketplace/oddyssey/plugin.json")]
+
+
+def test_a_plugin_that_vanished_from_a_tagged_record_is_a_failure(tmp_path: Path, monkeypatch):
+    # the record is on v1.13.0; the latest tag and the head both lack plugin.json
+    root = store_with(tmp_path)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    monkeypatch.setattr(releases.gitrepo, "has_file", lambda repository, sha, path: False)
+    monkeypatch.setattr(releases.gitrepo, "default_branch", lambda repository: ("main", "4" * 40))
+    gone = {"sha": "4" * 40, "manifest": {}, "errors": ["plugin.json: missing"], "notes": []}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(gone, at="4" * 40))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert (result["status"], result["ref"]) == ("failed", "main")
+    assert result["errors"][0].startswith("plugin.json: at neither")
+    assert json.loads((root / ".store" / "oddyssey.json").read_text())["ref"] == "v1.13.0"
 
 
 def test_a_first_tag_takes_over_a_record_on_a_branch(tmp_path: Path, monkeypatch):
