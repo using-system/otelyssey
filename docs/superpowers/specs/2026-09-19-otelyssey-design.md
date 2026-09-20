@@ -37,12 +37,15 @@ store.
   that chains the workflows (see the guard rails), because GitHub
   emits no workflow event for what the repository's own `GITHUB_TOKEN`
   does.
-- **Scope: OpenTelemetry in the broad sense.** A plugin is admissible
-  when its main subject touches OpenTelemetry: instrumentation, the
-  Collector, the semantic conventions, or the exploitation of OTel
-  telemetry in a backend (Grafana, Datadog, Dynatrace, ...). An
-  observability plugin with no OpenTelemetry in it is rejected, with
-  the reason.
+- **Scope: OpenTelemetry, directly or through a backend that ingests
+  it.** A plugin is admissible when its main subject is instrumentation,
+  the Collector, the semantic conventions, or the operation of an
+  observability backend that ingests OpenTelemetry telemetry, over OTLP
+  or through a Collector exporter. A backend plugin need not name
+  OpenTelemetry: the backend's compatibility, from the plugin's text or
+  the vendor registry at opentelemetry.io, is the criterion, and the
+  rule names no vendor. A plugin whose subject is neither is rejected,
+  with the reason.
 - **Releases are followed automatically.** The nightly workflow reads
   each admitted plugin's latest tag, replays the format and install
   validation on that tag, and re-pins the marketplace only when it
