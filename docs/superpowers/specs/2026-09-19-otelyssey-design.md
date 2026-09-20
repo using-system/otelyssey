@@ -239,11 +239,15 @@ cannot be told from the path: the ref is one segment (or GitHub's
 ### review (gh-aw, engine copilot, on `format-ok` labelled)
 
 Inputs: the intake comment's facts (name, version, repository, path,
-tag, sha), the plugin's README and `plugin.json` at the sha, the store,
-the open and closed submission issues. The agent:
+tag, sha), the plugin at the sha (`plugin.json`, the README, every
+`SKILL.md`, `mcp.json` when it exists, and a skill's annex files when
+the manifest, the README, the `SKILL.md` files and `mcp.json` leave
+the relevance unsettled: Markdown and JSON under the skill's directory
+only, at most twenty files, two hundred lines and 64 KB each), the
+store, the open and closed submission issues. The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
-  plugin's own description, skills and README, and states the
+  plugin's own description, skills, `mcp.json` and README, and states the
   evidence;
 - rules on **duplication** against the store and the other
   submissions: same repository, same plugin under another name, or a
