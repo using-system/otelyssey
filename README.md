@@ -20,7 +20,8 @@ VS Code: `"chat.plugins.marketplaces": ["using-system/otelyssey"]` in `settings.
 
 Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?template=submit-plugin.yml):
 a public GitHub repository holding a `plugin.json` in the Agent Plugins
-format and a subject that is OpenTelemetry. The
+format and a subject that is OpenTelemetry: its instrumentation, the
+Collector, or a backend that ingests its telemetry. The
 repository checks the format, installs the plugin, judges its relevance
 to OpenTelemetry and whether it is a plugin already listed, talks to you
 on the issue, and lists it. Every night it follows your releases: your
