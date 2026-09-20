@@ -70,6 +70,7 @@ store.
 marketplace.json                     generated: the marketplace Copilot CLI reads first
 .claude-plugin/marketplace.json      generated: the same content, the one Claude Code reads
 .agents/plugins/marketplace.json     generated: Codex's catalog, url and git-subdir sources at the sha
+hermes-pack.yaml                     generated: Hermes Agent's pack, every plugin pinned at its sha
 marketplace/<plugin>/README.md       generated: the plugin's page
 README.md                            intro, then the generated plugin list
 scripts/                             the deterministic layer, Python 3.11+, standard library only
@@ -117,6 +118,14 @@ idempotently:
   "ref", "sha"}`, the default policy, the category's title, and
   `description`, `version`, `keywords`, `author`, `homepage` as the
   manifest fields Codex lists before the install;
+- `hermes-pack.yaml`, Hermes Agent's plugin pack (`hermes plugins pack
+  install <url>` installs every entry after a review screen): one entry
+  per record with `repo: <repository>`, `subdir: "<path>"` when set
+  (double-quoted: the store's path rule is loose, a JSON string is a
+  YAML one),
+  `ref: "<sha>"` (a tag or a branch is refused; quoted, a sha of decimal
+  digits reading as an int); not written for an empty
+  store, which Hermes refuses;
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
   content: `name: otelyssey`, `owner: {"name": "using-system", "url":
   ...}`, one entry per record with
