@@ -107,8 +107,9 @@ tests/                               pytest on recorded fixtures
 | `stats` | `stars`, `forks`, `watchers`, `refreshed_at` |
 
 The record is written by the pipeline only: the admission pull request
-creates it, the nightly workflow updates `ref`, `sha`, `version` and
-`stats`. A human edits it only to withdraw a plugin (delete the file).
+creates it, the nightly workflow updates `ref`, `sha`, `version`, the
+fields derived from the manifest, and `stats`. A human edits it only
+to withdraw a plugin (delete the file).
 
 ### Generated artifacts
 
@@ -297,9 +298,13 @@ listens to every pull request event to find the admission one.
    oddyssey-actions does); when it differs from `ref`, the format
    validation and the install on the hosts are replayed on it (the
    same scripts as intake, `releases.py --smoke`); on pass, `ref`,
-   `sha` and `version` are updated; on failure, an
-   issue is opened for the contributor (one per plugin and tag, never
-   repeated) and the record stays.
+   `sha` and `version` are updated and the derived fields read again
+   from the new manifest, the repository's metadata filling the gaps
+   as the intake does (a field neither gives keeps its value; an
+   unreadable API lets the record's values stand in for the
+   repository's, never holds a release back); on failure, an issue is
+   opened for the contributor (one per plugin and tag, never repeated)
+   and the record stays.
 3. `build.py`, then one commit by the workflow's bot on `main`,
    `chore(store): nightly refresh`, only when something changed.
 

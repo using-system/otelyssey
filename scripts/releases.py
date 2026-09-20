@@ -1,15 +1,17 @@
 """Follow every admitted plugin's releases: a newer tag carrying the plugin, otherwise a new
-manifest version on the default branch; revalidate it, re-pin the record on a pass."""
+manifest version on the default branch; revalidate it, re-pin the record on a pass, its
+derived fields read again from the new manifest."""
 
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import sys
 from collections.abc import Callable
 from pathlib import Path
 
-from scripts import gitrepo, smoke, store, validate
+from scripts import derive, gitrepo, smoke, stats, store, validate
 
 SmokeFn = Callable[[str, Path, Path], dict[str, dict]]
 
@@ -34,6 +36,9 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
     nor the head is a failure: the plugin vanished.
     With smoke_fn, a release that validates is also installed on the hosts (the intake's
     smoke replayed on the checkout) and is re-pinned only when every host passes.
+    A re-pin reads the derived fields again from the new manifest, the repository's
+    metadata filling the gaps as the intake does; a field neither gives keeps its value, and
+    the record's values stand in for the repository's when its API cannot be read.
     """
     result: dict[str, dict] = {}
     for name, record in store.load_store(root).items():
@@ -69,10 +74,19 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
             if errors:
                 result[name] = {"status": "failed", "ref": ref, "errors": errors}
                 continue
+        repinned = {**record, "ref": ref, "sha": sha, "version": version}
         try:
-            store.write_record(root, {**record, "ref": ref, "sha": sha, "version": version})
+            meta = derive.fetch_metadata(record["repository"], stats.token_from_env())
+        except (OSError, http.client.HTTPException, ValueError):
+            # the record's values stand in for the repository's: an unreadable API neither
+            # holds a release back nor empties what the repository had given
+            meta = derive.from_record(record)
+        repinned, _ = derive.resync(repinned, check["manifest"], meta)
+        try:
+            store.write_record(root, repinned)
         except ValueError as error:
-            result[name] = {"status": "failed", "ref": ref, "errors": [f"record: {error}"]}
+            # the value the store refuses is the manifest's: the contributor fixes plugin.json
+            result[name] = {"status": "failed", "ref": ref, "errors": [f"plugin.json: {error}"]}
             continue
         result[name] = {"status": "updated", "ref": ref, "errors": []}
     return result

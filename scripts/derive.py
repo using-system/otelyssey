@@ -44,6 +44,20 @@ def metadata(raw: dict) -> dict:
     }
 
 
+def from_record(record: dict) -> dict:
+    """The metadata shape from what an admitted record carries: the repository's last answer
+    stands in when its API cannot be read (an email it once gave is not carried, the shape
+    has none)."""
+    author = record["author"]
+    return {
+        "description": record["description"],
+        "license": record["license"],
+        "homepage": record["homepage"],
+        "topics": list(record["keywords"]),
+        "owner": {"name": author["name"], "url": author.get("url", "")},
+    }
+
+
 def fetch_metadata(repository: str, token: str | None) -> dict:
     return metadata(stats.fetch_raw(repository, token))
 
@@ -135,8 +149,9 @@ def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
     submitted_in, admitted_at, stats) are untouched.
     """
     candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}
-    validation = {"sha": record["sha"], "manifest": manifest}
-    derived, errors, _ = derive(candidate, validation, meta)
+    # the name and the version are the record's, pinned; the manifest gives the rest
+    pinned = {**manifest, "name": record["name"], "version": record["version"]}
+    derived, errors, _ = derive(candidate, {"sha": record["sha"], "manifest": pinned}, meta)
     kept = [e for e in errors if e.startswith(MISSING)]
     missing = {e.removeprefix(MISSING).split(",", 1)[0] for e in kept}
     updated = {**record, **{f: derived[f] for f in DERIVED if f not in missing}}

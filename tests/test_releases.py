@@ -10,8 +10,12 @@ TAGS = {"v1.13.0": "1" * 40, "v1.14.0": "2" * 40}
 
 @pytest.fixture(autouse=True)
 def the_tag_carries_the_manifest(monkeypatch):
-    """No network: a tag carries plugin.json unless a test says otherwise."""
+    """No network: a tag carries plugin.json unless a test says otherwise, and the repository's
+    metadata is empty unless a test gives some."""
     monkeypatch.setattr(releases.gitrepo, "has_file", lambda repository, sha, path: True)
+    monkeypatch.setattr(
+        releases.derive, "fetch_metadata", lambda repository, token: releases.derive.metadata({})
+    )
 
 
 def store_with(tmp_path: Path) -> Path:
@@ -56,6 +60,55 @@ def test_updated_when_a_newer_tag_validates(tmp_path: Path, monkeypatch):
     assert releases.follow(root, tmp_path / "work")["oddyssey"]["status"] == "updated"
     record = json.loads((root / ".store" / "oddyssey.json").read_text())
     assert (record["ref"], record["sha"], record["version"]) == ("v1.14.0", "2" * 40, "1.14.0")
+
+
+def test_a_repin_reads_the_derived_fields_from_the_new_manifest(tmp_path: Path, monkeypatch):
+    root = store_with(tmp_path)
+    before = json.loads((root / ".store" / "oddyssey.json").read_text())
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    manifest = {
+        "name": "oddyssey",
+        "version": "1.14.0",
+        "description": "A new description",
+        "keywords": ["otel", "odd"],
+        "author": {"name": "New Author", "url": "https://new.example"},
+        "license": "Apache-2.0",
+    }
+    passing = {"sha": "2" * 40, "manifest": manifest, "errors": [], "notes": []}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(passing))
+    assert releases.follow(root, tmp_path / "work")["oddyssey"]["status"] == "updated"
+    record = json.loads((root / ".store" / "oddyssey.json").read_text())
+    assert record["description"] == "A new description"
+    assert record["keywords"] == ["otel", "odd"]
+    assert record["author"] == {"name": "New Author", "url": "https://new.example"}
+    assert record["license"] == "Apache-2.0"
+    # the manifest has no homepage and the repository none either: an empty derived value
+    assert record["homepage"] == ""
+    for field in ("name", "category", "submitted_in", "admitted_at", "stats"):
+        assert record[field] == before[field]
+
+
+def test_a_repin_keeps_a_field_the_new_manifest_and_the_repository_lack(
+    tmp_path: Path, monkeypatch
+):
+    root = store_with(tmp_path)
+    before = json.loads((root / ".store" / "oddyssey.json").read_text())
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    bare = {"name": "oddyssey", "version": "1.14.0"}
+    passing = {"sha": "2" * 40, "manifest": bare, "errors": [], "notes": []}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(passing))
+
+    def unreachable(repository, token):
+        raise TimeoutError("slow")
+
+    monkeypatch.setattr(releases.derive, "fetch_metadata", unreachable)
+    assert releases.follow(root, tmp_path / "work")["oddyssey"]["status"] == "updated"
+    record = json.loads((root / ".store" / "oddyssey.json").read_text())
+    assert (record["ref"], record["sha"], record["version"]) == ("v1.14.0", "2" * 40, "1.14.0")
+    # the record's values stood in for the repository's: nothing the repository had given is
+    # emptied by an API that could not be read
+    for field in ("description", "license", "author", "homepage", "keywords"):
+        assert record[field] == before[field]
 
 
 def test_failed_keeps_the_record(tmp_path: Path, monkeypatch):
@@ -251,6 +304,18 @@ def test_main_smoke_flag_passes_the_install(tmp_path: Path, monkeypatch, capsys)
     assert result["errors"] == [
         "install on claude: unavailable: the claude CLI is not on this machine"
     ]
+
+
+def test_a_new_manifest_the_store_refuses_is_named_as_the_manifests(tmp_path: Path, monkeypatch):
+    root = store_with(tmp_path)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    bad = {"name": "oddyssey", "version": "1.14.0", "description": "red \x1b"}
+    passing = {"sha": "2" * 40, "manifest": bad, "errors": [], "notes": []}
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(passing))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert result["status"] == "failed"
+    assert result["errors"] == ["plugin.json: description: control character"]
+    assert json.loads((root / ".store" / "oddyssey.json").read_text())["ref"] == "v1.13.0"
 
 
 def test_a_record_the_store_refuses_is_a_failed_follow(tmp_path: Path, monkeypatch):
