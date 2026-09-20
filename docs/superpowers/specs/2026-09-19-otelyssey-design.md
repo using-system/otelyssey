@@ -249,10 +249,11 @@ store, the open and closed submission issues. The agent:
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills, `mcp.json` and README, and states the
   evidence;
-- rules on **resubmission** against the store: the same repository,
-  the same skills' content under another name, or, on a plugin without
-  skills, the same `mcp.json` server; scope is not a criterion, two
-  distinct plugins on the same need are both listed;
+- rules on **resubmission** against the store, the same plugin under
+  another name: the same repository, the same skills' content at any
+  version or, when neither side has a skill, the same `mcp.json`
+  servers; scope is not a criterion, two distinct plugins that serve
+  the same need are both listed;
 - **converses** on the issue through safe outputs (`add-comment`,
   `add-labels` / `remove-labels`, bounded): what is missing, what
   would make the plugin admissible, an answer to the contributor's
