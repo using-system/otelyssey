@@ -31,6 +31,7 @@ OPTIONAL_STRINGS = ("version", "description", "homepage", "repository", "license
 AUTHOR_KEYS = {"name", "email", "url"}
 KNOWN_ENTRIES = {"plugin.json", "skills", "mcp.json", "README.md", "LICENSE", "CHANGELOG.md"}
 NAMESPACE_RE = re.compile(r"^[a-z0-9-]+(\.[a-z0-9-]+)+$")  # a reverse-domain extension directory
+VERSION_RE = re.compile(r"^[^\s`]+$")
 
 
 def check_manifest(
@@ -38,8 +39,8 @@ def check_manifest(
 ) -> tuple[dict, list[str]]:
     """The manifest read and every error.
 
-    An empty expected_version skips the version match; the manifest must still carry one,
-    it is the version the record takes.
+    An empty expected_name or expected_version skips that match; the manifest must still carry
+    both, they are the name and the version the record takes.
     """
     errors: list[str] = []
     manifest_path = plugin_dir / "plugin.json"
@@ -87,9 +88,12 @@ def check_manifest(
         or not all(isinstance(v, dict) for v in extensions.values())
     ):
         errors.append("plugin.json: extensions is an object whose values are objects (schema)")
-    if isinstance(name, str) and name != expected_name:
+    if expected_name and isinstance(name, str) and name != expected_name:
         errors.append(f"plugin.json: name is {name!r}, the submission says {expected_name!r}")
     version = manifest.get("version")
+    if isinstance(version, str) and version and not VERSION_RE.match(version):
+        # the version stands in backticks on the line the review rules on
+        errors.append("plugin.json: version carries whitespace or a backtick")
     if not expected_version:
         if not version:
             errors.append("plugin.json: version missing")
@@ -165,7 +169,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--repository", required=True)
     parser.add_argument("--ref", required=True, help="a tag, a branch, or a full commit sha")
     parser.add_argument("--path", default="")
-    parser.add_argument("--name", required=True)
+    parser.add_argument("--name", default="", help="empty skips the name match")
     parser.add_argument("--version", default="", help="empty skips the version match")
     parser.add_argument("--workdir", default=None)
     parser.add_argument("--json", action="store_true")

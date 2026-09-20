@@ -7,8 +7,6 @@ import json
 import sys
 from pathlib import Path
 
-from scripts import store
-
 MARK = "<!-- otelyssey-intake -->"
 CANDIDATE_MARK = "<!-- otelyssey-candidate "
 
@@ -23,40 +21,23 @@ def _read_json(path: str | None) -> dict | None:
         return None
 
 
-def candidate_record(candidate: dict, validation: dict) -> dict:
-    """The candidate completed from the manifest, in the store's field order.
-
-    The validation's sha is the source of truth (the intake resolved the same one); the
-    version is the manifest's, which the validation requires.
-    """
-    manifest = validation["manifest"]
-    merged = dict(candidate)
-    merged["sha"] = validation["sha"]
-    merged["version"] = manifest["version"]
-    if not merged.get("license") and isinstance(manifest.get("license"), str):
-        merged["license"] = manifest["license"]
-    homepage = manifest.get("homepage")
-    if not merged.get("homepage") and isinstance(homepage, str) and store.URL_RE.match(homepage):
-        merged["homepage"] = homepage
-    if not merged.get("keywords") and isinstance(manifest.get("keywords"), list):
-        merged["keywords"] = manifest["keywords"]
-    author = manifest.get("author")
-    if isinstance(author, dict) and author.get("name"):
-        merged["author"] = {k: v for k, v in author.items() if k in ("name", "email")}
-        if isinstance(author.get("url"), str) and store.URL_RE.match(author["url"]):
-            merged["author"]["url"] = author["url"]
-    return {field: merged[field] for field in store.FIELDS if field in merged}
-
-
 def candidate_block(record: dict) -> str:
     """The record as JSON whose `>` is escaped: no manifest value can close the HTML comment."""
     return json.dumps(record, ensure_ascii=False).replace(">", "\\u003e")
 
 
 def render(
-    candidate: dict, errors: list[str], validation: dict | None, smoke: dict | None
+    candidate: dict,
+    errors: list[str],
+    validation: dict | None,
+    derived: dict | None,
+    smoke: dict | None,
 ) -> tuple[str, str]:
-    """The comment and its verdict: format-ok, needs-changes or infra-error."""
+    """The comment and its verdict: format-ok, needs-changes or infra-error.
+
+    The derivation (derive.py) gives the record, its errors and the fields the repository's
+    metadata filled; it runs after a validation that passed.
+    """
     lines = [MARK, "## Intake", ""]
     if errors:
         lines.append("**Form**: needs changes")
@@ -69,8 +50,9 @@ def render(
     # facts it rules on stand here in backticks, the full sha below, never in the block only
     where = f"at `{candidate['path']}`" if candidate.get("path") else "at its root"
     if validation and not validation["errors"]:
+        manifest = validation["manifest"]
         lines.append(
-            f"**Plugin**: `{candidate['name']}` `{validation['manifest']['version']}` "
+            f"**Plugin**: `{manifest['name']}` `{manifest['version']}` "
             f"in `{candidate['repository']}` {where}"
         )
     verdict = "format-ok"
@@ -89,6 +71,23 @@ def render(
     if verdict == "format-ok":
         if lines[-1].startswith("- "):
             lines.append("")  # closes the notes list: the next line is a paragraph, not a bullet
+        if derived is None:
+            lines.append("**Record**: not derived")
+            verdict = "infra-error"
+        elif derived["errors"]:
+            lines.append("**Record**: needs changes")
+            lines += [f"- {e}" for e in derived["errors"]]
+            verdict = "needs-changes"
+        else:
+            filled = derived.get("from_repository") or []
+            source = "every field from plugin.json"
+            if filled:
+                source = (
+                    f"{', '.join(filled)} from the repository (plugin.json has none), "
+                    "the rest from plugin.json"
+                )
+            lines.append(f"**Record**: {source}")
+    if verdict == "format-ok":
         if smoke is None:
             lines.append("**Install**: not run")
             verdict = "infra-error"
@@ -111,7 +110,7 @@ def render(
     elif verdict == "infra-error":
         lines += ["", "The pipeline could not complete on its side; a maintainer re-runs it."]
     else:
-        record = candidate_record(candidate, validation)
+        record = derived["record"]
         lines += [
             "",
             "The format holds; the review of relevance, and that it is not a listed plugin "
@@ -126,6 +125,7 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="render the intake comment and print its verdict")
     parser.add_argument("--candidate", required=True, help="intake.py --json output")
     parser.add_argument("--validation", default=None, help="validate.py --json output")
+    parser.add_argument("--derived", default=None, help="derive.py --out file")
     parser.add_argument("--smoke", default=None, help="smoke.py --json output")
     parser.add_argument("--out", required=True)
     args = parser.parse_args(argv)
@@ -137,8 +137,9 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0
     validation = _read_json(args.validation)
+    derived = _read_json(args.derived)
     smoke = _read_json(args.smoke)
-    body, verdict = render(intake["candidate"], intake["errors"], validation, smoke)
+    body, verdict = render(intake["candidate"], intake["errors"], validation, derived, smoke)
     Path(args.out).write_text(body, encoding="utf-8")
     print(verdict)
     return 0

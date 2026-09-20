@@ -4,11 +4,11 @@ from pathlib import Path
 import pytest
 
 from scripts import admission, report, store
-from tests.test_report import CANDIDATE, SMOKE, VALIDATION
+from tests.test_report import CANDIDATE, DERIVED, RECORD, SMOKE, VALIDATION
 
 
 def intake_comment() -> str:
-    body, verdict = report.render(CANDIDATE, [], VALIDATION, SMOKE)
+    body, verdict = report.render(CANDIDATE, [], VALIDATION, DERIVED, SMOKE)
     assert verdict == "format-ok"
     return body
 
@@ -68,8 +68,8 @@ def test_the_record_adds_the_admission_date_and_zero_stats():
     candidate = admission.candidate_from_comment(intake_comment())
     record = admission.admitted(candidate, 7, "2026-09-19", "2026-09-19T17:00:00Z", "workflow")
     assert list(record) == list(store.FIELDS)
-    # the ruled category, not the form's
-    assert CANDIDATE["category"] == "backend"
+    # the ruled category: the derived record carries none
+    assert "category" not in RECORD
     assert record["category"] == "workflow"
     assert record["admitted_at"] == "2026-09-19"
     assert record["stats"] == {
@@ -111,7 +111,7 @@ def test_main_writes_the_canonical_record_and_prints_its_path(tmp_path: Path, ca
     assert capsys.readouterr().out.strip() == str(path)
     record = json.loads(path.read_text(encoding="utf-8"))
     assert path.read_text(encoding="utf-8") == store.canonical(record)
-    # the ruled category, end to end, not the form's
+    # the ruled category, end to end
     assert record["category"] == "workflow"
     assert store.DATE_RE.match(record["admitted_at"])
     assert store.STAMP_RE.match(record["stats"]["refreshed_at"])
@@ -133,8 +133,8 @@ def test_main_fails_on_a_ruling_without_a_category(tmp_path: Path, capsys):
 
 
 def test_a_value_that_would_close_the_block_is_read_back_intact():
-    candidate = {**CANDIDATE, "description": "closes --> the block"}
-    body, _ = report.render(candidate, [], VALIDATION, SMOKE)
+    derived = {**DERIVED, "record": {**RECORD, "description": "closes --> the block"}}
+    body, _ = report.render(CANDIDATE, [], VALIDATION, derived, SMOKE)
     assert admission.candidate_from_comment(body)["description"] == "closes --> the block"
 
 
