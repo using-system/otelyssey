@@ -110,7 +110,8 @@ def hermes_pack(records: dict[str, dict]) -> str:
     """The plugin pack `hermes plugins pack install` reads: every plugin pinned at its sha (a
     tag or a branch is refused), `subdir` for a plugin in a subdirectory. Written by hand:
     the file is small and flat, the values are the store's (owner/repo, a path, a sha); the
-    path is double-quoted, a JSON string being a YAML one, the store's path rule being loose."""
+    path and the sha are double-quoted, a JSON string being a YAML one: the store's path rule
+    is loose, a sha of decimal digits reads as an int."""
     lines = [
         f"name: {MARKETPLACE_NAME}",
         "description: OpenTelemetry agent plugins admitted by otelyssey, at the admitted commits",
@@ -121,7 +122,8 @@ def hermes_pack(records: dict[str, dict]) -> str:
         lines.append(f"  - repo: {record['repository']}")
         if record["path"]:
             lines.append(f"    subdir: {json.dumps(record['path'], ensure_ascii=False)}")
-        lines.append(f"    ref: {record['sha']}")
+        # quoted too: a sha of forty decimal digits would read as an int, and Hermes refuses it
+        lines.append(f'    ref: "{record["sha"]}"')
     return "\n".join(lines) + "\n"
 
 

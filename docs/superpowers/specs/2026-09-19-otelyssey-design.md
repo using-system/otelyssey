@@ -123,7 +123,8 @@ idempotently:
   per record with `repo: <repository>`, `subdir: "<path>"` when set
   (double-quoted: the store's path rule is loose, a JSON string is a
   YAML one),
-  `ref: <sha>` (a tag or a branch is refused); not written for an empty
+  `ref: "<sha>"` (a tag or a branch is refused; quoted, a sha of decimal
+  digits reading as an int); not written for an empty
   store, which Hermes refuses;
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
   content: `name: otelyssey`, `owner: {"name": "using-system", "url":

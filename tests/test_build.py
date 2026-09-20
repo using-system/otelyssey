@@ -99,7 +99,7 @@ def test_hermes_pack_pins_every_plugin_at_its_sha():
         "plugins:\n"
         "  - repo: using-system/oddyssey\n"
         '    subdir: "marketplace/oddyssey"\n'
-        f"    ref: {record['sha']}\n"
+        f'    ref: "{record["sha"]}"\n'
     )
     root_plugin = {**record, "path": ""}
     assert "subdir" not in build.hermes_pack({"oddyssey": root_plugin})
