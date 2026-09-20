@@ -2,7 +2,7 @@
 
 Observability-Driven Development for CLI coding agents
 
-- Category: `workflow`
+- Categories: `observability`
 - Repository: [using-system/oddyssey](https://github.com/using-system/oddyssey), the plugin at `marketplace/oddyssey` in it
 - Version: 1.13.0 (`v1.13.0`, commit `e7fd9fa96bf7`)
 - Author: [using-system](https://github.com/using-system)

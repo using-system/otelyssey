@@ -2,7 +2,7 @@
 
 Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.
 
-- Category: `instrumentation`
+- Categories: `instrumentation`
 - Repository: [BastiDood/skills](https://github.com/BastiDood/skills), the plugin at `plugins/observability` in it
 - Version: 0.1.7 (`main`, commit `9dfab1713cb2`)
 - Author: [Basti Ortiz](https://bastidood.dev/)

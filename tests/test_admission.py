@@ -20,14 +20,21 @@ RULING = (
 )
 
 
-def test_the_category_is_read_from_the_ruling_line():
-    assert admission.category_from_ruling(RULING) == "backend"
+def test_the_categories_are_read_from_the_ruling_line():
+    assert admission.categories_from_ruling(RULING) == ["backend"]
     # gh-aw may prepend a caution block: the line is found anywhere, the last one wins
-    assert admission.category_from_ruling("> caution\n\n" + RULING) == "backend"
-    two = RULING + RULING.replace("`backend`", "`workflow`")
-    assert admission.category_from_ruling(two) == "workflow"
-    assert admission.category_from_ruling(RULING.replace("\n", "\r\n")) == "backend"
-    assert admission.category_from_ruling(RULING.split("\n")[0]) == "backend"
+    assert admission.categories_from_ruling("> caution\n\n" + RULING) == ["backend"]
+    two = RULING + RULING.replace("`backend`", "`observability`")
+    assert admission.categories_from_ruling(two) == ["observability"]
+    assert admission.categories_from_ruling(RULING.replace("\n", "\r\n")) == ["backend"]
+    assert admission.categories_from_ruling(RULING.split("\n")[0]) == ["backend"]
+    # several, the principal first, in the order ruled
+    several = RULING.replace("`backend`", "`backend`, `observability`, `instrumentation`")
+    assert admission.categories_from_ruling(several) == [
+        "backend",
+        "observability",
+        "instrumentation",
+    ]
 
 
 @pytest.mark.parametrize(
@@ -35,15 +42,19 @@ def test_the_category_is_read_from_the_ruling_line():
     [
         "Ruling: admissible - `my-otel-plugin` `1.2.0` at `" + "1" * 40 + "`\n",
         RULING.replace("`backend`", "`backends`"),
-        RULING.replace("`backend`", "`backend` and `workflow`"),
-        RULING.replace("`backend`", "`backend` in `workflow`"),
+        RULING.replace("`backend`", "`backend` and `observability`"),
+        RULING.replace("`backend`", "`backend` in `observability`"),
         RULING.replace("`backend`", "`backend`."),
+        RULING.replace("`backend`", "`backend`,`observability`"),
+        RULING.replace("`backend`", "`backend, observability`"),
+        RULING.replace("`backend`", "`backend`, `backend`"),
+        RULING.replace("`backend`", "`workflow`"),
         "Not a ruling in `backend`\n",
     ],
 )
-def test_a_ruling_without_one_of_the_five_categories_is_refused(body):
+def test_a_ruling_outside_the_documented_shape_or_the_four_is_refused(body):
     with pytest.raises(ValueError, match="categor"):
-        admission.category_from_ruling(body)
+        admission.categories_from_ruling(body)
 
 
 def test_the_candidate_is_read_back_from_the_intake_comment():
@@ -66,11 +77,13 @@ def test_the_last_block_wins_when_the_comment_carries_two():
 
 def test_the_record_adds_the_admission_date_and_zero_stats():
     candidate = admission.candidate_from_comment(intake_comment())
-    record = admission.admitted(candidate, 7, "2026-09-19", "2026-09-19T17:00:00Z", "workflow")
+    record = admission.admitted(
+        candidate, 7, "2026-09-19", "2026-09-19T17:00:00Z", ["observability", "backend"]
+    )
     assert list(record) == list(store.FIELDS)
-    # the ruled category: the derived record carries none
-    assert "category" not in RECORD
-    assert record["category"] == "workflow"
+    # the ruled categories: the derived record carries none
+    assert "categories" not in RECORD
+    assert record["categories"] == ["observability", "backend"]
     assert record["admitted_at"] == "2026-09-19"
     assert record["stats"] == {
         "stars": 0,
@@ -84,7 +97,7 @@ def test_the_record_adds_the_admission_date_and_zero_stats():
 def test_a_block_from_another_issue_is_refused():
     candidate = admission.candidate_from_comment(intake_comment())
     with pytest.raises(ValueError, match="submitted_in"):
-        admission.admitted(candidate, 8, "2026-09-19", "2026-09-19T17:00:00Z", "backend")
+        admission.admitted(candidate, 8, "2026-09-19", "2026-09-19T17:00:00Z", ["backend"])
 
 
 def main_args(tmp_path: Path, issue: str, comment: str | None = None, ruling: str = RULING):
@@ -104,15 +117,15 @@ def main_args(tmp_path: Path, issue: str, comment: str | None = None, ruling: st
 
 def test_main_writes_the_canonical_record_and_prints_its_path(tmp_path: Path, capsys):
     code = admission.main(
-        main_args(tmp_path, "7", ruling=RULING.replace("`backend`", "`workflow`"))
+        main_args(tmp_path, "7", ruling=RULING.replace("`backend`", "`observability`, `backend`"))
     )
     assert code == 0
     path = tmp_path / ".store" / "my-otel-plugin.json"
     assert capsys.readouterr().out.strip() == str(path)
     record = json.loads(path.read_text(encoding="utf-8"))
     assert path.read_text(encoding="utf-8") == store.canonical(record)
-    # the ruled category, end to end
-    assert record["category"] == "workflow"
+    # the ruled categories, end to end
+    assert record["categories"] == ["observability", "backend"]
     assert store.DATE_RE.match(record["admitted_at"])
     assert store.STAMP_RE.match(record["stats"]["refreshed_at"])
 

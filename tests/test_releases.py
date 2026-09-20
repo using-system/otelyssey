@@ -84,7 +84,7 @@ def test_a_repin_reads_the_derived_fields_from_the_new_manifest(tmp_path: Path, 
     assert record["license"] == "Apache-2.0"
     # the manifest has no homepage and the repository none either: an empty derived value
     assert record["homepage"] == ""
-    for field in ("name", "category", "submitted_in", "admitted_at", "stats"):
+    for field in ("name", "categories", "submitted_in", "admitted_at", "stats"):
         assert record[field] == before[field]
 
 

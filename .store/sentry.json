@@ -1,7 +1,9 @@
 {
   "name": "sentry",
   "description": "Set up Sentry, debug production issues, and configure application monitoring.",
-  "category": "backend",
+  "categories": [
+    "backend"
+  ],
   "repository": "getsentry/agent-plugin",
   "path": "",
   "ref": "v1.4.0",

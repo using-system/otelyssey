@@ -95,7 +95,7 @@ tests/                               pytest on recorded fixtures
 | --- | --- |
 | `name` | the `plugin.json` name (the Agent Plugins pattern) |
 | `description` | `plugin.json`'s, else the repository's description; neither is a `needs-changes` |
-| `category` | one of a short closed list (instrumentation, collector, conventions, backend, workflow), ruled by the review from the plugin's content |
+| `categories` | a non-empty ordered list of distinct values among instrumentation, collector, backend, observability, the principal first, ruled by the review from the plugin's content (every category a named skill justifies) |
 | `repository` | `owner/repo`, public GitHub |
 | `path` | the plugin's directory inside the repository, empty at the root |
 | `ref` | the admitted tag |
@@ -119,7 +119,7 @@ idempotently:
 - `.agents/plugins/marketplace.json`, Codex's catalog: one entry per
   record with `source: {"source": "url" | "git-subdir", "url":
   https://github.com/<repository>.git, "path": ./<path> when set,
-  "ref", "sha"}`, the default policy, the category's title, and
+  "ref", "sha"}`, the default policy, the principal category's title, and
   `description`, `version`, `keywords`, `author`, `homepage` as the
   manifest fields Codex lists before the install;
 - `.grok-plugin/marketplace.json`, the same content: Grok Build reads
@@ -140,18 +140,19 @@ idempotently:
   when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
   accept; Copilot CLI rejects a `git-subdir` source, verified
   2026-09-19),
-  `description`, `version`, `category`, `keywords`, `license`,
+  `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
-  category, repository link, version and tag, author, license,
+  categories, repository link, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code, Copilot
   CLI, Codex CLI, Grok Build, APM, VS Code, Hermes Agent, OpenClaw,
   Mistral Vibe
   and, for a plugin at its repository's root, Kiro, the issue it was
   admitted from;
 - the README's plugin list, between two markers: one subsection per
-  category holding plugins, one entry per plugin (the plugin linked to
-  its repository, the author, the description, a link to its page) and
+  principal category holding plugins, one entry per plugin (the plugin
+  linked to its repository, the author, the description, its other
+  categories, a link to its page) and
   a line of live shields.io badges below it: release, created, last
   commit, license, stars, forks, watchers. The counts the store carries
   refresh the plugin's page, not the README, which changes only when a
@@ -172,7 +173,7 @@ the repository's latest release (`X.Y.Z` or `vX.Y.Z`, the highest by
 semver) carrying the plugin, else its default branch, resolved by the
 intake, and the sha is derived from it; every other field is read from
 `plugin.json` at that sha, the repository's metadata filling the gaps.
-The category is the review's. A branch whose name carries a slash
+The categories are the review's. A branch whose name carries a slash
 cannot be told from the path: the ref is one segment (or GitHub's
 `refs/heads/<branch>` and `refs/tags/<tag>`), and a wrong split is a
 `needs-changes` naming the missing directory.
@@ -259,14 +260,15 @@ store, the open and closed submission issues. The agent:
   would make the plugin admissible, an answer to the contributor's
   replies (the workflow also triggers on `issue_comment` from the
   submitter while `format-ok` holds);
-- **rules the category**, one of the store's five, from the plugin's
-  content, whatever the form says;
+- **rules the categories**, one or several of the store's four, from
+  the plugin's content, every one a named skill justifies, the
+  principal first;
 - **admits** by commenting the three rulings with their evidence and
   labelling `admissible`; or **rejects** with `rejected` and the
   reason, closing the issue. The agent writes no file and opens no
   pull request: the agents rule, the scripts write (settled by the
   first run, #5: the record cannot cross the MCP sanitizer exactly).
-  The category is the one value it contributes to the record, on the
+  The categories are the one value it contributes to the record, on the
   ruling's first line, an enum the admission reads and bounds.
 
 Bounds: `max-ai-credits` per run, one comment at most per run, a
@@ -279,9 +281,9 @@ definition; no shell execution of plugin content).
 
 `admission.yml` reads the intake comment through the REST API, writes
 `.store/<name>.json` from its candidate block plus the ruling's
-category, `admitted_at` and zero `stats` (`scripts/admission.py`),
+categories, `admitted_at` and zero `stats` (`scripts/admission.py`),
 refuses a record the review's latest ruling does not name (the ruling's
-first line carries the name, the version, the sha and the category, so
+first line carries the name, the version, the sha and the categories, so
 an issue edited after the ruling is not admitted, and the label alone
 admits nothing), checks the plugin still validates at its tag at the
 record's sha, pushes `admission/<name>`,

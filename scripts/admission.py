@@ -3,7 +3,7 @@
 The review rules and labels; this script writes. The candidate block is an HTML comment the
 agents never see (the GitHub MCP server strips it): the admission workflow reads the comment
 through the REST API, where it is intact. The one value the review contributes is the
-category, an enum read from its ruling line.
+categories, an ordered list from an enum read from its ruling line.
 """
 
 from __future__ import annotations
@@ -18,10 +18,11 @@ from pathlib import Path
 from scripts import report, store
 
 BLOCK_RE = re.compile(re.escape(report.CANDIDATE_MARK) + r"(.*?) -->", re.DOTALL)
-# the documented shape, per line, tolerant of CRLF: a line with two categories or an extra
-# `in` fragment does not match and is refused, never resolved by position
+# the documented shape, per line, tolerant of CRLF: the categories in backticks, comma
+# separated, the principal first; a line of another shape does not match and is refused
 RULING_RE = re.compile(
-    r"^Ruling: admissible - `[^`\n]*` `[^`\n]*` at `[^`\n]*` in `([^`\n]*)`[ \t\r]*$",
+    r"^Ruling: admissible - `[^`\n]*` `[^`\n]*` at `[^`\n]*`"
+    r" in ((?:`[^`\n]*`, )*`[^`\n]*`)[ \t\r]*$",
     re.MULTILINE,
 )
 
@@ -40,19 +41,23 @@ def candidate_from_comment(body: str) -> dict:
     return candidate
 
 
-def category_from_ruling(body: str) -> str:
-    """The category the ruling line names, one of the store's; the last such line wins."""
+def categories_from_ruling(body: str) -> list[str]:
+    """The categories the ruling line names, the principal first, each one of the store's and
+    none twice; the last such line wins."""
     found = RULING_RE.findall(body)
     if not found:
-        raise ValueError("the ruling names no category")
-    category = found[-1]
-    if category not in store.CATEGORIES:
-        raise ValueError(f"the ruling's category {category!r} is not one of the store's")
-    return category
+        raise ValueError("the ruling's first line names no category in the documented shape")
+    categories = re.findall(r"`([^`\n]*)`", found[-1])
+    unknown = [c for c in categories if c not in store.CATEGORIES]
+    if unknown:
+        raise ValueError(f"the ruling's category {unknown[0]!r} is not one of the store's")
+    if len(set(categories)) != len(categories):
+        raise ValueError("the ruling names a category twice")
+    return categories
 
 
-def admitted(candidate: dict, issue: int, today: str, now: str, category: str) -> dict:
-    """The candidate with the ruled category, `admitted_at` and zero `stats`, in the store's
+def admitted(candidate: dict, issue: int, today: str, now: str, categories: list[str]) -> dict:
+    """The candidate with the ruled categories, `admitted_at` and zero `stats`, in the store's
     field order."""
     if candidate.get("submitted_in") != issue:
         raise ValueError(
@@ -60,7 +65,7 @@ def admitted(candidate: dict, issue: int, today: str, now: str, category: str) -
         )
     record = {
         **candidate,
-        "category": category,
+        "categories": categories,
         "admitted_at": today,
         "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": now},
     }
@@ -88,7 +93,7 @@ def main(argv: list[str] | None = None) -> int:
             args.issue,
             moment.strftime("%Y-%m-%d"),
             moment.strftime("%Y-%m-%dT%H:%M:%SZ"),
-            category_from_ruling(ruling),
+            categories_from_ruling(ruling),
         )
         path = store.write_record(Path(args.root), record)
     except ValueError as error:

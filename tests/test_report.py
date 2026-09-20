@@ -47,7 +47,7 @@ def test_green_report_carries_the_derived_record_in_store_order():
     block = body.split(report.CANDIDATE_MARK, 1)[1].split(" -->", 1)[0]
     candidate = json.loads(block)
     assert list(candidate) == [
-        f for f in store.FIELDS if f not in ("category", "admitted_at", "stats")
+        f for f in store.FIELDS if f not in ("categories", "admitted_at", "stats")
     ]
     assert candidate == RECORD
     assert "**Plugin at `v1.2.0`**: pass (commit `" + "1" * 40 + "`)" in body

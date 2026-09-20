@@ -1,7 +1,9 @@
 {
   "name": "stdtel",
   "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
-  "category": "instrumentation",
+  "categories": [
+    "instrumentation"
+  ],
   "repository": "amiable-dev/skills-telemetry",
   "path": "",
   "ref": "v0.4.0",

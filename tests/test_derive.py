@@ -60,13 +60,13 @@ def test_the_manifest_is_the_source_of_every_field():
     }
     # the store's order, without the fields the admission adds
     assert list(record) == [
-        f for f in store.FIELDS if f not in ("category", "admitted_at", "stats")
+        f for f in store.FIELDS if f not in ("categories", "admitted_at", "stats")
     ]
     assert (
         store.validate_record(
             {
                 **record,
-                "category": "backend",
+                "categories": ["backend"],
                 "admitted_at": "2026-09-20",
                 "stats": {
                     "stars": 0,
@@ -195,7 +195,7 @@ def test_resync_rewrites_the_derived_fields_and_keeps_what_is_pinned_or_decided(
     record = {
         "name": "my-otel-plugin",
         "description": "typed in the form",
-        "category": "backend",
+        "categories": ["backend"],
         "repository": "contoso/my-otel-plugin",
         "path": "plugins/otel",
         "ref": "v1.2.0",
@@ -218,7 +218,7 @@ def test_resync_rewrites_the_derived_fields_and_keeps_what_is_pinned_or_decided(
     assert updated["homepage"] == "https://contoso.example/plugin"
     for field in (
         "name",
-        "category",
+        "categories",
         "ref",
         "sha",
         "version",
@@ -235,7 +235,7 @@ def test_resync_keeps_a_field_neither_source_gives_and_says_so():
     record = {
         "name": "my-otel-plugin",
         "description": "typed in the form",
-        "category": "backend",
+        "categories": ["backend"],
         "repository": "contoso/my-otel-plugin",
         "path": "",
         "ref": "v1.2.0",

@@ -8,7 +8,7 @@ import re
 import sys
 from pathlib import Path
 
-CATEGORIES = ("instrumentation", "collector", "conventions", "backend", "workflow")
+CATEGORIES = ("instrumentation", "collector", "backend", "observability")
 NAME_RE = re.compile(r"^(?!.*(?:--|\.\.))[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$")
 REPO_RE = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?/[A-Za-z0-9._-]+$")
 SHA_RE = re.compile(r"^[0-9a-f]{40}$")
@@ -18,7 +18,7 @@ URL_RE = re.compile(r"^https://[^\s()<>\[\]]+$")  # no whitespace, no markdown l
 FIELDS = (
     "name",
     "description",
-    "category",
+    "categories",
     "repository",
     "path",
     "ref",
@@ -56,8 +56,16 @@ def validate_record(record: dict) -> list[str]:
         errors.append("name: not an Agent Plugins name (lowercase, digits, . and -)")
     if not isinstance(record["description"], str) or not record["description"].strip():
         errors.append("description: empty")
-    if record["category"] not in CATEGORIES:
-        errors.append(f"category: not one of {', '.join(CATEGORIES)}")
+    categories = record["categories"]
+    if (
+        not isinstance(categories, list)
+        or not categories
+        or any(c not in CATEGORIES for c in categories)
+        or len(set(categories)) != len(categories)
+    ):
+        errors.append(
+            f"categories: a non-empty list of distinct values among {', '.join(CATEGORIES)}"
+        )
     if not isinstance(record["repository"], str) or not REPO_RE.match(record["repository"]):
         errors.append("repository: not owner/repo")
     path = record["path"]

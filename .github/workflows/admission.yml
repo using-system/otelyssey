@@ -39,10 +39,10 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: The record, from the intake comment and the ruling's category
+      - name: The record, from the intake comment and the ruling's categories
         # the ruling is found by its line, not by its position (the pipeline comments after it,
         # and gh-aw may prepend a caution block to it); the one value it contributes to the
-        # record is the category, an enum the script reads from that line
+        # record is the categories, an ordered list from an enum the script reads from that line
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
@@ -110,7 +110,7 @@ jobs:
           git push --force origin "admission/${NAME}"
           url=$(gh pr create --base main --head "admission/${NAME}" --label admission \
             --title "chore(store): admit ${NAME}" \
-            --body "Admits #${ISSUE}. The rulings on relevance, category and resubmission are on the issue; this record is the intake's with the ruled category, dated today.")
+            --body "Admits #${ISSUE}. The rulings on relevance, categories and resubmission are on the issue; this record is the intake's with the ruled categories, dated today.")
           echo "PR_URL=$url" >> "$GITHUB_ENV"
           echo "HEAD_SHA=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
           gh issue edit "$ISSUE" --add-label admission-opened
