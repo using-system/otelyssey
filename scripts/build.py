@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shlex
 import shutil
 import sys
 from pathlib import Path
@@ -174,24 +175,23 @@ def plugin_page(record: dict) -> str:
 
 def repository_install_lines(record: dict) -> str:
     """The hosts that install from the plugin's repository, no marketplace read: Hermes Agent
-    pins the commit and takes a subdirectory; OpenClaw's git install takes the root only, a
-    plugin in a subdirectory goes through a clone of the marketplace read as a local one
-    (a remote marketplace may only carry relative paths); Mistral Vibe has no install
-    command, a plugin is a directory under ~/.vibe/plugins/."""
+    pins the commit and takes a subdirectory, OpenClaw's git install takes the root only (a
+    subdirectory goes through a clone of this marketplace, read locally), Mistral Vibe has
+    no install command."""
     repository = record["repository"]
     repo_url = f"https://github.com/{repository}"
     clone_dir = repository.rsplit("/", 1)[1]
     name, path, sha = record["name"], record["path"], record["sha"]
-    hermes_source = f"{repository}/{path}" if path else repository
+    # the store lets a path carry a space or a shell metacharacter: quoted, today's are bare
+    hermes_source = shlex.quote(f"{repository}/{path}" if path else repository)
+    vibe_source = shlex.quote(f"{clone_dir}/{path}" if path else clone_dir)
     if path:
         openclaw = (
             f"git clone https://github.com/{MARKETPLACE_REPO}\n"
             f"openclaw plugins install {name} --marketplace ./{MARKETPLACE_NAME}\n"
         )
-        vibe_copy = f"cp -r {clone_dir}/{path} ~/.vibe/plugins/{name}\n"
     else:
         openclaw = f"openclaw plugins install git:{repository}@{sha} --force\n"
-        vibe_copy = f"cp -r {clone_dir} ~/.vibe/plugins/{name}\n"
     return (
         "\nHermes Agent:\n\n"
         "```text\n"
@@ -205,7 +205,7 @@ def repository_install_lines(record: dict) -> str:
         "Mistral Vibe:\n\n"
         "```text\n"
         f"git clone {repo_url} && git -C {clone_dir} checkout {sha}\n"
-        f"{vibe_copy}"
+        f"mkdir -p ~/.vibe/plugins/{name} && cp -r {vibe_source}/. ~/.vibe/plugins/{name}\n"
         "```\n"
     )
 

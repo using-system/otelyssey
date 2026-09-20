@@ -66,5 +66,5 @@ Mistral Vibe:
 
 ```text
 git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout e7fd9fa96bf752f1caf31d4abce207fa6b40c107
-cp -r oddyssey/marketplace/oddyssey ~/.vibe/plugins/oddyssey
+mkdir -p ~/.vibe/plugins/oddyssey && cp -r oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey
 ```

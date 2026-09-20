@@ -66,5 +66,5 @@ Mistral Vibe:
 
 ```text
 git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
-cp -r skills/plugins/observability ~/.vibe/plugins/observability
+mkdir -p ~/.vibe/plugins/observability && cp -r skills/plugins/observability/. ~/.vibe/plugins/observability
 ```

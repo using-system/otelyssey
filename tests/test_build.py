@@ -131,12 +131,19 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
         f"git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout {sha}"
         in page
     )
-    assert "cp -r oddyssey/marketplace/oddyssey ~/.vibe/plugins/oddyssey" in page
+    assert (
+        "mkdir -p ~/.vibe/plugins/oddyssey && "
+        "cp -r oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey"
+    ) in page
     root = build.plugin_page({**record, "path": ""})
     assert f"hermes plugins install using-system/oddyssey --ref {sha}" in root
     assert f"openclaw plugins install git:using-system/oddyssey@{sha} --force" in root
     assert "--marketplace" not in root
-    assert "cp -r oddyssey ~/.vibe/plugins/oddyssey" in root
+    assert "cp -r oddyssey/. ~/.vibe/plugins/oddyssey" in root
+    # a path the store accepts but a shell would split: quoted on the lines that carry it
+    odd = build.plugin_page({**record, "path": "my plugins/otel"})
+    assert "hermes plugins install 'using-system/oddyssey/my plugins/otel' --ref" in odd
+    assert "cp -r 'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
 
 
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():

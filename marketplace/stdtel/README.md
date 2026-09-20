@@ -67,5 +67,5 @@ Mistral Vibe:
 
 ```text
 git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
-cp -r skills-telemetry ~/.vibe/plugins/stdtel
+mkdir -p ~/.vibe/plugins/stdtel && cp -r skills-telemetry/. ~/.vibe/plugins/stdtel
 ```
