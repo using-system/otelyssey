@@ -249,10 +249,11 @@ store, the open and closed submission issues. The agent:
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills, `mcp.json` and README, and states the
   evidence;
-- rules on **duplication** against the store and the other
-  submissions: same repository, same plugin under another name, or a
-  plugin whose purpose an admitted one already covers; a near-duplicate
-  is a question to the contributor, not a rejection;
+- rules on **resubmission** against the store, the same plugin under
+  another name: the same repository, the same skills' content at any
+  version or, when neither side has a skill, the same `mcp.json`
+  servers; scope is not a criterion, two distinct plugins that serve
+  the same need are both listed;
 - **converses** on the issue through safe outputs (`add-comment`,
   `add-labels` / `remove-labels`, bounded): what is missing, what
   would make the plugin admissible, an answer to the contributor's
@@ -312,10 +313,12 @@ listens to every pull request event to find the admission one.
 3. `build.py`, then one commit by the workflow's bot on `main`,
    `chore(store): nightly refresh`, only when something changed.
 
-`duplicates.md` (gh-aw, weekly): audits the store for plugins that
-serve the same purpose and opens one review issue, closing the older
-one, as awesome-copilot's detector does; accepted pairs recorded on
-past issues are respected.
+`duplicates.md` (gh-aw, weekly): audits the store for the same plugin
+listed twice, on the review's definition (the same repository, the
+same skills' content at any version or, when neither record has a
+skill, the same `mcp.json` servers), and opens one review issue with
+the evidence, nothing else; pairs a maintainer ruled `keep both` or
+`not duplicates` on a past issue are not reported again.
 
 ## Errors and guard rails
 
