@@ -52,9 +52,10 @@ def test_legacy_layout_is_named():
 
 
 def test_layout_notes_are_not_errors():
-    assert validate.check_layout(PLUGINS / "valid") == ([], [])
-    errors, notes = validate.check_layout(PLUGINS / "extras")
-    assert errors == ["skills/empty: no SKILL.md"]
+    assert validate.check_layout(PLUGINS / "valid") == []
+    notes = validate.check_layout(PLUGINS / "extras")
+    # a skills/ entry without SKILL.md is not a skill: a client skips it, the plugin stands
+    assert "skills/empty: not a skill, no SKILL.md" in notes
     assert any(".claude-plugin" in n for n in notes)
     assert any("commands" in n for n in notes)
     assert not any("com.example.tool" in n for n in notes)

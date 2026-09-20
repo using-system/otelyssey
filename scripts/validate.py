@@ -100,15 +100,15 @@ def check_manifest(
     return manifest, errors
 
 
-def check_layout(plugin_dir: Path) -> tuple[list[str], list[str]]:
-    """Errors (a skill without SKILL.md) and notes (directories the format does not define).
+def check_layout(plugin_dir: Path) -> list[str]:
+    """Notes: the directories the format does not define, and a `skills/` entry without
+    SKILL.md, which is not a skill and which a client skips rather than refuses the plugin for.
 
     Known: plugin.json, skills/, mcp.json, README, LICENSE, CHANGELOG, dotfiles, and a
     reverse-domain directory (an extension namespace, `com.example.tool`). A plain file next
     to plugin.json is never a note: the format tolerates any file, and a plugin at its
     repository's root sits next to all of the repository's files.
     """
-    errors: list[str] = []
     notes: list[str] = []
     for entry in sorted(plugin_dir.iterdir()):
         if entry.name == ".claude-plugin":
@@ -123,8 +123,8 @@ def check_layout(plugin_dir: Path) -> tuple[list[str], list[str]]:
     if skills.is_dir():
         for skill in sorted(skills.iterdir()):
             if skill.is_dir() and not (skill / "SKILL.md").is_file():
-                errors.append(f"skills/{skill.name}: no SKILL.md")
-    return errors, notes
+                notes.append(f"skills/{skill.name}: not a skill, no SKILL.md")
+    return notes
 
 
 def validate(
@@ -154,10 +154,9 @@ def validate(
         result["errors"].append(f"path {path!r}: no such directory at {ref}")
         return result
     manifest, errors = check_manifest(plugin_dir, expected_name, expected_version)
-    layout_errors, notes = check_layout(plugin_dir)
     result["manifest"] = manifest
-    result["errors"] = errors + layout_errors
-    result["notes"] = notes
+    result["errors"] = errors
+    result["notes"] = check_layout(plugin_dir)
     return result
 
 

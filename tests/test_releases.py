@@ -107,7 +107,7 @@ def test_untagged_broken_head_with_a_version_bump_is_a_failure(tmp_path: Path, m
     broken = {
         "sha": "4" * 40,
         "manifest": {"version": "1.14.0"},
-        "errors": ["skills/x: no SKILL.md"],
+        "errors": ["plugin.json: not JSON"],
         "notes": [],
     }
     monkeypatch.setattr(releases.validate, "validate", fake_validate(broken, at="4" * 40))
@@ -115,7 +115,7 @@ def test_untagged_broken_head_with_a_version_bump_is_a_failure(tmp_path: Path, m
     assert (result["status"], result["ref"], result["errors"]) == (
         "failed",
         "main",
-        ["skills/x: no SKILL.md"],
+        ["plugin.json: not JSON"],
     )
 
 
