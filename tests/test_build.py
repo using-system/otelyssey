@@ -123,6 +123,9 @@ def test_hermes_pack_is_not_written_for_an_empty_store(tmp_path: Path):
 def test_plugin_page_carries_the_facts():
     page = build.plugin_page(records()["oddyssey"])
     assert page.startswith("# oddyssey\n")
+    # the repository first among the facts; the admission issue is not a fact of the plugin
+    assert page.split("\n\n")[2].startswith("- Repository: [using-system/oddyssey](")
+    assert "Admitted from" not in page and "issues/1" not in page
     for fragment in (
         "- Categories: `observability`, `instrumentation`",
         "https://github.com/using-system/oddyssey",
@@ -138,7 +141,6 @@ def test_plugin_page_carries_the_facts():
         '"chat.plugins.marketplaces": ["using-system/otelyssey"]',
         "apm marketplace add using-system/otelyssey",
         "apm install oddyssey@otelyssey --target copilot",
-        "https://github.com/using-system/otelyssey/issues/1",
     ):
         assert fragment in page, fragment
     # Kiro imports a power from a repository url: only a plugin at the repository's root

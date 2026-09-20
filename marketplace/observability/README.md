@@ -2,14 +2,13 @@
 
 Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.
 
-- Categories: `instrumentation`
 - Repository: [BastiDood/skills](https://github.com/BastiDood/skills), the plugin at `plugins/observability` in it
+- Categories: `instrumentation`
 - Version: 0.1.7 (`main`, commit `9dfab1713cb2`)
 - Author: [Basti Ortiz](https://bastidood.dev/)
 - License: MPL-2.0
 - Keywords: `claude`, `codex`, `cursor`, `skills`
 - Stars 14, forks 0, watchers 0 (refreshed 2026-09-20T08:38:53Z)
-- Admitted from [issue #57](https://github.com/using-system/otelyssey/issues/57) on 2026-09-20
 
 ## Install
 

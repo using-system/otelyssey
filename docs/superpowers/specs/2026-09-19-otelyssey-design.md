@@ -143,12 +143,10 @@ idempotently:
   `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
-  categories, repository link, version and tag, author, license,
+  repository link, categories, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code, Copilot
   CLI, Codex CLI, Grok Build, APM, VS Code, Hermes Agent, OpenClaw,
-  Mistral Vibe
-  and, for a plugin at its repository's root, Kiro, the issue it was
-  admitted from;
+  Mistral Vibe and, for a plugin at its repository's root, Kiro;
 - the README's plugin list, between two markers: one subsection per
   principal category holding plugins, one entry per plugin (the plugin
   linked to its page, the author, the description, its other

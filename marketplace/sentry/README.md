@@ -2,15 +2,14 @@
 
 Set up Sentry, debug production issues, and configure application monitoring.
 
-- Categories: `backend`
 - Repository: [getsentry/agent-plugin](https://github.com/getsentry/agent-plugin), the plugin at the root of it
+- Categories: `backend`
 - Version: 1.4.0 (`v1.4.0`, commit `3dfc0eab9afb`)
 - Author: [Sentry](https://sentry.io)
 - License: MIT
 - Keywords: `sentry`, `debugging`, `monitoring`, `error-tracking`
 - Homepage: <https://sentry.io>
 - Stars 0, forks 0, watchers 0 (refreshed 2026-09-20T10:40:30Z)
-- Admitted from [issue #75](https://github.com/using-system/otelyssey/issues/75) on 2026-09-20
 
 ## Install
 
