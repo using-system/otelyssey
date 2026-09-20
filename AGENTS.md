@@ -23,7 +23,7 @@ against a finding is written with its reasoning, never silent.
 The README is not a specification: it is what a visitor reads first.
 Clear, simple, didactic, pleasant to read; short sentences, no
 exhaustive list of hosts or rules, no pipeline internals. The details
-live in `docs/` and on the plugin pages. A reviewer holds a README
+live in the design spec under `docs/` and on the plugin pages. A reviewer holds a README
 change to that, not to completeness.
 
 ## The store is the pipeline's

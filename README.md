@@ -2,12 +2,12 @@
 
 A marketplace of OpenTelemetry agent plugins in the
 [Agent Plugins](https://agent-plugins.org/) format, run by the repository
-itself: submit a plugin once, the repository checks it, lists it and
+itself: submit a plugin once; the repository checks it, lists it and
 follows its releases.
 
 ## Install
 
-Add the marketplace to your client, then install any plugin from the list below:
+Add the marketplace to your client:
 
 ```text
 claude plugin marketplace add using-system/otelyssey
@@ -17,8 +17,8 @@ grok plugin marketplace add using-system/otelyssey
 apm marketplace add using-system/otelyssey
 ```
 
-Another client (VS Code, Kiro, Hermes Agent, OpenClaw, Mistral Vibe)? Each
-plugin's page, linked from the list, has its install lines.
+Then pick a plugin from the list below: its page has the install line, for
+these clients and the others.
 
 ## Submit a plugin
 
@@ -31,13 +31,11 @@ Your plugin needs:
 - a `plugin.json` in the [Agent Plugins](https://agent-plugins.org/) format,
   at the repository's root or in a subdirectory;
 - OpenTelemetry as its subject: instrumentation, semantic conventions, the
-  Collector, or a backend that ingests OpenTelemetry telemetry.
+  Collector, or a backend that ingests its telemetry.
 
-Then the repository checks the format, installs the plugin, reviews its
-relevance, talks to you on the issue and lists it. Every night it follows
-your releases (your latest `X.Y.Z` or `vX.Y.Z` tag, or a new `version` in
-`plugin.json`) and refreshes your repository's statistics. Plugins that
-compete on the same scope are all listed.
+The repository answers on the issue. Once listed, it follows your releases
+every night: a new `X.Y.Z` or `vX.Y.Z` tag, or a new `version` in
+`plugin.json` on your default branch. Competing plugins are all listed.
 
 ## Plugins
 
