@@ -189,3 +189,81 @@ def test_main_exits_2_when_the_plugin_does_not_validate_or_the_api_fails(
     assert derive.main(args) == 2
     assert not (tmp_path / "d.json").exists()
     assert "metadata unreadable" in capsys.readouterr().err
+
+
+def test_resync_rewrites_the_derived_fields_and_keeps_what_is_pinned_or_decided():
+    record = {
+        "name": "my-otel-plugin",
+        "description": "typed in the form",
+        "category": "backend",
+        "repository": "contoso/my-otel-plugin",
+        "path": "plugins/otel",
+        "ref": "v1.2.0",
+        "sha": "1" * 40,
+        "version": "1.2.0",
+        "author": {"name": "Typed"},
+        "license": "MIT",
+        "homepage": "",
+        "keywords": ["typed"],
+        "submitted_in": 7,
+        "admitted_at": "2026-09-19",
+        "stats": {"stars": 3, "forks": 0, "watchers": 1, "refreshed_at": "2026-09-20T00:00:00Z"},
+    }
+    updated, kept = derive.resync(record, MANIFEST, derive.metadata(RAW))
+    assert kept == []
+    assert updated["description"] == "Queries traces in Tempo."
+    assert updated["license"] == "Apache-2.0"
+    assert updated["author"]["name"] == "Contoso"
+    assert updated["keywords"] == ["opentelemetry", "tempo"]
+    assert updated["homepage"] == "https://contoso.example/plugin"
+    for field in (
+        "name",
+        "category",
+        "ref",
+        "sha",
+        "version",
+        "submitted_in",
+        "admitted_at",
+        "stats",
+    ):
+        assert updated[field] == record[field]
+    assert list(updated) == list(store.FIELDS)
+    assert store.validate_record(updated) == []
+
+
+def test_resync_keeps_a_field_neither_source_gives_and_says_so():
+    record = {
+        "name": "my-otel-plugin",
+        "description": "typed in the form",
+        "category": "backend",
+        "repository": "contoso/my-otel-plugin",
+        "path": "",
+        "ref": "v1.2.0",
+        "sha": "1" * 40,
+        "version": "1.2.0",
+        "author": {"name": "Typed"},
+        "license": "MIT",
+        "homepage": "",
+        "keywords": ["typed"],
+        "submitted_in": 7,
+        "admitted_at": "2026-09-19",
+        "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "2026-09-20T00:00:00Z"},
+    }
+    bare = {"$schema": MANIFEST["$schema"], "name": "my-otel-plugin", "version": "1.2.0"}
+    empty = derive.metadata(
+        {"owner": {"login": "contoso", "html_url": "https://github.com/contoso"}}
+    )
+    updated, kept = derive.resync(record, bare, empty)
+    assert kept == [
+        "plugin.json: no description, and the repository has none either: add a description",
+        "plugin.json: no license, and the repository has none either: add a license",
+    ]
+    assert updated["description"] == "typed in the form" and updated["license"] == "MIT"
+    # the sources that did answer still win, and an empty keywords list is a derived value
+    assert updated["author"] == {"name": "contoso", "url": "https://github.com/contoso"}
+    assert updated["keywords"] == []
+    # an author from neither source: the record's is kept, not an empty one
+    updated, kept = derive.resync(record, bare, derive.metadata({}))
+    assert updated["author"] == {"name": "Typed"}
+    assert kept[-1].startswith("plugin.json: no author")
+    assert store.validate_record(updated) == []

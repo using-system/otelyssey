@@ -1,6 +1,6 @@
 {
   "name": "stdtel",
-  "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
+  "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
   "category": "instrumentation",
   "repository": "amiable-dev/skills-telemetry",
   "path": "",
@@ -14,10 +14,11 @@
   "license": "MIT",
   "homepage": "https://github.com/amiable-dev/skills-telemetry",
   "keywords": [
-    "opentelemetry",
     "telemetry",
+    "opentelemetry",
     "skills",
-    "otlp"
+    "standards",
+    "governance"
   ],
   "submitted_in": 29,
   "admitted_at": "2026-09-19",

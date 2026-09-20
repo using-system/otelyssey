@@ -1,6 +1,6 @@
 {
   "name": "dynatrace-managed-mcp",
-  "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters, the telemetry Dynatrace ingests from OneAgent and over OTLP.",
+  "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
   "category": "backend",
   "repository": "dynatrace-oss/dynatrace-managed-mcp",
   "path": "",
@@ -22,8 +22,7 @@
     "apm",
     "logs",
     "metrics",
-    "slo",
-    "opentelemetry"
+    "slo"
   ],
   "submitted_in": 51,
   "admitted_at": "2026-09-20",

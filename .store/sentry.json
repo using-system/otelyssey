@@ -1,6 +1,6 @@
 {
   "name": "sentry",
-  "description": "Set up Sentry, debug production issues, and configure application monitoring: skills to debug an issue, fix stack traces, create alerts and set up releases, with the Sentry MCP server; Sentry ingests OpenTelemetry natively over OTLP.",
+  "description": "Set up Sentry, debug production issues, and configure application monitoring.",
   "category": "backend",
   "repository": "getsentry/agent-plugin",
   "path": "",
@@ -17,8 +17,7 @@
     "sentry",
     "debugging",
     "monitoring",
-    "error-tracking",
-    "opentelemetry"
+    "error-tracking"
   ],
   "submitted_in": 75,
   "admitted_at": "2026-09-20",
