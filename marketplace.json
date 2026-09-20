@@ -57,6 +57,34 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "signoz",
+      "source": {
+        "source": "github",
+        "repo": "SigNoz/agent-skills",
+        "path": "plugins/signoz",
+        "ref": "main",
+        "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
+      },
+      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+      "version": "2026.9.200",
+      "category": "backend",
+      "keywords": [
+        "signoz",
+        "opentelemetry",
+        "observability",
+        "mcp",
+        "clickhouse",
+        "tracing",
+        "logging"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "SigNoz",
+        "url": "https://signoz.io"
+      },
+      "homepage": "https://signoz.io"
+    },
+    {
       "name": "stdtel",
       "source": {
         "source": "github",

@@ -61,6 +61,37 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "signoz",
+      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+      "version": "2026.9.200",
+      "keywords": [
+        "signoz",
+        "opentelemetry",
+        "observability",
+        "mcp",
+        "clickhouse",
+        "tracing",
+        "logging"
+      ],
+      "author": {
+        "name": "SigNoz",
+        "url": "https://signoz.io"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/SigNoz/agent-skills.git",
+        "path": "./plugins/signoz",
+        "ref": "main",
+        "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://signoz.io"
+    },
+    {
       "name": "stdtel",
       "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
       "version": "0.4.0",
