@@ -1,0 +1,186 @@
+{
+  "name": "otelyssey",
+  "interface": {
+    "displayName": "otelyssey"
+  },
+  "plugins": [
+    {
+      "name": "dynatrace-managed-mcp",
+      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters, the telemetry Dynatrace ingests from OneAgent and over OTLP.",
+      "version": "1.1.1",
+      "keywords": [
+        "dynatrace",
+        "dynatrace-managed",
+        "mcp",
+        "observability",
+        "monitoring",
+        "apm",
+        "logs",
+        "metrics",
+        "slo",
+        "opentelemetry"
+      ],
+      "author": {
+        "name": "Dynatrace",
+        "url": "https://www.dynatrace.com"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/dynatrace-oss/dynatrace-managed-mcp.git",
+        "ref": "main",
+        "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://github.com/dynatrace-oss/dynatrace-managed-mcp#readme"
+    },
+    {
+      "name": "langwatch",
+      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+      "version": "1.2.0",
+      "keywords": [
+        "langwatch",
+        "observability",
+        "telemetry",
+        "traces",
+        "coding-agent",
+        "otlp"
+      ],
+      "author": {
+        "name": "LangWatch",
+        "url": "https://langwatch.ai"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/langwatch/agent-plugin.git",
+        "ref": "v1.2.0",
+        "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://docs.langwatch.ai"
+    },
+    {
+      "name": "observability",
+      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation: one language-agnostic skill on spans as operation records, named log events, attributes under the OpenTelemetry semantic conventions, and exception recording, for adding or reviewing instrumentation in any OpenTelemetry SDK.",
+      "version": "0.1.7",
+      "keywords": [
+        "opentelemetry",
+        "instrumentation",
+        "semantic-conventions",
+        "spans",
+        "logs",
+        "best-practices"
+      ],
+      "author": {
+        "name": "Basti Ortiz",
+        "email": "ortiz@bastidood.dev",
+        "url": "https://bastidood.dev/"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/BastiDood/skills.git",
+        "path": "./plugins/observability",
+        "ref": "main",
+        "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://github.com/BastiDood/skills#readme"
+    },
+    {
+      "name": "oddyssey",
+      "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
+      "version": "1.13.0",
+      "keywords": [
+        "opentelemetry",
+        "observability",
+        "mcp"
+      ],
+      "author": {
+        "name": "using-system",
+        "url": "https://github.com/using-system"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/using-system/oddyssey.git",
+        "path": "./marketplace/oddyssey",
+        "ref": "v1.13.0",
+        "sha": "e7fd9fa96bf752f1caf31d4abce207fa6b40c107"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Workflows",
+      "homepage": "https://github.com/using-system/oddyssey#readme"
+    },
+    {
+      "name": "signoz",
+      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+      "version": "2026.9.200",
+      "keywords": [
+        "signoz",
+        "opentelemetry",
+        "observability",
+        "mcp",
+        "clickhouse",
+        "tracing",
+        "logging"
+      ],
+      "author": {
+        "name": "SigNoz",
+        "url": "https://signoz.io"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/SigNoz/agent-skills.git",
+        "path": "./plugins/signoz",
+        "ref": "main",
+        "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://signoz.io"
+    },
+    {
+      "name": "stdtel",
+      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
+      "version": "0.4.0",
+      "keywords": [
+        "opentelemetry",
+        "telemetry",
+        "skills",
+        "otlp"
+      ],
+      "author": {
+        "name": "amiable-dev",
+        "url": "https://github.com/amiable-dev"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/amiable-dev/skills-telemetry.git",
+        "ref": "v0.4.0",
+        "sha": "a95d23afc26150737a4eb6894b96a7235fa8f8da"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://github.com/amiable-dev/skills-telemetry"
+    }
+  ]
+}

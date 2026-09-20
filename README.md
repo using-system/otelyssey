@@ -11,6 +11,7 @@ Add the marketplace; each plugin's page under `marketplace/` gives its install l
 claude plugin marketplace add using-system/otelyssey
 copilot plugin marketplace add using-system/otelyssey
 codex plugin marketplace add using-system/otelyssey
+grok plugin marketplace add using-system/otelyssey
 apm marketplace add using-system/otelyssey
 ```
 

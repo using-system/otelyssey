@@ -35,6 +35,13 @@ codex plugin marketplace add using-system/otelyssey
 codex plugin add dynatrace-managed-mcp@otelyssey
 ```
 
+Grok Build:
+
+```text
+grok plugin marketplace add using-system/otelyssey
+grok plugin install dynatrace-managed-mcp --trust
+```
+
 APM:
 
 ```text

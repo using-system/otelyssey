@@ -11,7 +11,9 @@ schema 1.0.0), readable by Claude Code and GitHub Copilot CLI today
 Claude Code and VS Code read `.claude-plugin/marketplace.json`: the
 generator writes the same content at both places), Codex CLI
 (`.agents/plugins/marketplace.json`, the same generator, with the
-git-backed sources Codex accepts), APM (`apm marketplace add`, the
+git-backed sources Codex accepts), Grok Build
+(`.grok-plugin/marketplace.json`, Codex's content again: the github
+form gives it nothing, verified on 1.0.34), APM (`apm marketplace add`, the
 Claude Code schema, an Agent Plugins package for its `copilot` target),
 Kiro (a plugin at its repository's root, imported by url), Hermes Agent
 (`hermes plugins install owner/repo[/path] --ref <sha>`), OpenClaw
@@ -70,6 +72,7 @@ store.
 marketplace.json                     generated: the marketplace Copilot CLI reads first
 .claude-plugin/marketplace.json      generated: the same content, the one Claude Code reads
 .agents/plugins/marketplace.json     generated: Codex's catalog, url and git-subdir sources at the sha
+.grok-plugin/marketplace.json        generated: the same content, the one Grok Build reads
 hermes-pack.yaml                     generated: Hermes Agent's pack, every plugin pinned at its sha
 marketplace/<plugin>/README.md       generated: the plugin's page
 README.md                            intro, then the generated plugin list
@@ -118,6 +121,9 @@ idempotently:
   "ref", "sha"}`, the default policy, the category's title, and
   `description`, `version`, `keywords`, `author`, `homepage` as the
   manifest fields Codex lists before the install;
+- `.grok-plugin/marketplace.json`, the same content: Grok Build reads
+  that place only, and only the `url` and `git-subdir` sources (a copy
+  of the Claude Code manifest lists nothing, verified on 1.0.34);
 - `hermes-pack.yaml`, Hermes Agent's plugin pack (`hermes plugins pack
   install <url>` installs every entry after a review screen): one entry
   per record with `repo: <repository>`, `subdir: "<path>"` when set
@@ -138,7 +144,8 @@ idempotently:
 - `marketplace/<name>/README.md`: the plugin's page: description,
   category, repository link, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code, Copilot
-  CLI, Codex CLI, APM, VS Code, Hermes Agent, OpenClaw, Mistral Vibe
+  CLI, Codex CLI, Grok Build, APM, VS Code, Hermes Agent, OpenClaw,
+  Mistral Vibe
   and, for a plugin at its repository's root, Kiro, the issue it was
   admitted from;
 - the README's plugin list, between two markers: one subsection per
@@ -191,11 +198,14 @@ that no pull request against `.store/` is accepted from a contributor.
    of the checked-out plugin (a relative source: no second clone, no
    network in the smoke) and installs the plugin with Copilot CLI (`copilot plugin
    marketplace add`, `copilot plugin install`), with Claude Code's
-   headless plugin install and with Codex CLI (`codex plugin
+   headless plugin install, with Codex CLI (`codex plugin
    marketplace add`, `codex plugin add`, reading the marketplace's
-   `.agents/plugins/marketplace.json` with a local source), each under
-   an isolated HOME (and CODEX_HOME); the install must exit 0 and list
-   the plugin. No plugin code is executed beyond the host's install.
+   `.agents/plugins/marketplace.json` with a local source) and with
+   Grok Build (`grok plugin marketplace add`, `grok plugin install
+   <name> --trust`, reading `.grok-plugin/marketplace.json` with a
+   local source), each under an isolated HOME (and CODEX_HOME); the
+   install must exit 0 and list the plugin. No plugin code is executed
+   beyond the host's install.
 4. The workflow comments one result on the issue: each check with pass
    or the exact reason, and sets `format-ok` or `needs-changes`. A
    re-edit re-runs it (concurrency per issue, cancel in progress).

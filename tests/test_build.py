@@ -132,6 +132,8 @@ def test_plugin_page_carries_the_facts():
         "copilot plugin install oddyssey@otelyssey",
         "codex plugin marketplace add using-system/otelyssey",
         "codex plugin add oddyssey@otelyssey",
+        "grok plugin marketplace add using-system/otelyssey",
+        "grok plugin install oddyssey --trust",
         '"chat.plugins.marketplaces": ["using-system/otelyssey"]',
         "apm marketplace add using-system/otelyssey",
         "apm install oddyssey@otelyssey --target copilot",
@@ -242,6 +244,7 @@ def test_build_is_idempotent(tmp_path: Path):
         "marketplace.json",
         ".claude-plugin/marketplace.json",
         ".agents/plugins/marketplace.json",
+        ".grok-plugin/marketplace.json",
         "hermes-pack.yaml",
         "marketplace/oddyssey/README.md",
         "README.md",
@@ -249,6 +252,10 @@ def test_build_is_idempotent(tmp_path: Path):
     codex = json.loads((root / ".agents" / "plugins" / "marketplace.json").read_text())
     assert codex["plugins"][0]["source"]["source"] == "git-subdir"
     assert (root / "hermes-pack.yaml").read_text().startswith("name: otelyssey\n")
+    # Grok Build reads the Codex shape, at its own place
+    assert (root / ".grok-plugin" / "marketplace.json").read_text() == (
+        root / ".agents" / "plugins" / "marketplace.json"
+    ).read_text()
     assert build.build(root, check=True) == []
     # Copilot CLI looks at the root first, Claude Code and VS Code in .claude-plugin/: one content
     assert (root / "marketplace.json").read_bytes() == (
@@ -263,6 +270,7 @@ def test_build_on_an_empty_store(tmp_path: Path):
     assert build.build(tmp_path, check=False) == [
         ".agents/plugins/marketplace.json",
         ".claude-plugin/marketplace.json",
+        ".grok-plugin/marketplace.json",
         "README.md",
         "marketplace.json",
     ]
@@ -284,6 +292,9 @@ def test_check_fails_when_an_artifact_is_stale(tmp_path: Path):
     assert build.main(["--check", "--root", str(root)]) == 1
     build.build(root, check=False)
     (root / "hermes-pack.yaml").write_text("name: x\n")
+    assert build.main(["--check", "--root", str(root)]) == 1
+    build.build(root, check=False)
+    (root / ".grok-plugin" / "marketplace.json").write_text("{}\n")
     assert build.main(["--check", "--root", str(root)]) == 1
 
 
