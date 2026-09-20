@@ -22,8 +22,11 @@ Open a [plugin submission](https://github.com/using-system/otelyssey/issues/new?
 a public GitHub repository holding a `plugin.json` in the Agent Plugins
 format, a release tag, and a subject that is OpenTelemetry. The
 repository checks the format, installs the plugin, judges its relevance
-and its novelty, talks to you on the issue, and lists it. Every night it
-follows your releases and refreshes your repository's statistics.
+to OpenTelemetry and whether it is a plugin already listed, talks to you
+on the issue, and lists it. Every night it follows your releases and
+refreshes your repository's statistics. Plugins that compete on the same
+scope are all listed: the marketplace never arbitrates between
+competitors.
 
 ## Plugins
 

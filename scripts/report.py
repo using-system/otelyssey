@@ -110,7 +110,8 @@ def render(
         record = candidate_record(candidate, validation)
         lines += [
             "",
-            "The format holds; the review of relevance and novelty follows on this issue.",
+            "The format holds; the review of relevance, and that it is not a listed plugin "
+            "resubmitted, follows on this issue.",
             "",
             f"{CANDIDATE_MARK}{candidate_block(record)} -->",
         ]
