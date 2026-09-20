@@ -15,6 +15,7 @@ copilot plugin marketplace add using-system/otelyssey
 codex plugin marketplace add using-system/otelyssey
 grok plugin marketplace add using-system/otelyssey
 apm marketplace add using-system/otelyssey
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 ```
 
 Then pick a plugin from the list below: its page has the install line, for
