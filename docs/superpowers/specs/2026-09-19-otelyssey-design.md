@@ -151,10 +151,12 @@ idempotently:
   admitted from;
 - the README's plugin list, between two markers: one subsection per
   principal category holding plugins, one entry per plugin (the plugin
-  linked to its repository, the author, the description, its other
-  categories, a link to its page) and
-  a line of live shields.io badges below it: release, created, last
-  commit, license, stars, forks, watchers. The counts the store carries
+  linked to its page, the author, the description, its other
+  categories) and a line of live shields.io badges below it, anchored
+  at `#` (GitHub links a bare image to itself, and drops an anchor
+  without href): release, created, last commit, license, stars, forks,
+  watchers. The
+  counts the store carries
   refresh the plugin's page, not the README, which changes only when a
   record does.
 
