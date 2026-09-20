@@ -122,6 +122,27 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
     return ordered, errors, from_repository
 
 
+DERIVED = ("description", "license", "homepage", "author", "keywords")
+
+
+def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
+    """An admitted record with its derived fields read again from its manifest and its
+    repository's metadata; a field neither gives keeps the record's value, and is reported.
+
+    What the record pins (name, version, ref, sha) and what the pipeline decided (category,
+    submitted_in, admitted_at, stats) are untouched.
+    """
+    candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}
+    validation = {"sha": record["sha"], "manifest": manifest}
+    derived, errors, _ = derive(candidate, validation, meta)
+    kept = [e for e in errors if e.startswith("plugin.json: no ")]
+    updated = dict(record)
+    for field in DERIVED:
+        if derived[field] or not kept:
+            updated[field] = derived[field]
+    return updated, kept
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="derive the record from the validated manifest")
     parser.add_argument("--candidate", required=True, help="intake.py --json output")

@@ -1,6 +1,6 @@
 {
   "name": "langwatch",
-  "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+  "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
   "category": "instrumentation",
   "repository": "langwatch/agent-plugin",
   "path": "",
@@ -18,8 +18,7 @@
     "observability",
     "telemetry",
     "traces",
-    "coding-agent",
-    "otlp"
+    "coding-agent"
   ],
   "submitted_in": 42,
   "admitted_at": "2026-09-20",

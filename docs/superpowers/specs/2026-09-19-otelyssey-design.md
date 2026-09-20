@@ -208,7 +208,9 @@ cannot be told from the path: the ref is one segment (or GitHub's
    keywords), through the REST API with the app's token; a description,
    a license or an author from neither is an error the contributor
    fixes in `plugin.json`, a `needs-changes`. The comment says which
-   fields the repository filled.
+   fields the repository filled. `scripts/resync.py`, run by hand
+   once (2026-09-20), read the derived fields of the records admitted
+   from the old form again from their manifests, the same way.
 4. `scripts/smoke.py` writes a temporary marketplace holding a copy
    of the checked-out plugin (a relative source: no second clone, no
    network in the smoke) and installs the plugin with Copilot CLI (`copilot plugin

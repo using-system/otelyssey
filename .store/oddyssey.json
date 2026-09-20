@@ -1,6 +1,6 @@
 {
   "name": "oddyssey",
-  "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
+  "description": "Observability-Driven Development for CLI coding agents",
   "category": "workflow",
   "repository": "using-system/oddyssey",
   "path": "marketplace/oddyssey",
@@ -14,9 +14,14 @@
   "license": "MIT",
   "homepage": "https://github.com/using-system/oddyssey#readme",
   "keywords": [
-    "opentelemetry",
+    "claude-code",
+    "claude-code-plugin",
+    "claude-skills",
+    "mcp",
+    "ai-agents",
     "observability",
-    "mcp"
+    "opentelemetry",
+    "developer-tools"
   ],
   "submitted_in": 9,
   "admitted_at": "2026-09-19",

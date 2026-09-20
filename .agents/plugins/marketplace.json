@@ -6,7 +6,7 @@
   "plugins": [
     {
       "name": "dynatrace-managed-mcp",
-      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters, the telemetry Dynatrace ingests from OneAgent and over OTLP.",
+      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
       "version": "1.1.1",
       "keywords": [
         "dynatrace",
@@ -17,8 +17,7 @@
         "apm",
         "logs",
         "metrics",
-        "slo",
-        "opentelemetry"
+        "slo"
       ],
       "author": {
         "name": "Dynatrace",
@@ -39,15 +38,14 @@
     },
     {
       "name": "langwatch",
-      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
       "version": "1.2.0",
       "keywords": [
         "langwatch",
         "observability",
         "telemetry",
         "traces",
-        "coding-agent",
-        "otlp"
+        "coding-agent"
       ],
       "author": {
         "name": "LangWatch",
@@ -68,15 +66,13 @@
     },
     {
       "name": "observability",
-      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation: one language-agnostic skill on spans as operation records, named log events, attributes under the OpenTelemetry semantic conventions, and exception recording, for adding or reviewing instrumentation in any OpenTelemetry SDK.",
+      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
       "version": "0.1.7",
       "keywords": [
-        "opentelemetry",
-        "instrumentation",
-        "semantic-conventions",
-        "spans",
-        "logs",
-        "best-practices"
+        "claude",
+        "codex",
+        "cursor",
+        "skills"
       ],
       "author": {
         "name": "Basti Ortiz",
@@ -94,17 +90,21 @@
         "installation": "AVAILABLE",
         "authentication": "ON_INSTALL"
       },
-      "category": "Instrumentation",
-      "homepage": "https://github.com/BastiDood/skills#readme"
+      "category": "Instrumentation"
     },
     {
       "name": "oddyssey",
-      "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
+      "description": "Observability-Driven Development for CLI coding agents",
       "version": "1.13.0",
       "keywords": [
-        "opentelemetry",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "mcp",
+        "ai-agents",
         "observability",
-        "mcp"
+        "opentelemetry",
+        "developer-tools"
       ],
       "author": {
         "name": "using-system",
@@ -126,14 +126,13 @@
     },
     {
       "name": "sentry",
-      "description": "Set up Sentry, debug production issues, and configure application monitoring: skills to debug an issue, fix stack traces, create alerts and set up releases, with the Sentry MCP server; Sentry ingests OpenTelemetry natively over OTLP.",
+      "description": "Set up Sentry, debug production issues, and configure application monitoring.",
       "version": "1.4.0",
       "keywords": [
         "sentry",
         "debugging",
         "monitoring",
-        "error-tracking",
-        "opentelemetry"
+        "error-tracking"
       ],
       "author": {
         "name": "Sentry",
@@ -154,7 +153,7 @@
     },
     {
       "name": "signoz",
-      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
       "version": "2026.9.200",
       "keywords": [
         "signoz",
@@ -185,13 +184,14 @@
     },
     {
       "name": "stdtel",
-      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
+      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
       "version": "0.4.0",
       "keywords": [
-        "opentelemetry",
         "telemetry",
+        "opentelemetry",
         "skills",
-        "otlp"
+        "standards",
+        "governance"
       ],
       "author": {
         "name": "amiable-dev",

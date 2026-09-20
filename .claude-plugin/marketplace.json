@@ -14,7 +14,7 @@
         "ref": "main",
         "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
       },
-      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters, the telemetry Dynatrace ingests from OneAgent and over OTLP.",
+      "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
       "version": "1.1.1",
       "category": "backend",
       "keywords": [
@@ -26,8 +26,7 @@
         "apm",
         "logs",
         "metrics",
-        "slo",
-        "opentelemetry"
+        "slo"
       ],
       "license": "Apache-2.0",
       "author": {
@@ -44,7 +43,7 @@
         "ref": "v1.2.0",
         "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
       },
-      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch. The hook emits the record over OTLP: an `OTEL_EXPORTER_OTLP_ENDPOINT` in the environment takes precedence over the signed-in control plane.",
+      "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
       "version": "1.2.0",
       "category": "instrumentation",
       "keywords": [
@@ -52,8 +51,7 @@
         "observability",
         "telemetry",
         "traces",
-        "coding-agent",
-        "otlp"
+        "coding-agent"
       ],
       "license": "MIT",
       "author": {
@@ -71,24 +69,21 @@
         "ref": "main",
         "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
       },
-      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation: one language-agnostic skill on spans as operation records, named log events, attributes under the OpenTelemetry semantic conventions, and exception recording, for adding or reviewing instrumentation in any OpenTelemetry SDK.",
+      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
       "version": "0.1.7",
       "category": "instrumentation",
       "keywords": [
-        "opentelemetry",
-        "instrumentation",
-        "semantic-conventions",
-        "spans",
-        "logs",
-        "best-practices"
+        "claude",
+        "codex",
+        "cursor",
+        "skills"
       ],
       "license": "MPL-2.0",
       "author": {
         "name": "Basti Ortiz",
         "email": "ortiz@bastidood.dev",
         "url": "https://bastidood.dev/"
-      },
-      "homepage": "https://github.com/BastiDood/skills#readme"
+      }
     },
     {
       "name": "oddyssey",
@@ -99,13 +94,18 @@
         "ref": "v1.13.0",
         "sha": "e7fd9fa96bf752f1caf31d4abce207fa6b40c107"
       },
-      "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
+      "description": "Observability-Driven Development for CLI coding agents",
       "version": "1.13.0",
       "category": "workflow",
       "keywords": [
-        "opentelemetry",
+        "claude-code",
+        "claude-code-plugin",
+        "claude-skills",
+        "mcp",
+        "ai-agents",
         "observability",
-        "mcp"
+        "opentelemetry",
+        "developer-tools"
       ],
       "license": "MIT",
       "author": {
@@ -122,15 +122,14 @@
         "ref": "v1.4.0",
         "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
       },
-      "description": "Set up Sentry, debug production issues, and configure application monitoring: skills to debug an issue, fix stack traces, create alerts and set up releases, with the Sentry MCP server; Sentry ingests OpenTelemetry natively over OTLP.",
+      "description": "Set up Sentry, debug production issues, and configure application monitoring.",
       "version": "1.4.0",
       "category": "backend",
       "keywords": [
         "sentry",
         "debugging",
         "monitoring",
-        "error-tracking",
-        "opentelemetry"
+        "error-tracking"
       ],
       "license": "MIT",
       "author": {
@@ -148,7 +147,7 @@
         "ref": "main",
         "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
       },
-      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
+      "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
       "version": "2026.9.200",
       "category": "backend",
       "keywords": [
@@ -175,14 +174,15 @@
         "ref": "v0.4.0",
         "sha": "a95d23afc26150737a4eb6894b96a7235fa8f8da"
       },
-      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot, emitted as OpenTelemetry spans over OTLP/HTTP to any collector. Metadata only, no prompt or file content.",
+      "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
       "version": "0.4.0",
       "category": "instrumentation",
       "keywords": [
-        "opentelemetry",
         "telemetry",
+        "opentelemetry",
         "skills",
-        "otlp"
+        "standards",
+        "governance"
       ],
       "license": "MIT",
       "author": {
