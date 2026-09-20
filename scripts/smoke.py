@@ -10,10 +10,19 @@ import subprocess
 import sys
 from pathlib import Path
 
-HOSTS = ("copilot", "claude", "codex")
+HOSTS = ("copilot", "claude", "codex", "grok")
 MARKETPLACE = "otelyssey-intake"
-# Codex installs with `plugin add`, the other hosts with `plugin install`
-INSTALL_VERB = {"codex": "add"}
+
+
+def install_args(host: str, name: str) -> list[str]:
+    """Codex installs with `plugin add`; Grok Build takes the bare name and `--trust` (its
+    qualifier is the marketplace directory's name, not the manifest's); the others
+    `plugin install name@marketplace`."""
+    if host == "codex":
+        return [host, "plugin", "add", f"{name}@{MARKETPLACE}"]
+    if host == "grok":
+        return [host, "plugin", "install", name, "--trust"]
+    return [host, "plugin", "install", f"{name}@{MARKETPLACE}"]
 
 
 def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
@@ -30,7 +39,8 @@ def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
     }
     text = json.dumps(manifest, indent=2) + "\n"
     # the layout the marketplace ships: at the root for Copilot CLI, in .claude-plugin/ for
-    # Claude Code, and Codex's own catalog in .agents/plugins/ with a local source
+    # Claude Code, Codex's own catalog in .agents/plugins/ and Grok Build's in .grok-plugin/,
+    # each with its local source form
     (market / "marketplace.json").write_text(text)
     (market / ".claude-plugin" / "marketplace.json").write_text(text)
     codex = {
@@ -42,6 +52,13 @@ def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
     (market / ".agents" / "plugins" / "marketplace.json").write_text(
         json.dumps(codex, indent=2) + "\n"
     )
+    grok = {
+        "name": MARKETPLACE,
+        "owner": {"name": "otelyssey"},
+        "plugins": [{"name": name, "source": {"type": "local", "path": "./plugin"}}],
+    }
+    (market / ".grok-plugin").mkdir()
+    (market / ".grok-plugin" / "marketplace.json").write_text(json.dumps(grok, indent=2) + "\n")
     return market
 
 
@@ -75,10 +92,10 @@ def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[st
     code, out = _run([host, "plugin", "marketplace", "add", str(marketplace_dir)], home)
     if code != 0:
         return "fail", f"marketplace add exited {code}\n{out}"
-    verb = INSTALL_VERB.get(host, "install")
-    code, out = _run([host, "plugin", verb, f"{name}@{MARKETPLACE}"], home)
+    args = install_args(host, name)
+    code, out = _run(args, home)
     if code != 0:
-        return "fail", f"plugin {verb} exited {code}\n{out}"
+        return "fail", f"plugin {args[2]} exited {code}\n{out}"
     code, listed = _run([host, "plugin", "list"], home)
     if code != 0 or name not in listed:
         return "fail", f"plugin list does not carry {name}\n{listed}"

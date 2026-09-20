@@ -42,7 +42,7 @@ def test_unavailable_host_is_not_a_failure(tmp_path: Path, monkeypatch):
 def test_smoke_runs_every_host(tmp_path: Path, monkeypatch):
     monkeypatch.setenv("PATH", str(tmp_path))
     result = smoke.smoke("my-otel-plugin", PLUGIN, tmp_path)
-    assert set(result) == {"copilot", "claude", "codex"}
+    assert set(result) == {"copilot", "claude", "codex", "grok"}
     assert all(r["status"] == "unavailable" for r in result.values())
 
 
@@ -80,6 +80,31 @@ def test_smoke_resolves_a_relative_workdir(tmp_path: Path, monkeypatch):
         market = Path(args[-1])
         assert market.is_absolute()
         assert market.is_relative_to(tmp_path / "relative-work")
+
+
+def test_ephemeral_marketplace_writes_the_grok_catalog(tmp_path: Path):
+    market = smoke.ephemeral_marketplace(tmp_path, "my-otel-plugin", PLUGIN)
+    catalog = json.loads((market / ".grok-plugin" / "marketplace.json").read_text())
+    assert catalog["name"] == "otelyssey-intake"
+    [entry] = catalog["plugins"]
+    assert entry == {"name": "my-otel-plugin", "source": {"type": "local", "path": "./plugin"}}
+
+
+def test_install_args_per_host():
+    assert smoke.install_args("copilot", "p") == [
+        "copilot",
+        "plugin",
+        "install",
+        "p@otelyssey-intake",
+    ]
+    assert smoke.install_args("claude", "p") == [
+        "claude",
+        "plugin",
+        "install",
+        "p@otelyssey-intake",
+    ]
+    assert smoke.install_args("codex", "p") == ["codex", "plugin", "add", "p@otelyssey-intake"]
+    assert smoke.install_args("grok", "p") == ["grok", "plugin", "install", "p", "--trust"]
 
 
 def test_codex_adds_under_its_own_home(tmp_path: Path, monkeypatch):

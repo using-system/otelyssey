@@ -35,6 +35,13 @@ codex plugin marketplace add using-system/otelyssey
 codex plugin add observability@otelyssey
 ```
 
+Grok Build:
+
+```text
+grok plugin marketplace add using-system/otelyssey
+grok plugin install observability --trust
+```
+
 APM:
 
 ```text

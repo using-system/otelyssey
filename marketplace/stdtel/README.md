@@ -35,6 +35,13 @@ codex plugin marketplace add using-system/otelyssey
 codex plugin add stdtel@otelyssey
 ```
 
+Grok Build:
+
+```text
+grok plugin marketplace add using-system/otelyssey
+grok plugin install stdtel --trust
+```
+
 APM:
 
 ```text

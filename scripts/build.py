@@ -179,6 +179,11 @@ def plugin_page(record: dict) -> str:
         f"codex plugin marketplace add {MARKETPLACE_REPO}\n"
         f"codex plugin add {record['name']}@{MARKETPLACE_NAME}\n"
         "```\n\n"
+        "Grok Build:\n\n"
+        "```text\n"
+        f"grok plugin marketplace add {MARKETPLACE_REPO}\n"
+        f"grok plugin install {record['name']} --trust\n"
+        "```\n\n"
         "APM:\n\n"
         "```text\n"
         f"apm marketplace add {MARKETPLACE_REPO}\n"
@@ -281,12 +286,16 @@ def build(root: Path, check: bool) -> list[str]:
     records = store.load_store(root)
     readme = (root / "README.md").read_text(encoding="utf-8")
     manifest = render_json(marketplace_json(records))
+    codex = render_json(codex_marketplace_json(records))
     wanted = {
         # Copilot CLI looks at the root first, Claude Code and VS Code in .claude-plugin/:
-        # one content, twice; Codex reads its own catalog, with git-backed sources
+        # one content, twice; Codex reads its own catalog, with git-backed sources, and
+        # Grok Build reads the same content at its own place (the github form gives it
+        # nothing, verified on 1.0.34)
         "marketplace.json": manifest,
         ".claude-plugin/marketplace.json": manifest,
-        ".agents/plugins/marketplace.json": render_json(codex_marketplace_json(records)),
+        ".agents/plugins/marketplace.json": codex,
+        ".grok-plugin/marketplace.json": codex,
         "README.md": splice(readme, readme_list(records)),
     }
     if records:
