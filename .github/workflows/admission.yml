@@ -39,18 +39,24 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - name: The record, from the intake comment
+      - name: The record, from the intake comment and the ruling's category
+        # the ruling is found by its line, not by its position (the pipeline comments after it,
+        # and gh-aw may prepend a caution block to it); the one value it contributes to the
+        # record is the category, an enum the script reads from that line
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: |
           set -o pipefail
           mkdir -p work
           # gh api refuses --slurp with --jq: the slurped pages go through jq
-          gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
-            | jq -r '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
-            > work/comment.md
+          gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp > work/comments.json
+          jq -r '[.[][] | select((.body | startswith("<!-- otelyssey-intake -->")) and .user.login == "otelyssey-bot[bot]")] | last | .body // empty' \
+            work/comments.json > work/comment.md
           [ -s work/comment.md ] || { echo "::error::no intake comment by otelyssey-bot[bot] on #${ISSUE}"; exit 1; }
-          record=$(python3 -m scripts.admission --comment-file work/comment.md --issue "$ISSUE" --root work) || { echo "::error::no record: ${record:-see above}"; exit 1; }
+          jq -r '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty' \
+            work/comments.json > work/ruling.md
+          [ -s work/ruling.md ] || { echo "::error::no admissible ruling by the review on #${ISSUE}"; exit 1; }
+          record=$(python3 -m scripts.admission --comment-file work/comment.md --ruling-file work/ruling.md --issue "$ISSUE" --root work) || { echo "::error::no record: ${record:-see above}"; exit 1; }
           cp "$record" "$RUNNER_TEMP/record.json"
           python3 - <<'PY'
           import json, os
@@ -64,18 +70,10 @@ jobs:
           PY
       - name: The ruling is on this record
         # the intake rewrites its comment on every edit of the issue: the review's ruling names
-        # what it ruled on, and a record the latest ruling does not name is not admitted; the
-        # ruling is found by its line, not by its position (the pipeline comments after it, and
-        # gh-aw may prepend a caution block to it)
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        # what it ruled on, and a record the latest ruling does not name is not admitted
         run: |
-          set -o pipefail
-          ruling=$(gh api "repos/${GITHUB_REPOSITORY}/issues/${ISSUE}/comments" --paginate --slurp \
-            | jq -r '[.[][] | select(.user.login == "otelyssey-bot[bot]" and (.body | test("(^|\n)Ruling: admissible")))] | last | .body // empty')
-          [ -n "$ruling" ] || { echo "::error::no admissible ruling by the review on #${ISSUE}"; exit 1; }
-          printf '%s' "$ruling" | grep -q "\`${NAME}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${NAME}"; exit 1; }
-          printf '%s' "$ruling" | grep -q "\`${SHA}\`" || { echo "::error::the ruling on #${ISSUE} does not name ${SHA}: the intake changed since"; exit 1; }
+          grep -q "\`${NAME}\`" work/ruling.md || { echo "::error::the ruling on #${ISSUE} does not name ${NAME}"; exit 1; }
+          grep -q "\`${SHA}\`" work/ruling.md || { echo "::error::the ruling on #${ISSUE} does not name ${SHA}: the intake changed since"; exit 1; }
       - name: Not admitted twice
         env:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
