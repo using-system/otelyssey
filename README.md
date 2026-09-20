@@ -18,8 +18,8 @@ apm marketplace add using-system/otelyssey
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 ```
 
-Then pick a plugin below: its page has the install line. Other clients
-(VS Code, Kiro, OpenClaw, Mistral Vibe...): the page has their lines too.
+Then pick a plugin below: its page has the install line — and the ones for
+VS Code, Kiro, OpenClaw and Mistral Vibe.
 
 ## Submit a plugin
 
