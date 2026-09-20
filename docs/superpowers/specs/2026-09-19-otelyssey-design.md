@@ -95,7 +95,7 @@ tests/                               pytest on recorded fixtures
 | --- | --- |
 | `name` | the `plugin.json` name (the Agent Plugins pattern) |
 | `description` | one or two sentences, from the submission |
-| `category` | one of a short closed list the issue form offers (instrumentation, collector, conventions, backend, workflow) |
+| `category` | one of a short closed list (instrumentation, collector, conventions, backend, workflow), ruled by the review from the plugin's content; the form's, when it carries one, is a suggestion |
 | `repository` | `owner/repo`, public GitHub |
 | `path` | the plugin's directory inside the repository, empty at the root |
 | `ref` | the admitted tag |
@@ -236,11 +236,15 @@ the open and closed submission issues. The agent:
   would make the plugin admissible, an answer to the contributor's
   replies (the workflow also triggers on `issue_comment` from the
   submitter while `format-ok` holds);
-- **admits** by commenting the two rulings with their evidence and
+- **rules the category**, one of the store's five, from the plugin's
+  content, whatever the form says;
+- **admits** by commenting the three rulings with their evidence and
   labelling `admissible`; or **rejects** with `rejected` and the
   reason, closing the issue. The agent writes no file and opens no
   pull request: the agents rule, the scripts write (settled by the
   first run, #5: the record cannot cross the MCP sanitizer exactly).
+  The category is the one value it contributes to the record, on the
+  ruling's first line, an enum the admission reads and bounds.
 
 Bounds: `max-ai-credits` per run, one comment at most per run, a
 read-only shell, network limited to GitHub, the contributor's content
@@ -251,12 +255,13 @@ definition; no shell execution of plugin content).
 ### admission (deterministic, on `admissible` labelled)
 
 `admission.yml` reads the intake comment through the REST API, writes
-`.store/<name>.json` from its candidate block plus `admitted_at` and
-zero `stats` (`scripts/admission.py`), refuses a record the review's
-latest ruling does not name (the ruling's first line carries the name,
-the version and the sha, so an issue edited after the ruling is not
-admitted, and the label alone admits nothing), checks the plugin still
-validates at its tag at the record's sha, pushes `admission/<name>`,
+`.store/<name>.json` from its candidate block plus the ruling's
+category, `admitted_at` and zero `stats` (`scripts/admission.py`),
+refuses a record the review's latest ruling does not name (the ruling's
+first line carries the name, the version, the sha and the category, so
+an issue edited after the ruling is not admitted, and the label alone
+admits nothing), checks the plugin still validates at its tag at the
+record's sha, pushes `admission/<name>`,
 opens the pull request labelled `admission` (`ci.yml` validates the
 record against the store schema), waits for `ci`, squash-merges, runs
 `build.py`, commits the generated artifacts to `main`, and closes the

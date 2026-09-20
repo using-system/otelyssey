@@ -2,7 +2,8 @@
 
 The review rules and labels; this script writes. The candidate block is an HTML comment the
 agents never see (the GitHub MCP server strips it): the admission workflow reads the comment
-through the REST API, where it is intact.
+through the REST API, where it is intact. The one value the review contributes is the
+category, an enum read from its ruling line.
 """
 
 from __future__ import annotations
@@ -17,6 +18,12 @@ from pathlib import Path
 from scripts import report, store
 
 BLOCK_RE = re.compile(re.escape(report.CANDIDATE_MARK) + r"(.*?) -->", re.DOTALL)
+# the documented shape, per line, tolerant of CRLF: a line with two categories or an extra
+# `in` fragment does not match and is refused, never resolved by position
+RULING_RE = re.compile(
+    r"^Ruling: admissible - `[^`\n]*` `[^`\n]*` at `[^`\n]*` in `([^`\n]*)`[ \t\r]*$",
+    re.MULTILINE,
+)
 
 
 def candidate_from_comment(body: str) -> dict:
@@ -33,14 +40,27 @@ def candidate_from_comment(body: str) -> dict:
     return candidate
 
 
-def admitted(candidate: dict, issue: int, today: str, now: str) -> dict:
-    """The candidate with `admitted_at` and zero `stats`, in the store's field order."""
+def category_from_ruling(body: str) -> str:
+    """The category the ruling line names, one of the store's; the last such line wins."""
+    found = RULING_RE.findall(body)
+    if not found:
+        raise ValueError("the ruling names no category")
+    category = found[-1]
+    if category not in store.CATEGORIES:
+        raise ValueError(f"the ruling's category {category!r} is not one of the store's")
+    return category
+
+
+def admitted(candidate: dict, issue: int, today: str, now: str, category: str) -> dict:
+    """The candidate with the ruled category, `admitted_at` and zero `stats`, in the store's
+    field order."""
     if candidate.get("submitted_in") != issue:
         raise ValueError(
             f"submitted_in: {candidate.get('submitted_in')!r} is not the issue {issue}"
         )
     record = {
         **candidate,
+        "category": category,
         "admitted_at": today,
         "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": now},
     }
@@ -50,11 +70,13 @@ def admitted(candidate: dict, issue: int, today: str, now: str) -> dict:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="write the store record of an admitted submission")
     parser.add_argument("--comment-file", required=True, help="the intake comment's raw body")
+    parser.add_argument("--ruling-file", required=True, help="the review's ruling, raw body")
     parser.add_argument("--issue", required=True, type=int, help="the submission issue's number")
     parser.add_argument("--root", default=".", help="the repository root")
     args = parser.parse_args(argv)
     try:
         body = Path(args.comment_file).read_text(encoding="utf-8")
+        ruling = Path(args.ruling_file).read_text(encoding="utf-8")
     except OSError as error:
         print(error, file=sys.stderr)
         return 2
@@ -66,6 +88,7 @@ def main(argv: list[str] | None = None) -> int:
             args.issue,
             moment.strftime("%Y-%m-%d"),
             moment.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            category_from_ruling(ruling),
         )
         path = store.write_record(Path(args.root), record)
     except ValueError as error:
