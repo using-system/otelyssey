@@ -311,7 +311,10 @@ listens to every pull request event to find the admission one.
    opened for the contributor (one per plugin and tag, never repeated)
    and the record stays.
 3. `build.py`, then one commit by the workflow's bot on `main`,
-   `chore(store): nightly refresh`, only when something changed.
+   `chore(store): nightly refresh`, only when something changed. The
+   checkout persists no credential: the plugins are cloned and
+   installed in the same job; the push authenticates through `gh`
+   once the plugin checkouts are gone, as the admission does.
 
 `duplicates.md` (gh-aw, weekly): audits the store for the same plugin
 listed twice, on the review's definition (the same repository, the

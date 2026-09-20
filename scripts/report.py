@@ -21,6 +21,12 @@ def _read_json(path: str | None) -> dict | None:
         return None
 
 
+def one_line(item: str) -> str:
+    """A list item on one line: a newline in an error or a note could start a line of the
+    comment the pipeline signs, a ruling among them."""
+    return " ".join(item.split())
+
+
 def candidate_block(record: dict) -> str:
     """The record as JSON whose `>` is escaped: no manifest value can close the HTML comment."""
     return json.dumps(record, ensure_ascii=False).replace(">", "\\u003e")
@@ -41,7 +47,7 @@ def render(
     lines = [MARK, "## Intake", ""]
     if errors:
         lines.append("**Form**: needs changes")
-        lines += [f"- {e}" for e in errors]
+        lines += [f"- {one_line(e)}" for e in errors]
         lines += ["", "Edit the issue; the checks run again on every edit."]
         return "\n".join(lines) + "\n", "needs-changes"
     lines.append("**Form**: pass")
@@ -62,12 +68,12 @@ def render(
     elif validation["errors"]:
         sha = (validation.get("sha") or "")[:12] or "unresolved"
         lines.append(f"**Plugin at `{ref}`**: needs changes (commit `{sha}`)")
-        lines += [f"- {e}" for e in validation["errors"]]
+        lines += [f"- {one_line(e)}" for e in validation["errors"]]
         verdict = "needs-changes"
     else:
         lines.append(f"**Plugin at `{ref}`**: pass (commit `{validation['sha']}`)")
     if validation and validation.get("notes"):
-        lines += ["", "Notes (informational):"] + [f"- {n}" for n in validation["notes"]]
+        lines += ["", "Notes (informational):"] + [f"- {one_line(n)}" for n in validation["notes"]]
     if verdict == "format-ok":
         if lines[-1].startswith("- "):
             lines.append("")  # closes the notes list: the next line is a paragraph, not a bullet
@@ -76,7 +82,7 @@ def render(
             verdict = "infra-error"
         elif derived["errors"]:
             lines.append("**Record**: needs changes")
-            lines += [f"- {e}" for e in derived["errors"]]
+            lines += [f"- {one_line(e)}" for e in derived["errors"]]
             verdict = "needs-changes"
         else:
             filled = derived.get("from_repository") or []

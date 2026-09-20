@@ -71,12 +71,13 @@ def validate_record(record: dict) -> list[str]:
     path = record["path"]
     if not isinstance(path, str) or path.startswith("/") or ".." in path:
         errors.append("path: not a relative directory inside the repository")
-    if not _is_text(record["ref"]):
-        errors.append("ref: empty")
+    # ref, version and keywords stand in code spans on the pages: no backtick can close one
+    if not _is_text(record["ref"]) or "`" in record["ref"]:
+        errors.append("ref: empty or carries a backtick")
     if not isinstance(record["sha"], str) or not SHA_RE.match(record["sha"]):
         errors.append("sha: not a 40-hex commit")
-    if not _is_text(record["version"]):
-        errors.append("version: empty")
+    if not _is_text(record["version"]) or "`" in record["version"]:
+        errors.append("version: empty or carries a backtick")
     author = record["author"]
     if not isinstance(author, dict) or not _is_text(author.get("name")):
         errors.append("author: needs a name")
@@ -97,6 +98,8 @@ def validate_record(record: dict) -> list[str]:
     keywords = record["keywords"]
     if not isinstance(keywords, list) or not all(isinstance(k, str) for k in keywords):
         errors.append("keywords: not a list of strings")
+    elif any("`" in k for k in keywords):
+        errors.append("keywords: a keyword carries a backtick")
     if not isinstance(record["submitted_in"], int) or record["submitted_in"] <= 0:
         errors.append("submitted_in: not an issue number")
     if not isinstance(record["admitted_at"], str) or not DATE_RE.match(record["admitted_at"]):

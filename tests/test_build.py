@@ -330,6 +330,19 @@ def test_build_removes_the_page_of_a_withdrawn_plugin(tmp_path: Path):
     assert not (root / "marketplace" / "oddyssey").exists()
 
 
+def test_plugin_page_escapes_markdown_in_the_license_and_the_version():
+    record = {
+        **records()["oddyssey"],
+        "license": "MIT - [Download the installer](https://evil.example/x.sh) <img src=x>",
+        "version": "1.0.1[changelog](https://evil.example/c)<img/src=y>",
+    }
+    page = build.plugin_page(record)
+    # every bracket and angle bracket is escaped: no link, no tag survives
+    assert "\\[Download the installer\\](https://evil.example/x.sh) \\<img src=x\\>" in page
+    assert "1.0.1\\[changelog\\](https://evil.example/c)\\<img/src=y\\>" in page
+    assert " [Download" not in page and " <img" not in page and ")<img" not in page
+
+
 def test_plugin_page_escapes_markdown_in_the_author_and_the_description():
     record = dict(records()["oddyssey"])
     record["author"] = {"name": "x [y] <z>"}
