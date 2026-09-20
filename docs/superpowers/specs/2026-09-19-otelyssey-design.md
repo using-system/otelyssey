@@ -313,10 +313,12 @@ listens to every pull request event to find the admission one.
 3. `build.py`, then one commit by the workflow's bot on `main`,
    `chore(store): nightly refresh`, only when something changed.
 
-`duplicates.md` (gh-aw, weekly): audits the store for plugins that
-serve the same purpose and opens one review issue, closing the older
-one, as awesome-copilot's detector does; accepted pairs recorded on
-past issues are respected.
+`duplicates.md` (gh-aw, weekly): audits the store for the same plugin
+listed twice, on the review's definition (the same repository, the
+same skills' content at any version or, when neither record has a
+skill, the same `mcp.json` servers), and opens one review issue with
+the evidence, nothing else; pairs a maintainer ruled `keep both` or
+`not duplicates` on a past issue are not reported again.
 
 ## Errors and guard rails
 
