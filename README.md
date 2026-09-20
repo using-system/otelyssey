@@ -35,8 +35,7 @@ Your plugin needs:
   Collector, or a backend that ingests its telemetry.
 
 The repository answers on the issue. Once listed, it follows your releases
-every night: a new `X.Y.Z` or `vX.Y.Z` tag, or a new `version` in
-`plugin.json` on your default branch. Competing plugins are all listed.
+every night.
 
 ## Plugins
 
