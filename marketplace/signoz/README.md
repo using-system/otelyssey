@@ -2,7 +2,7 @@
 
 Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts
 
-- Category: `backend`
+- Categories: `backend`
 - Repository: [SigNoz/agent-skills](https://github.com/SigNoz/agent-skills), the plugin at `plugins/signoz` in it
 - Version: 2026.9.200 (`main`, commit `4cdc848eb480`)
 - Author: [SigNoz](https://signoz.io)

@@ -21,9 +21,8 @@ LIST_END = "<!-- /otelyssey:plugins -->"
 CATEGORY_TITLES = {
     "instrumentation": "Instrumentation",
     "collector": "Collector",
-    "conventions": "Semantic conventions",
     "backend": "Backends",
-    "workflow": "Workflows",
+    "observability": "Observability",
 }
 # live, from GitHub through shields.io: the README needs no refresh when a count moves; the
 # version is the record's, a repository releases with or without a tag
@@ -70,7 +69,8 @@ def codex_marketplace_json(records: dict[str, dict]) -> dict:
             "author": record["author"],
             "source": codex_source_of(record),
             "policy": {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
-            "category": CATEGORY_TITLES[record["category"]],
+            # a scalar in the catalogs: the principal category
+            "category": CATEGORY_TITLES[record["categories"][0]],
         }
         if record["homepage"]:
             entry["homepage"] = record["homepage"]
@@ -91,7 +91,7 @@ def marketplace_json(records: dict[str, dict]) -> dict:
             "source": source_of(record),
             "description": record["description"],
             "version": record["version"],
-            "category": record["category"],
+            "category": record["categories"][0],
             "keywords": record["keywords"],
             "license": record["license"],
             "author": record["author"],
@@ -154,7 +154,7 @@ def plugin_page(record: dict) -> str:
     return (
         f"# {record['name']}\n\n"
         f"{text(record['description'])}\n\n"
-        f"- Category: `{record['category']}`\n"
+        f"- Categories: {', '.join(f'`{c}`' for c in record['categories'])}\n"
         f"- Repository: [{record['repository']}]({repo_url}), the plugin at {where} it\n"
         f"- Version: {record['version']} (`{record['ref']}`, commit `{record['sha'][:12]}`)\n"
         f"- Author: {author_text}\n"
@@ -255,21 +255,26 @@ def readme_entry(record: dict) -> str:
     author_name = text(author["name"])
     author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
     repo = record["repository"]
+    # listed once, under the principal category; the others named in the line
+    others = ", ".join(f"`{c}`" for c in record["categories"][1:])
+    also = f" · also {others}" if others else ""
     return (
         f"- [{record['name']}](https://github.com/{repo}) by {author_text} - "
-        f"{text(record['description'])} · [install](marketplace/{record['name']}/README.md)  \n"
+        f"{text(record['description'])}{also}"
+        f" · [install](marketplace/{record['name']}/README.md)  \n"
         + "&nbsp;&nbsp;".join(badge(kind, record) for kind in BADGES)
         + "\n\n"
     )
 
 
 def readme_list(records: dict[str, dict]) -> str:
-    """The plugins by category, in the store's category order, the empty categories left out."""
+    """The plugins by principal category, in the store's category order, the empty categories
+    left out."""
     if not records:
         return "No plugin listed yet.\n"
     sections = []
     for category in store.CATEGORIES:
-        names = sorted(name for name, r in records.items() if r["category"] == category)
+        names = sorted(name for name, r in records.items() if r["categories"][0] == category)
         if names:
             entries = "".join(readme_entry(records[name]) for name in names)
             sections.append(f"### {CATEGORY_TITLES[category]}\n\n{entries}")

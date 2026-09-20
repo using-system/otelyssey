@@ -96,7 +96,7 @@
       },
       "description": "Observability-Driven Development for CLI coding agents",
       "version": "1.13.0",
-      "category": "workflow",
+      "category": "observability",
       "keywords": [
         "claude-code",
         "claude-code-plugin",

@@ -20,7 +20,7 @@ from scripts import stats, store
 FALLBACKS = (("description", "description", "description"), ("license", "license", "license"))
 # what the store adds at the admission, so its rules can be run on the record here
 PLACEHOLDERS = {
-    "category": store.CATEGORIES[0],
+    "categories": [store.CATEGORIES[0]],
     "admitted_at": "1970-01-01",
     "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "1970-01-01T00:00:00Z"},
 }
@@ -72,7 +72,7 @@ def _url(value: object) -> str:
 
 
 def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[str], list[str]]:
-    """The record (without category, admitted_at, stats), its errors, and one line per field
+    """The record (without categories, admitted_at, stats), its errors, and one line per field
     that the repository's metadata gave instead of the manifest."""
     manifest = validation["manifest"]
     errors: list[str] = []
@@ -145,7 +145,7 @@ def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
     repository's metadata. A description, a license or an author that neither gives keeps
     the record's value, and is reported; an empty homepage or keywords is a derived value.
 
-    What the record pins (name, version, ref, sha) and what the pipeline decided (category,
+    What the record pins (name, version, ref, sha) and what the pipeline decided (categories,
     submitted_in, admitted_at, stats) are untouched.
     """
     candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}

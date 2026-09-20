@@ -2,7 +2,7 @@
 
 MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.
 
-- Category: `backend`
+- Categories: `backend`
 - Repository: [dynatrace-oss/dynatrace-managed-mcp](https://github.com/dynatrace-oss/dynatrace-managed-mcp), the plugin at the root of it
 - Version: 1.1.1 (`main`, commit `52959ebce94e`)
 - Author: [Dynatrace](https://www.dynatrace.com)

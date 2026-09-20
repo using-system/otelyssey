@@ -8,7 +8,7 @@ from scripts import store
 RECORD = {
     "name": "oddyssey",
     "description": "Observability-Driven Development for CLI coding agents.",
-    "category": "workflow",
+    "categories": ["observability", "instrumentation"],
     "repository": "using-system/oddyssey",
     "path": "marketplace/oddyssey",
     "ref": "v1.13.0",
@@ -32,7 +32,10 @@ def test_valid_record_has_no_errors():
     "field,value,fragment",
     [
         ("name", "Bad_Name", "name"),
-        ("category", "misc", "category"),
+        ("categories", ["misc"], "categories"),
+        ("categories", [], "categories"),
+        ("categories", ["backend", "backend"], "categories"),
+        ("categories", "backend", "categories"),
         ("repository", "not-a-repo", "repository"),
         ("sha", "abc", "sha"),
         ("stats", {"stars": 1}, "stats"),

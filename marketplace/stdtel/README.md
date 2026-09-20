@@ -2,7 +2,7 @@
 
 Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.
 
-- Category: `instrumentation`
+- Categories: `instrumentation`
 - Repository: [amiable-dev/skills-telemetry](https://github.com/amiable-dev/skills-telemetry), the plugin at the root of it
 - Version: 0.4.0 (`v0.4.0`, commit `a95d23afc261`)
 - Author: [amiable-dev](https://github.com/amiable-dev)

@@ -1,7 +1,9 @@
 {
   "name": "observability",
   "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
-  "category": "instrumentation",
+  "categories": [
+    "instrumentation"
+  ],
   "repository": "BastiDood/skills",
   "path": "plugins/observability",
   "ref": "main",

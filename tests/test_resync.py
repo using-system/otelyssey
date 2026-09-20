@@ -7,7 +7,7 @@ from tests.test_derive import MANIFEST, RAW
 RECORD = {
     "name": "my-otel-plugin",
     "description": "typed in the form",
-    "category": "backend",
+    "categories": ["backend"],
     "repository": "contoso/my-otel-plugin",
     "path": "",
     "ref": "v1.2.0",
@@ -41,7 +41,7 @@ def test_a_record_is_rewritten_from_its_manifest(tmp_path: Path, monkeypatch):
     assert (rewritten, kept, skipped) == (["my-otel-plugin"], {}, {})
     record = json.loads((root / ".store" / "my-otel-plugin.json").read_text())
     assert record["description"] == "Queries traces in Tempo."
-    assert record["category"] == "backend"
+    assert record["categories"] == ["backend"]
 
 
 def test_an_unchanged_record_is_not_written(tmp_path: Path, monkeypatch):

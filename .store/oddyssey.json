@@ -1,7 +1,9 @@
 {
   "name": "oddyssey",
   "description": "Observability-Driven Development for CLI coding agents",
-  "category": "workflow",
+  "categories": [
+    "observability"
+  ],
   "repository": "using-system/oddyssey",
   "path": "marketplace/oddyssey",
   "ref": "v1.13.0",

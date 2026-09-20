@@ -93,12 +93,13 @@ corrupted. The intake comment states in backticks what the review rules
 on (name, version, repository, path, ref, sha); the hidden block is for
 `admission.yml`, which reads the comment through the REST API, intact.
 The admissible ruling's first line names the plugin, its version, its
-sha and its category in backticks, and `admission.yml` admits no record
-the latest ruling does not name: an issue edited after the ruling is
-not admitted, and the label `admissible` alone, set by hand, admits
-nothing. The category is the one value the review contributes to a
-record: an enum of the store's five, read from that line by
-`scripts/admission.py`, refused outside it.
+sha and its categories in backticks, and `admission.yml` admits no
+record the latest ruling does not name: an issue edited after the
+ruling is not admitted, and the label `admissible` alone, set by hand,
+admits nothing. The categories are the one value the review contributes
+to a record: an ordered list, the principal first, from the store's
+four (`instrumentation`, `collector`, `backend`, `observability`), read
+from that line by `scripts/admission.py`, refused outside it.
 
 ## The agentic workflows read untrusted content on purpose
 

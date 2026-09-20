@@ -40,7 +40,8 @@ def test_marketplace_entry_pins_the_admitted_commit():
         "sha": "1" * 40,
     }
     assert entry["version"] == "1.13.0"
-    assert entry["category"] == "workflow"
+    # a scalar in the catalogs: the principal category
+    assert entry["category"] == "observability"
 
 
 def test_root_plugin_has_no_path():
@@ -76,7 +77,7 @@ def test_codex_marketplace_uses_git_backed_sources_pinned_at_the_sha():
         "sha": records()["oddyssey"]["sha"],
     }
     assert entry["policy"] == {"installation": "AVAILABLE", "authentication": "ON_INSTALL"}
-    assert entry["category"] == "Workflows"
+    assert entry["category"] == "Observability"
     assert entry["description"] == records()["oddyssey"]["description"]
     assert entry["version"] == "1.13.0" and entry["keywords"] == records()["oddyssey"]["keywords"]
     assert entry["author"] == records()["oddyssey"]["author"]
@@ -123,7 +124,7 @@ def test_plugin_page_carries_the_facts():
     page = build.plugin_page(records()["oddyssey"])
     assert page.startswith("# oddyssey\n")
     for fragment in (
-        "workflow",
+        "- Categories: `observability`, `instrumentation`",
         "https://github.com/using-system/oddyssey",
         "1.13.0 (`v1.13.0`, commit `111111111111`)",
         "MIT",
@@ -190,10 +191,16 @@ def test_readme_install_block_carries_the_pack_url():
 
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
-    assert text.startswith("### Workflows\n\n")
+    # listed once, under the principal category; the other named in the line
+    assert text.startswith("### Observability\n\n")
+    assert "### Instrumentation" not in text
     (entry, badges, blank) = text.splitlines()[2:5]
     assert entry.startswith("- [oddyssey](https://github.com/using-system/oddyssey) by ")
-    assert " - " in entry and entry.endswith("[install](marketplace/oddyssey/README.md)  ")
+    assert " - " in entry and entry.endswith(
+        " · also `instrumentation` · [install](marketplace/oddyssey/README.md)  "
+    )
+    single = {**records()["oddyssey"], "categories": ["observability"]}
+    assert "also" not in build.readme_entry(single)
     kinds = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
     record = records()["oddyssey"]
     assert badges == "&nbsp;&nbsp;".join(build.badge(k, record) for k in kinds)
@@ -217,16 +224,16 @@ def test_every_category_has_a_title():
 
 def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_ones():
     first = records()["oddyssey"]
-    second = {**first, "name": "col-b", "category": "collector", "repository": "a/col-b"}
-    third = {**first, "name": "col-a", "category": "collector", "repository": "a/col-a"}
+    second = {**first, "name": "col-b", "categories": ["collector"], "repository": "a/col-b"}
+    third = {**first, "name": "col-a", "categories": ["collector"], "repository": "a/col-a"}
     text = build.readme_list({"oddyssey": first, "col-b": second, "col-a": third})
     headings = [line for line in text.splitlines() if line.startswith("### ")]
-    assert headings == ["### Collector", "### Workflows"]
+    assert headings == ["### Collector", "### Observability"]
     # two entries in one category: name order, one blank line between them
     lines = text.splitlines()
     assert lines[2].startswith("- [col-a](") and lines[3].startswith("<img ") and lines[4] == ""
     assert lines[5].startswith("- [col-b](") and lines[6].startswith("<img ") and lines[7] == ""
-    assert lines[8] == "### Workflows"
+    assert lines[8] == "### Observability"
 
 
 def test_readme_list_of_an_empty_store_says_so():

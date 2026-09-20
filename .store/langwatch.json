@@ -1,7 +1,9 @@
 {
   "name": "langwatch",
   "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
-  "category": "instrumentation",
+  "categories": [
+    "instrumentation"
+  ],
   "repository": "langwatch/agent-plugin",
   "path": "",
   "ref": "v1.2.0",

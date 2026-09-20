@@ -1,7 +1,9 @@
 {
   "name": "signoz",
   "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-  "category": "backend",
+  "categories": [
+    "backend"
+  ],
   "repository": "SigNoz/agent-skills",
   "path": "plugins/signoz",
   "ref": "main",
