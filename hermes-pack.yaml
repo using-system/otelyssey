@@ -11,6 +11,8 @@ plugins:
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
     ref: "e7fd9fa96bf752f1caf31d4abce207fa6b40c107"
+  - repo: getsentry/agent-plugin
+    ref: "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
     ref: "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"

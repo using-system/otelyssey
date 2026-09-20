@@ -115,6 +115,31 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "sentry",
+      "source": {
+        "source": "github",
+        "repo": "getsentry/agent-plugin",
+        "ref": "v1.4.0",
+        "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
+      },
+      "description": "Set up Sentry, debug production issues, and configure application monitoring: skills to debug an issue, fix stack traces, create alerts and set up releases, with the Sentry MCP server; Sentry ingests OpenTelemetry natively over OTLP.",
+      "version": "1.4.0",
+      "category": "backend",
+      "keywords": [
+        "sentry",
+        "debugging",
+        "monitoring",
+        "error-tracking",
+        "opentelemetry"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "Sentry",
+        "url": "https://sentry.io"
+      },
+      "homepage": "https://sentry.io"
+    },
+    {
       "name": "signoz",
       "source": {
         "source": "github",

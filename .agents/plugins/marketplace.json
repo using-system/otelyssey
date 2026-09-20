@@ -125,6 +125,34 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "sentry",
+      "description": "Set up Sentry, debug production issues, and configure application monitoring: skills to debug an issue, fix stack traces, create alerts and set up releases, with the Sentry MCP server; Sentry ingests OpenTelemetry natively over OTLP.",
+      "version": "1.4.0",
+      "keywords": [
+        "sentry",
+        "debugging",
+        "monitoring",
+        "error-tracking",
+        "opentelemetry"
+      ],
+      "author": {
+        "name": "Sentry",
+        "url": "https://sentry.io"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/getsentry/agent-plugin.git",
+        "ref": "v1.4.0",
+        "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://sentry.io"
+    },
+    {
       "name": "signoz",
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thirteen skills for an OpenTelemetry-native backend: setting up observability and the OpenTelemetry Collector, generating and explaining queries, creating and investigating alerts and dashboards, reducing telemetry cost, and writing ClickHouse queries against OpenTelemetry data.",
       "version": "2026.9.200",
