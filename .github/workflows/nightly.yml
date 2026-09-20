@@ -36,6 +36,10 @@ jobs:
           codex --version
           grok --version
       - name: Releases
+        # the token is for the repository metadata a re-pin reads (the API's rate); the
+        # smoke hands the hosts an explicit environment, the token is not in it
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: python3 -m scripts.releases --workdir work --smoke --json > work-releases.json
       - name: Issues for the releases that failed
         env:

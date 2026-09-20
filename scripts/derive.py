@@ -135,8 +135,9 @@ def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
     submitted_in, admitted_at, stats) are untouched.
     """
     candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}
-    validation = {"sha": record["sha"], "manifest": manifest}
-    derived, errors, _ = derive(candidate, validation, meta)
+    # the name and the version are the record's, pinned; the manifest gives the rest
+    pinned = {**manifest, "name": record["name"], "version": record["version"]}
+    derived, errors, _ = derive(candidate, {"sha": record["sha"], "manifest": pinned}, meta)
     kept = [e for e in errors if e.startswith(MISSING)]
     missing = {e.removeprefix(MISSING).split(",", 1)[0] for e in kept}
     updated = {**record, **{f: derived[f] for f in DERIVED if f not in missing}}
