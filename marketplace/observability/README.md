@@ -58,6 +58,7 @@ VS Code, in `settings.json`:
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install BastiDood/skills/plugins/observability --ref 9dfab1713cb24ccb515563de166def3239e92f1a
 hermes plugins enable observability
 ```

@@ -154,6 +154,11 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
     page = build.plugin_page(record)
     assert f"hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref {sha}" in page
     assert "hermes plugins enable oddyssey" in page
+    assert (
+        "hermes plugins pack install "
+        "https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml\n"
+        "hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref"
+    ) in page
     # OpenClaw's git install has no subdirectory form: the marketplace, cloned, read locally
     assert "git clone https://github.com/using-system/otelyssey\n" in page
     assert "openclaw plugins install oddyssey --marketplace ./otelyssey" in page
@@ -175,6 +180,12 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
     odd = build.plugin_page({**record, "path": "my plugins/otel"})
     assert "hermes plugins install 'using-system/oddyssey/my plugins/otel' --ref" in odd
     assert "cp -r 'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
+
+
+def test_readme_install_block_carries_the_pack_url():
+    # the README's head is prose: the literal there must not drift from the constant
+    readme = (FIXTURES.parent.parent / "README.md").read_text(encoding="utf-8")
+    assert build.HERMES_PACK_URL in readme
 
 
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():

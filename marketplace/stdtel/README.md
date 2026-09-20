@@ -60,6 +60,7 @@ Kiro: Import power from GitHub, `https://github.com/amiable-dev/skills-telemetry
 Hermes Agent:
 
 ```text
+hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
 hermes plugins install amiable-dev/skills-telemetry --ref a95d23afc26150737a4eb6894b96a7235fa8f8da
 hermes plugins enable stdtel
 ```
