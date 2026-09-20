@@ -9,7 +9,7 @@ Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts. Thi
 - License: MIT
 - Keywords: `signoz`, `opentelemetry`, `observability`, `mcp`, `clickhouse`, `tracing`, `logging`
 - Homepage: <https://signoz.io>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-09-20T00:44:57Z)
+- Stars 16, forks 11, watchers 2 (refreshed 2026-09-20T08:38:53Z)
 - Admitted from [issue #50](https://github.com/using-system/otelyssey/issues/50) on 2026-09-20
 
 ## Install

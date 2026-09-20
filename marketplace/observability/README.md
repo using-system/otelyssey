@@ -9,7 +9,7 @@ Opinionated guidance for clear and operationally useful OpenTelemetry instrument
 - License: MPL-2.0
 - Keywords: `opentelemetry`, `instrumentation`, `semantic-conventions`, `spans`, `logs`, `best-practices`
 - Homepage: <https://github.com/BastiDood/skills#readme>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-09-20T01:06:50Z)
+- Stars 14, forks 0, watchers 0 (refreshed 2026-09-20T08:38:53Z)
 - Admitted from [issue #57](https://github.com/using-system/otelyssey/issues/57) on 2026-09-20
 
 ## Install
