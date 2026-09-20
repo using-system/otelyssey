@@ -10,8 +10,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-HOSTS = ("copilot", "claude")
+HOSTS = ("copilot", "claude", "codex")
 MARKETPLACE = "otelyssey-intake"
+# Codex installs with `plugin add`, the other hosts with `plugin install`
+INSTALL_VERB = {"codex": "add"}
 
 
 def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
@@ -28,9 +30,18 @@ def ephemeral_marketplace(workdir: Path, name: str, plugin_dir: Path) -> Path:
     }
     text = json.dumps(manifest, indent=2) + "\n"
     # the layout the marketplace ships: at the root for Copilot CLI, in .claude-plugin/ for
-    # Claude Code
+    # Claude Code, and Codex's own catalog in .agents/plugins/ with a local source
     (market / "marketplace.json").write_text(text)
     (market / ".claude-plugin" / "marketplace.json").write_text(text)
+    codex = {
+        "name": MARKETPLACE,
+        "interface": {"displayName": MARKETPLACE},
+        "plugins": [{"name": name, "source": {"source": "local", "path": "./plugin"}}],
+    }
+    (market / ".agents" / "plugins").mkdir(parents=True)
+    (market / ".agents" / "plugins" / "marketplace.json").write_text(
+        json.dumps(codex, indent=2) + "\n"
+    )
     return market
 
 
@@ -41,6 +52,7 @@ def _run(args: list[str], home: Path) -> tuple[int, str]:
         "XDG_CONFIG_HOME": str(home / ".config"),
         "XDG_CACHE_HOME": str(home / ".cache"),
         "XDG_DATA_HOME": str(home / ".local" / "share"),
+        "CODEX_HOME": str(home / ".codex"),
         "CI": "1",
     }
     try:
@@ -58,13 +70,15 @@ def install(host: str, marketplace_dir: Path, name: str, home: Path) -> tuple[st
     if shutil.which(host) is None:
         return "unavailable", f"the {host} CLI is not on this machine"
     shutil.rmtree(home, ignore_errors=True)
-    home.mkdir(parents=True, exist_ok=True)
+    # Codex refuses a CODEX_HOME that does not exist
+    (home / ".codex").mkdir(parents=True)
     code, out = _run([host, "plugin", "marketplace", "add", str(marketplace_dir)], home)
     if code != 0:
         return "fail", f"marketplace add exited {code}\n{out}"
-    code, out = _run([host, "plugin", "install", f"{name}@{MARKETPLACE}"], home)
+    verb = INSTALL_VERB.get(host, "install")
+    code, out = _run([host, "plugin", verb, f"{name}@{MARKETPLACE}"], home)
     if code != 0:
-        return "fail", f"plugin install exited {code}\n{out}"
+        return "fail", f"plugin {verb} exited {code}\n{out}"
     code, listed = _run([host, "plugin", "list"], home)
     if code != 0 or name not in listed:
         return "fail", f"plugin list does not carry {name}\n{listed}"

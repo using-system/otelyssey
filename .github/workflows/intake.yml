@@ -28,9 +28,10 @@ jobs:
           persist-credentials: false
       - name: Install the hosts
         run: |
-          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278
+          npm install -g @github/copilot@1.0.86 @anthropic-ai/claude-code@2.1.278 @openai/codex@0.155.1
           copilot --version
           claude --version
+          codex --version
       - name: Parse the form
         env:
           BODY: ${{ github.event.issue.body }}
