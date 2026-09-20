@@ -30,7 +30,8 @@ Your plugin needs:
 
 - a public GitHub repository;
 - a `plugin.json` in the [Agent Plugins](https://agent-plugins.org/) format,
-  at the repository's root or in a subdirectory;
+  at the repository's root or in a subdirectory: the form asks for its URL,
+  everything else is read from it;
 - OpenTelemetry as its subject: instrumentation, semantic conventions, the
   Collector, or a backend that ingests its telemetry.
 

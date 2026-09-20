@@ -94,14 +94,14 @@ tests/                               pytest on recorded fixtures
 | field | content |
 | --- | --- |
 | `name` | the `plugin.json` name (the Agent Plugins pattern) |
-| `description` | one or two sentences, from the submission |
+| `description` | `plugin.json`'s, else the repository's description; neither is a `needs-changes` |
 | `category` | one of a short closed list (instrumentation, collector, conventions, backend, workflow), ruled by the review from the plugin's content; the form's, when it carries one, is a suggestion |
 | `repository` | `owner/repo`, public GitHub |
 | `path` | the plugin's directory inside the repository, empty at the root |
 | `ref` | the admitted tag |
 | `sha` | the 40-hex commit the tag resolved to when admitted or last followed |
 | `version` | `plugin.json`'s version at that sha |
-| `author`, `license`, `homepage`, `keywords` | from `plugin.json` at that sha, the submission filling the gaps |
+| `author`, `license`, `homepage`, `keywords` | from `plugin.json` at that sha, the repository's metadata filling the gaps (its owner, its license, its homepage, its topics); a license from neither is a `needs-changes`, an author from neither too; keywords may be empty |
 | `submitted_in` | the issue number |
 | `admitted_at` | UTC date |
 | `stats` | `stars`, `forks`, `watchers`, `refreshed_at` |
@@ -160,31 +160,36 @@ A run of `build.py` on a store that did not change produces no diff.
 
 ## The submission
 
-`.github/ISSUE_TEMPLATE/submit-plugin.yml`, labels `submission`: plugin
-name, description, GitHub repository (`owner/repo`), path inside the
-repository (optional), license, author name and URL, homepage
-(optional), keywords, category (dropdown). The form asks neither the
-tag nor the version: the tag reviewed is the repository's latest
-release (`X.Y.Z` or `vX.Y.Z`, the highest by semver), resolved by the
-intake, and the sha is derived from it; the version is read from
-`plugin.json` at that tag. The template says what will be checked and
-that no pull request against `.store/` is accepted from a contributor.
+`.github/ISSUE_TEMPLATE/submit-plugin.yml`, labels `submission`: one
+field, the URL of the plugin's `plugin.json` on GitHub
+(`https://github.com/<owner>/<repo>/blob/<ref>/<path>/plugin.json`, or
+the `raw.githubusercontent.com` form). It gives the repository and the
+path, nothing else: no text of the contributor enters the store, the
+pages or the catalogs. The URL's ref is ignored: the ref reviewed is
+the repository's latest release (`X.Y.Z` or `vX.Y.Z`, the highest by
+semver) carrying the plugin, else its default branch, resolved by the
+intake, and the sha is derived from it; every other field is read from
+`plugin.json` at that sha, the repository's metadata filling the gaps.
+The category is the review's. A branch whose name carries a slash
+cannot be told from the path: the ref is one segment, and a wrong
+split is a `needs-changes` naming the missing directory.
 
 ## Admission
 
 ### intake (deterministic, on `issues: opened, edited, reopened` carrying `submission`)
 
-1. `scripts/intake.py` parses the issue body into a candidate record
-   and names every missing or malformed field; on a clean form it
-   resolves the repository's latest release tag (`git ls-remote
-   --tags`, semver-sorted) and its sha into the candidate, and names
-   an unreadable repository or one without a release tag as an error.
-2. `scripts/validate.py` resolves the tag to a sha, clones the
+1. `scripts/intake.py` parses the issue body's one field, the manifest
+   URL, into the repository and the path, and names a malformed URL;
+   on a clean one it resolves the repository's latest release tag
+   (`git ls-remote --tags`, semver-sorted) carrying the plugin, else
+   its default branch, and its sha into the candidate, and names an
+   unreadable repository as an error.
+2. `scripts/validate.py` resolves the ref to a sha, clones the
    repository at that sha (shallow, no credentials), checks that
    `<path>/plugin.json` exists and validates against the Agent Plugins
-   1.0.0 schema (fetched once, cached under `tests/fixtures/`), that
-   the `name` matches the submission, and that it carries a `version`
-   (the record's version is read from `plugin.json`). A `skills/<x>/`
+   1.0.0 schema (fetched once, cached under `tests/fixtures/`), and
+   that it carries a `name` and a `version` (the record's, read from
+   `plugin.json`). A `skills/<x>/`
    without `SKILL.md` (not a skill; a client skips it, #63) and the
    directories the format does not define (`agents/`, `commands/`,
    `hooks/`, a `.claude-plugin/` carried next to `plugin.json`) are
@@ -194,7 +199,15 @@ that no pull request against `.store/` is accepted from a contributor.
    A `plugin.json`
    missing at the root is an error, named as the legacy layout when
    `.claude-plugin/plugin.json` exists.
-3. `scripts/smoke.py` writes a temporary marketplace holding a copy
+3. `scripts/derive.py` builds the record: the manifest first
+   (`name`, `version`, `description`, `license`, `homepage`, `author`,
+   `keywords`), the repository's GitHub metadata next (its description,
+   `license.spdx_id`, homepage, owner as the author, topics as the
+   keywords), through the REST API with the app's token; a description,
+   a license or an author from neither is an error the contributor
+   fixes in `plugin.json`, a `needs-changes`. The comment says which
+   fields the repository filled.
+4. `scripts/smoke.py` writes a temporary marketplace holding a copy
    of the checked-out plugin (a relative source: no second clone, no
    network in the smoke) and installs the plugin with Copilot CLI (`copilot plugin
    marketplace add`, `copilot plugin install`), with Claude Code's
@@ -206,10 +219,10 @@ that no pull request against `.store/` is accepted from a contributor.
    local source), each under an isolated HOME (and CODEX_HOME); the
    install must exit 0 and list the plugin. No plugin code is executed
    beyond the host's install.
-4. The workflow comments one result on the issue: each check with pass
+5. The workflow comments one result on the issue: each check with pass
    or the exact reason, and sets `format-ok` or `needs-changes`. A
    re-edit re-runs it (concurrency per issue, cancel in progress).
-5. On `format-ok` the candidate record is attached to the issue as a
+6. On `format-ok` the derived record is attached to the issue as a
    hidden comment block (`<!-- otelyssey-candidate ... -->`), the input
    of the admission workflow, which reads it through the REST API. The
    agent never sees it: the GitHub MCP server strips HTML comments and

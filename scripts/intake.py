@@ -1,32 +1,31 @@
-"""Turn a submission issue's body (the rendered issue form) into a candidate record.
+"""Turn a submission issue's body (the rendered issue form) into a candidate.
 
-The form names neither the ref nor the version: the ref is the repository's latest release
-tag when it carries the plugin, otherwise its default branch, resolved here; the version is
-read from plugin.json by the validation.
+The form has one field, the URL of the plugin's plugin.json on GitHub: it gives the
+repository and the path, nothing else. The ref is the repository's latest release tag when
+it carries the plugin, otherwise its default branch, resolved here, never the URL's; every
+other field is read from the manifest at that commit, by the derivation, after the
+validation.
 """
 
 from __future__ import annotations
 
 import argparse
 import json
+import re
 import sys
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 
 from scripts import gitrepo, store
 
-LABELS = (
-    "Plugin name",
-    "Description",
-    "GitHub repository",
-    "Path inside the repository",
-    "License",
-    "Author name",
-    "Author URL",
-    "Homepage",
-    "Keywords",
-    "Category",
-)
+LABELS = ("plugin.json URL",)
 EMPTY = "_No response_"
+HOSTS = ("github.com", "www.github.com", "raw.githubusercontent.com")
+BAD_URL = (
+    "plugin.json URL: the URL of plugin.json on GitHub, as GitHub shows it "
+    "(https://github.com/owner/repo/blob/main/plugin.json), on a branch or tag without a slash"
+)
+SEGMENT_RE = re.compile(r"^[^\x00-\x1f\x7f]+$")
 
 
 def parse_form(body: str) -> dict[str, str]:
@@ -47,52 +46,47 @@ def parse_form(body: str) -> dict[str, str]:
     return {k: ("" if v == EMPTY else v) for k, v in fields.items()}
 
 
+def parse_url(url: str) -> tuple[str, str]:
+    """The repository (owner/repo) and the plugin's directory the URL points at, or ValueError.
+
+    github.com/<owner>/<repo>/blob|raw/<ref>/<path>/plugin.json and
+    raw.githubusercontent.com/<owner>/<repo>/<ref>/<path>/plugin.json; the ref is one segment
+    (a branch with a slash cannot be told from the path) and is not used.
+    """
+    parts = urlsplit(url.strip())
+    if parts.scheme != "https" or parts.netloc.lower() not in HOSTS or parts.query:
+        raise ValueError(BAD_URL)
+    segments = [unquote(s) for s in parts.path.split("/") if s]
+    if parts.netloc.lower() == "raw.githubusercontent.com":
+        head, rest = segments[:2], segments[2:]
+    else:
+        head, rest = segments[:2], segments[2:]
+        if len(rest) < 1 or rest[0] not in ("blob", "raw"):
+            raise ValueError(BAD_URL)
+        rest = rest[1:]
+    # after owner and repo: the ref, then the path, then plugin.json
+    if len(head) != 2 or len(rest) < 2 or rest[-1] != "plugin.json":
+        raise ValueError(BAD_URL)
+    repository = "/".join(head)
+    repository = repository[:-4] if repository.endswith(".git") else repository
+    path_segments = rest[1:-1]
+    if not store.REPO_RE.match(repository) or any(
+        s in (".", "..") or not SEGMENT_RE.match(s) for s in path_segments
+    ):
+        raise ValueError(BAD_URL)
+    return repository, "/".join(path_segments)
+
+
 def candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str]]:
-    """The record the form describes (without ref, sha, version, admitted_at, stats), its errors."""
+    """The repository and the path the URL names, the issue; or the errors."""
     errors = [f"{label}: section missing from the form" for label in LABELS if label not in fields]
     if errors:
         return {}, errors
-    for label in LABELS:
-        if "-->" in fields[label]:
-            errors.append(f"{label}: must not contain -->")
-    author = {"name": fields["Author name"].strip()}
-    if fields["Author URL"].strip():
-        author["url"] = fields["Author URL"].strip()
-    record = {
-        "name": fields["Plugin name"].strip(),
-        "description": " ".join(fields["Description"].split()),
-        "category": fields["Category"].strip(),
-        "repository": fields["GitHub repository"].strip(),
-        "path": fields["Path inside the repository"].strip().strip("/"),
-        "author": author,
-        "license": fields["License"].strip(),
-        "homepage": fields["Homepage"].strip(),
-        "keywords": [k.strip().lower() for k in fields["Keywords"].split(",") if k.strip()],
-        "submitted_in": issue_number,
-    }
-    if not store.NAME_RE.match(record["name"]):
-        errors.append(
-            "Plugin name: lowercase letters, digits, dots and hyphens (Agent Plugins name)"
-        )
-    if not record["description"]:
-        errors.append("Description: empty")
-    if record["category"] not in store.CATEGORIES:
-        errors.append(f"Category: one of {', '.join(store.CATEGORIES)}")
-    if not store.REPO_RE.match(record["repository"]):
-        errors.append("GitHub repository: owner/repo")
-    if ".." in record["path"].split("/"):
-        errors.append("Path inside the repository: a relative directory")
-    if not record["license"]:
-        errors.append("License: empty")
-    if not author["name"]:
-        errors.append("Author name: empty")
-    if author.get("url") and not store.URL_RE.match(author["url"]):
-        errors.append("Author URL: an https URL")
-    if record["homepage"] and not store.URL_RE.match(record["homepage"]):
-        errors.append("Homepage: an https URL")
-    if not record["keywords"]:
-        errors.append("Keywords: at least one")
-    return record, errors
+    try:
+        repository, path = parse_url(fields["plugin.json URL"])
+    except ValueError as error:
+        return {}, [str(error)]
+    return {"repository": repository, "path": path, "submitted_in": issue_number}, []
 
 
 def resolve_ref(repository: str, path: str) -> tuple[str, str, list[str]]:
@@ -126,7 +120,7 @@ def main(argv: list[str] | None = None) -> int:
         for error in errors:
             print(error)
         if not errors:
-            print(f"candidate {record['name']} at {record['repository']} {record.get('ref', '')}")
+            print(f"candidate at {record['repository']} {record['path']!r} {record.get('ref', '')}")
     return 1 if errors else 0
 
 

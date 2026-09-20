@@ -32,6 +32,9 @@ def test_name_and_version_must_match_the_submission():
     _, errors = validate.check_manifest(PLUGINS / "valid", "other", "9.9.9")
     assert any("name" in e for e in errors)
     assert any("version" in e for e in errors)
+    # an empty expected name skips the match: the manifest's name is the record's
+    manifest, errors = validate.check_manifest(PLUGINS / "valid", "", "")
+    assert errors == [] and manifest["name"] == "my-otel-plugin"
 
 
 def test_bad_name_is_reported_against_the_schema():

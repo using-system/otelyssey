@@ -6,87 +6,13 @@ body:
   - type: markdown
     attributes:
       value: |
-        The repository checks the format of your plugin at your repository's latest release tag (X.Y.Z or vX.Y.Z) when
-        it carries the plugin, otherwise at the head of your default branch, installs it,
-        judges its relevance to OpenTelemetry and whether it is a plugin already listed, and answers here.
-        Plugins that compete on the same scope are all listed.
-        Do not open a pull request against `.store/`: the pipeline writes it.
+        Give the URL of your plugin's `plugin.json` on GitHub; the repository reads everything
+        else from it and answers here.
   - type: input
-    id: plugin-name
+    id: plugin-url
     attributes:
-      label: Plugin name
-      description: The `name` of your plugin.json - lowercase letters, digits, dots and hyphens.
-      placeholder: my-otel-plugin
-    validations:
-      required: true
-  - type: textarea
-    id: description
-    attributes:
-      label: Description
-      description: One or two sentences.
-    validations:
-      required: true
-  - type: input
-    id: repository
-    attributes:
-      label: GitHub repository
-      description: Public, in owner/repo form.
-      placeholder: owner/repo
-    validations:
-      required: true
-  - type: input
-    id: path
-    attributes:
-      label: Path inside the repository
-      description: The directory holding plugin.json, empty when it is the repository root.
-      placeholder: plugins/my-otel-plugin
-    validations:
-      required: false
-  - type: input
-    id: license
-    attributes:
-      label: License
-      description: An SPDX identifier.
-      placeholder: MIT
-    validations:
-      required: true
-  - type: input
-    id: author-name
-    attributes:
-      label: Author name
-    validations:
-      required: true
-  - type: input
-    id: author-url
-    attributes:
-      label: Author URL
-      placeholder: https://github.com/owner
-    validations:
-      required: false
-  - type: input
-    id: homepage
-    attributes:
-      label: Homepage
-      placeholder: https://github.com/owner/repo#readme
-    validations:
-      required: false
-  - type: input
-    id: keywords
-    attributes:
-      label: Keywords
-      description: Comma-separated, lowercase.
-      placeholder: opentelemetry, collector, traces
-    validations:
-      required: true
-  - type: dropdown
-    id: category
-    attributes:
-      label: Category
-      options:
-        - instrumentation
-        - collector
-        - conventions
-        - backend
-        - workflow
+      label: plugin.json URL
+      description: As GitHub shows it, on your default branch or a release tag.
+      placeholder: https://github.com/owner/repo/blob/main/plugin.json
     validations:
       required: true

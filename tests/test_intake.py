@@ -17,40 +17,87 @@ def the_tag_carries_the_manifest(monkeypatch):
 
 def test_parse_form_maps_labels_to_values():
     fields = intake.parse_form((FIXTURES / "valid.md").read_text())
-    assert fields["Plugin name"] == "my-otel-plugin"
-    assert fields["Path inside the repository"] == ""
-    assert fields["Keywords"] == "opentelemetry, tempo, traces"
+    assert fields == {
+        "plugin.json URL": "https://github.com/contoso/my-otel-plugin/blob/main/plugin.json"
+    }
+    assert intake.parse_form("### plugin.json URL\n\n_No response_\n") == {"plugin.json URL": ""}
+
+
+@pytest.mark.parametrize(
+    ("url", "expected"),
+    [
+        (
+            "https://github.com/contoso/my-otel-plugin/blob/main/plugin.json",
+            ("contoso/my-otel-plugin", ""),
+        ),
+        (
+            "https://github.com/Contoso/skills/blob/v1.2.0/plugins/otel/plugin.json",
+            ("Contoso/skills", "plugins/otel"),
+        ),
+        (
+            "https://github.com/contoso/skills/raw/main/plugins/otel/plugin.json",
+            ("contoso/skills", "plugins/otel"),
+        ),
+        (
+            "https://raw.githubusercontent.com/contoso/skills/main/plugins/otel/plugin.json",
+            ("contoso/skills", "plugins/otel"),
+        ),
+        ("https://www.github.com/contoso/skills.git/blob/main/plugin.json", ("contoso/skills", "")),
+        # a percent-encoded path is decoded; the store accepts a space, the pages quote it
+        (
+            "https://github.com/contoso/skills/blob/main/my%20plugins/otel/plugin.json",
+            ("contoso/skills", "my plugins/otel"),
+        ),
+        (
+            "  https://github.com/contoso/my-otel-plugin/blob/main/plugin.json  ",
+            ("contoso/my-otel-plugin", ""),
+        ),
+    ],
+)
+def test_parse_url_gives_the_repository_and_the_path(url, expected):
+    assert intake.parse_url(url) == expected
+
+
+@pytest.mark.parametrize(
+    "url",
+    [
+        "https://github.com/contoso",
+        "https://github.com/contoso/my-otel-plugin",
+        "https://github.com/contoso/my-otel-plugin/tree/main/plugins/otel",
+        "https://github.com/contoso/my-otel-plugin/blob/main/plugins/otel",
+        "https://github.com/contoso/my-otel-plugin/blob/plugin.json",
+        "http://github.com/contoso/my-otel-plugin/blob/main/plugin.json",
+        "https://gitlab.com/contoso/my-otel-plugin/-/blob/main/plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/../plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/./plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/plugin.json?plain=1",
+        "https://github.com/contoso/my-otel-plugin/blob/main/PLUGIN.JSON",
+        "https://github.com/-contoso/my-otel-plugin/blob/main/plugin.json",
+        "https://github.com/contoso/my-otel-plugin/blob/main/a%0ab/plugin.json",
+        "",
+    ],
+)
+def test_parse_url_refuses_what_is_not_a_manifest_url(url):
+    with pytest.raises(ValueError, match="plugin.json URL"):
+        intake.parse_url(url)
 
 
 def test_candidate_from_a_valid_form():
     fields = intake.parse_form((FIXTURES / "valid.md").read_text())
     record, errors = intake.candidate(fields, issue_number=7)
     assert errors == []
-    assert record["name"] == "my-otel-plugin"
-    assert record["repository"] == "contoso/my-otel-plugin"
-    assert record["path"] == ""
-    assert record["keywords"] == ["opentelemetry", "tempo", "traces"]
-    assert record["author"] == {"name": "Contoso", "url": "https://github.com/contoso"}
-    assert record["homepage"] == ""
-    assert record["submitted_in"] == 7
-    assert list(record) == [
-        "name",
-        "description",
-        "category",
-        "repository",
-        "path",
-        "author",
-        "license",
-        "homepage",
-        "keywords",
-        "submitted_in",
-    ]
+    assert record == {"repository": "contoso/my-otel-plugin", "path": "", "submitted_in": 7}
 
 
-def test_candidate_names_a_bad_repository():
+def test_candidate_names_a_bad_url():
     fields = intake.parse_form((FIXTURES / "bad-repository.md").read_text())
     _, errors = intake.candidate(fields, issue_number=7)
-    assert errors == ["GitHub repository: owner/repo"]
+    assert len(errors) == 1 and errors[0].startswith("plugin.json URL: the URL of plugin.json")
+
+
+def test_candidate_names_a_missing_section():
+    _, errors = intake.candidate({"Plugin name": "x"}, issue_number=7)
+    assert errors == ["plugin.json URL: section missing from the form"]
 
 
 def test_resolve_ref_picks_the_latest_release(monkeypatch):
@@ -91,22 +138,22 @@ def test_resolve_ref_unreadable(monkeypatch):
     assert errors == ["GitHub repository: cannot be read (repository not found)"]
 
 
-def test_candidate_refuses_a_comment_terminator():
-    fields = intake.parse_form((FIXTURES / "comment-close.md").read_text())
-    _, errors = intake.candidate(fields, issue_number=7)
-    assert errors == ["Description: must not contain -->"]
-
-
-def test_main_resolves_the_latest_release(tmp_path: Path, capsys, monkeypatch):
+def test_main_resolves_the_latest_release_and_ignores_the_urls_ref(
+    tmp_path: Path, capsys, monkeypatch
+):
     monkeypatch.setattr(intake.gitrepo, "list_tags", lambda repository: TAGS)
     body = tmp_path / "body.md"
-    body.write_text((FIXTURES / "valid.md").read_text())
+    body.write_text((FIXTURES / "valid.md").read_text().replace("/main/", "/some-branch/"))
     assert intake.main(["--body-file", str(body), "--issue", "7", "--json"]) == 0
     data = json.loads(capsys.readouterr().out)
     assert data["errors"] == []
-    assert data["candidate"]["name"] == "my-otel-plugin"
-    assert data["candidate"]["ref"] == "v1.2.0"
-    assert data["candidate"]["sha"] == "b" * 40
+    assert data["candidate"] == {
+        "repository": "contoso/my-otel-plugin",
+        "path": "",
+        "submitted_in": 7,
+        "ref": "v1.2.0",
+        "sha": "b" * 40,
+    }
 
 
 def test_main_reports_the_resolution_errors(tmp_path: Path, capsys, monkeypatch):
@@ -130,7 +177,8 @@ def test_main_does_not_resolve_a_form_with_errors(tmp_path: Path, capsys, monkey
     body = tmp_path / "body.md"
     body.write_text((FIXTURES / "bad-repository.md").read_text())
     assert intake.main(["--body-file", str(body), "--issue", "7", "--json"]) == 1
-    assert json.loads(capsys.readouterr().out)["errors"] == ["GitHub repository: owner/repo"]
+    [error] = json.loads(capsys.readouterr().out)["errors"]
+    assert error.startswith("plugin.json URL")
 
 
 def test_main_no_resolve_keeps_the_form_only(tmp_path: Path, capsys, monkeypatch):
@@ -140,16 +188,5 @@ def test_main_no_resolve_keeps_the_form_only(tmp_path: Path, capsys, monkeypatch
     monkeypatch.setattr(intake.gitrepo, "list_tags", must_not_be_called)
     body = tmp_path / "body.md"
     body.write_text((FIXTURES / "valid.md").read_text())
-    args = ["--body-file", str(body), "--issue", "7", "--json", "--no-resolve"]
-    assert intake.main(args) == 0
-    data = json.loads(capsys.readouterr().out)
-    assert data["errors"] == []
-    assert "ref" not in data["candidate"] and "sha" not in data["candidate"]
-
-
-def test_path_is_refused_by_segment_not_by_substring():
-    fields = intake.parse_form((FIXTURES / "valid.md").read_text())
-    record, errors = intake.candidate({**fields, "Path inside the repository": "a..b"}, 7)
-    assert errors == [] and record["path"] == "a..b"
-    _, errors = intake.candidate({**fields, "Path inside the repository": "a/../b"}, 7)
-    assert errors == ["Path inside the repository: a relative directory"]
+    assert intake.main(["--body-file", str(body), "--issue", "7", "--no-resolve"]) == 0
+    assert capsys.readouterr().out == "candidate at contoso/my-otel-plugin '' \n"
