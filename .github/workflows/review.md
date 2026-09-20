@@ -13,6 +13,11 @@ permissions:
   issues: read
   copilot-requests: write
 engine: copilot
+# the cheapest of the catalog's latest GPT generation; auto resolved to Sonnet and may move.
+# A top-level model also pins the threat-detection job (gh-aw 0.88.7 ignores
+# threat-detection.model): its engine below keeps the detector on its own alias, so the
+# agent and the model that screens its run for an injection are never the same one
+model: gpt-5.6-luna
 tools:
   # read-only shell, for the store's records; gh-aw's strict mode requires it to be explicit at none
   # jq builds the JSON the safe outputs take on stdin, a multi-line comment body among them
@@ -27,6 +32,10 @@ tools:
 network:
   allowed: [defaults, github, agent-plugins.org, opentelemetry.io]
 safe-outputs:
+  threat-detection:
+    engine:
+      id: copilot
+      model: detection
   github-app:
     client-id: ${{ vars.OTELYSSEY_APP_CLIENT_ID }}
     private-key: ${{ secrets.OTELYSSEY_APP_PRIVATE_KEY }}
