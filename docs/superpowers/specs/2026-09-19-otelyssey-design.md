@@ -241,9 +241,10 @@ cannot be told from the path: the ref is one segment (or GitHub's
 Inputs: the intake comment's facts (name, version, repository, path,
 tag, sha), the plugin at the sha (`plugin.json`, the README, every
 `SKILL.md`, `mcp.json` when it exists, and a skill's annex files when
-the `SKILL.md` alone does not settle it: Markdown and JSON only, at
-most twenty files and two hundred lines each), the store, the open and
-closed submission issues. The agent:
+the manifest, the README, the `SKILL.md` files and `mcp.json` leave
+the relevance unsettled: Markdown and JSON under the skill's directory
+only, at most twenty files, two hundred lines and 64 KB each), the
+store, the open and closed submission issues. The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills and README, and states the
