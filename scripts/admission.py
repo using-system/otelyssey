@@ -18,7 +18,12 @@ from pathlib import Path
 from scripts import report, store
 
 BLOCK_RE = re.compile(re.escape(report.CANDIDATE_MARK) + r"(.*?) -->", re.DOTALL)
-RULING_RE = re.compile(r"(?:^|\n)Ruling: admissible - .* in `([^`\n]*)`[ \t]*(?:\n|$)")
+# the documented shape, per line, tolerant of CRLF: a line with two categories or an extra
+# `in` fragment does not match and is refused, never resolved by position
+RULING_RE = re.compile(
+    r"^Ruling: admissible - `[^`\n]*` `[^`\n]*` at `[^`\n]*` in `([^`\n]*)`[ \t\r]*$",
+    re.MULTILINE,
+)
 
 
 def candidate_from_comment(body: str) -> dict:

@@ -260,8 +260,8 @@ category, `admitted_at` and zero `stats` (`scripts/admission.py`),
 refuses a record the review's latest ruling does not name (the ruling's
 first line carries the name, the version, the sha and the category, so
 an issue edited after the ruling is not admitted, and the label alone
-admits nothing), checks the plugin still
-validates at its tag at the record's sha, pushes `admission/<name>`,
+admits nothing), checks the plugin still validates at its tag at the
+record's sha, pushes `admission/<name>`,
 opens the pull request labelled `admission` (`ci.yml` validates the
 record against the store schema), waits for `ci`, squash-merges, runs
 `build.py`, commits the generated artifacts to `main`, and closes the

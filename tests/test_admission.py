@@ -26,6 +26,8 @@ def test_the_category_is_read_from_the_ruling_line():
     assert admission.category_from_ruling("> caution\n\n" + RULING) == "backend"
     two = RULING + RULING.replace("`backend`", "`workflow`")
     assert admission.category_from_ruling(two) == "workflow"
+    assert admission.category_from_ruling(RULING.replace("\n", "\r\n")) == "backend"
+    assert admission.category_from_ruling(RULING.split("\n")[0]) == "backend"
 
 
 @pytest.mark.parametrize(
@@ -34,6 +36,8 @@ def test_the_category_is_read_from_the_ruling_line():
         "Ruling: admissible - `my-otel-plugin` `1.2.0` at `" + "1" * 40 + "`\n",
         RULING.replace("`backend`", "`backends`"),
         RULING.replace("`backend`", "`backend` and `workflow`"),
+        RULING.replace("`backend`", "`backend` in `workflow`"),
+        RULING.replace("`backend`", "`backend`."),
         "Not a ruling in `backend`\n",
     ],
 )
@@ -99,13 +103,16 @@ def main_args(tmp_path: Path, issue: str, comment: str | None = None, ruling: st
 
 
 def test_main_writes_the_canonical_record_and_prints_its_path(tmp_path: Path, capsys):
-    code = admission.main(main_args(tmp_path, "7"))
+    code = admission.main(
+        main_args(tmp_path, "7", ruling=RULING.replace("`backend`", "`workflow`"))
+    )
     assert code == 0
     path = tmp_path / ".store" / "my-otel-plugin.json"
     assert capsys.readouterr().out.strip() == str(path)
     record = json.loads(path.read_text(encoding="utf-8"))
     assert path.read_text(encoding="utf-8") == store.canonical(record)
-    assert record["category"] == "backend"
+    # the ruled category, end to end, not the form's
+    assert record["category"] == "workflow"
     assert store.DATE_RE.match(record["admitted_at"])
     assert store.STAMP_RE.match(record["stats"]["refreshed_at"])
 
