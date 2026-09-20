@@ -75,15 +75,15 @@ def render(
         )
     verdict = "format-ok"
     if validation is None:
-        lines.append("**Plugin at the tag**: not run")
+        lines.append("**Plugin at the ref**: not run")
         verdict = "infra-error"
     elif validation["errors"]:
         sha = (validation.get("sha") or "")[:12] or "unresolved"
-        lines.append(f"**Plugin at the tag `{ref}`**: needs changes (commit `{sha}`)")
+        lines.append(f"**Plugin at `{ref}`**: needs changes (commit `{sha}`)")
         lines += [f"- {e}" for e in validation["errors"]]
         verdict = "needs-changes"
     else:
-        lines.append(f"**Plugin at the tag `{ref}`**: pass (commit `{validation['sha']}`)")
+        lines.append(f"**Plugin at `{ref}`**: pass (commit `{validation['sha']}`)")
     if validation and validation.get("notes"):
         lines += ["", "Notes (informational):"] + [f"- {n}" for n in validation["notes"]]
     if verdict == "format-ok":
@@ -103,7 +103,11 @@ def render(
             elif "unavailable" in statuses:
                 verdict = "infra-error"
     if verdict == "needs-changes":
-        lines += ["", "Fix the plugin at a new release and edit the issue; the checks run again."]
+        lines += [
+            "",
+            "Fix the plugin (a new tag, or a new commit on the default branch) and edit the "
+            "issue; the checks run again.",
+        ]
     elif verdict == "infra-error":
         lines += ["", "The pipeline could not complete on its side; a maintainer re-runs it."]
     else:

@@ -129,19 +129,20 @@ def check_layout(plugin_dir: Path) -> tuple[list[str], list[str]]:
 
 def validate(
     repository: str,
-    tag: str,
+    ref: str,
     path: str,
     expected_name: str,
     expected_version: str,
     workdir: Path,
 ) -> dict:
-    """sha, manifest, errors and notes of the plugin at the tag; never raises on a bad input."""
+    """sha, manifest, errors and notes of the plugin at the ref (a tag, a branch, a full sha);
+    never raises on a bad input."""
     result: dict = {"sha": None, "manifest": {}, "errors": [], "notes": []}
     if path.startswith("/") or ".." in path.split("/"):
         result["errors"].append("path: not a relative directory inside the repository")
         return result
     try:
-        sha = gitrepo.resolve(repository, tag)
+        sha = gitrepo.resolve(repository, ref)
         result["sha"] = sha
         checkout = workdir / "checkout"
         gitrepo.clone_at(repository, sha, checkout)
@@ -150,7 +151,7 @@ def validate(
         return result
     plugin_dir = checkout / path if path else checkout
     if not plugin_dir.is_dir():
-        result["errors"].append(f"path {path!r}: no such directory at {tag}")
+        result["errors"].append(f"path {path!r}: no such directory at {ref}")
         return result
     manifest, errors = check_manifest(plugin_dir, expected_name, expected_version)
     layout_errors, notes = check_layout(plugin_dir)
@@ -161,9 +162,9 @@ def validate(
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(description="validate a plugin at a tag")
+    parser = argparse.ArgumentParser(description="validate a plugin at a ref")
     parser.add_argument("--repository", required=True)
-    parser.add_argument("--tag", required=True)
+    parser.add_argument("--ref", required=True, help="a tag, a branch, or a full commit sha")
     parser.add_argument("--path", default="")
     parser.add_argument("--name", required=True)
     parser.add_argument("--version", default="", help="empty skips the version match")
@@ -171,7 +172,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     workdir = Path(args.workdir) if args.workdir else Path(tempfile.mkdtemp(prefix="otelyssey-"))
-    result = validate(args.repository, args.tag, args.path, args.name, args.version, workdir)
+    result = validate(args.repository, args.ref, args.path, args.name, args.version, workdir)
     if args.json:
         print(json.dumps(result, indent=2))
     else:

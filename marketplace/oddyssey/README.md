@@ -4,7 +4,7 @@ A CLI toolbox for Observability-Driven Development (ODD): coding agents observe 
 
 - Category: `workflow`
 - Repository: [using-system/oddyssey](https://github.com/using-system/oddyssey), the plugin at `marketplace/oddyssey` in it
-- Version: 1.13.0 (tag `v1.13.0`, commit `e7fd9fa96bf7`)
+- Version: 1.13.0 (`v1.13.0`, commit `e7fd9fa96bf7`)
 - Author: [using-system](https://github.com/using-system)
 - License: MIT
 - Keywords: `opentelemetry`, `observability`, `mcp`

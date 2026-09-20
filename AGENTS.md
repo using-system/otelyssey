@@ -80,7 +80,7 @@ agents never write a file: the GitHub MCP server they read through
 strips HTML comments and escapes quotes, so the intake's hidden
 candidate block never reaches them and a visible JSON would reach them
 corrupted. The intake comment states in backticks what the review rules
-on (name, version, repository, path, tag, sha); the hidden block is for
+on (name, version, repository, path, ref, sha); the hidden block is for
 `admission.yml`, which reads the comment through the REST API, intact.
 The admissible ruling's first line names the plugin, its version and
 its sha in backticks, and `admission.yml` admits no record the latest

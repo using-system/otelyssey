@@ -96,8 +96,7 @@ def test_plugin_page_carries_the_facts():
     for fragment in (
         "workflow",
         "https://github.com/using-system/oddyssey",
-        "v1.13.0",
-        "1.13.0",
+        "1.13.0 (`v1.13.0`, commit `111111111111`)",
         "MIT",
         "claude plugin marketplace add using-system/otelyssey",
         "claude plugin install oddyssey@otelyssey",
@@ -124,11 +123,21 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     (entry, badges, blank) = text.splitlines()[2:5]
     assert entry.startswith("- [oddyssey](https://github.com/using-system/oddyssey) by ")
     assert " - " in entry and entry.endswith("[install](marketplace/oddyssey/README.md)  ")
-    kinds = ("v/release", "created-at", "last-commit", "license", "stars", "forks", "watchers")
-    assert badges == "&nbsp;&nbsp;".join(build.badge(k, "using-system/oddyssey") for k in kinds)
+    kinds = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
+    record = records()["oddyssey"]
+    assert badges == "&nbsp;&nbsp;".join(build.badge(k, record) for k in kinds)
+    assert badges.startswith('<img src="https://img.shields.io/badge/version-1.13.0-6b6b6b?')
     assert blank == ""
     assert text.endswith('alt="watchers">\n\n') and "\n\n\n" not in text
     assert "Stars" not in text and "| " not in text
+
+
+def test_version_badge_is_static_and_escapes_shields_separators():
+    record = {**records()["oddyssey"], "version": "1.0.0-rc_1"}
+    assert 'src="https://img.shields.io/badge/version-1.0.0--rc__1-6b6b6b?' in (
+        build.badge("version", record)
+    )
+    assert "github/v/release" not in build.badge("version", record)
 
 
 def test_every_category_has_a_title():

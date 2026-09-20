@@ -1,7 +1,8 @@
 """Turn a submission issue's body (the rendered issue form) into a candidate record.
 
-The form names neither the tag nor the version: the tag is the repository's latest
-release, resolved here; the version is read from plugin.json by the validation.
+The form names neither the ref nor the version: the ref is the repository's latest release
+tag or, without one, its default branch, resolved here; the version is read from plugin.json
+by the validation.
 """
 
 from __future__ import annotations
@@ -95,16 +96,15 @@ def candidate(fields: dict[str, str], issue_number: int) -> tuple[dict, list[str
 
 
 def resolve_ref(repository: str) -> tuple[str, str, list[str]]:
-    """The repository's latest release tag and its commit, or the error naming why there is none."""
+    """The latest release tag and its commit; without one, the default branch and its head."""
     try:
         latest = gitrepo.latest_release(gitrepo.list_tags(repository))
+        if latest is None:
+            latest = gitrepo.default_branch(repository)
     except gitrepo.RepositoryError as error:
         return "", "", [f"GitHub repository: cannot be read ({error})"]
-    if latest is None:
-        error = "GitHub repository: no release tag (the pipeline follows X.Y.Z or vX.Y.Z tags)"
-        return "", "", [error]
-    tag, sha = latest
-    return tag, sha, []
+    ref, sha = latest
+    return ref, sha, []
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -112,16 +112,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--body-file", required=True)
     parser.add_argument("--issue", type=int, required=True)
     parser.add_argument(
-        "--no-resolve", action="store_true", help="skip resolving the repository's latest release"
+        "--no-resolve", action="store_true", help="skip resolving the repository's ref"
     )
     parser.add_argument("--json", action="store_true")
     args = parser.parse_args(argv)
     body = Path(args.body_file).read_text(encoding="utf-8")
     record, errors = candidate(parse_form(body), args.issue)
     if not errors and not args.no_resolve:
-        tag, sha, errors = resolve_ref(record["repository"])
+        ref, sha, errors = resolve_ref(record["repository"])
         if not errors:
-            record["ref"] = tag
+            record["ref"] = ref
             record["sha"] = sha
     if args.json:
         print(json.dumps({"candidate": record, "errors": errors}, indent=2))
