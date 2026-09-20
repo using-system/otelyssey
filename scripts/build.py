@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shlex
 import shutil
 import sys
 from pathlib import Path
@@ -168,6 +169,44 @@ def plugin_page(record: dict) -> str:
         "```\n"
         # Kiro imports a power from its repository's url: a plugin at the root only
         + (f"\nKiro: Import power from GitHub, `{repo_url}`.\n" if not record["path"] else "")
+        + repository_install_lines(record)
+    )
+
+
+def repository_install_lines(record: dict) -> str:
+    """The hosts that install from the plugin's repository, no marketplace read: Hermes Agent
+    pins the commit and takes a subdirectory, OpenClaw's git install takes the root only (a
+    subdirectory goes through a clone of this marketplace, read locally), Mistral Vibe has
+    no install command."""
+    repository = record["repository"]
+    repo_url = f"https://github.com/{repository}"
+    clone_dir = repository.rsplit("/", 1)[1]
+    name, path, sha = record["name"], record["path"], record["sha"]
+    # the store lets a path carry a space or a shell metacharacter: quoted, today's are bare
+    hermes_source = shlex.quote(f"{repository}/{path}" if path else repository)
+    vibe_source = shlex.quote(f"{clone_dir}/{path}" if path else clone_dir)
+    if path:
+        openclaw = (
+            f"git clone https://github.com/{MARKETPLACE_REPO}\n"
+            f"openclaw plugins install {name} --marketplace ./{MARKETPLACE_NAME}\n"
+        )
+    else:
+        openclaw = f"openclaw plugins install git:{repository}@{sha} --force\n"
+    return (
+        "\nHermes Agent:\n\n"
+        "```text\n"
+        f"hermes plugins install {hermes_source} --ref {sha}\n"
+        f"hermes plugins enable {name}\n"
+        "```\n\n"
+        "OpenClaw:\n\n"
+        "```text\n"
+        f"{openclaw}"
+        "```\n\n"
+        "Mistral Vibe:\n\n"
+        "```text\n"
+        f"git clone {repo_url} && git -C {clone_dir} checkout {sha}\n"
+        f"mkdir -p ~/.vibe/plugins/{name} && cp -r {vibe_source}/. ~/.vibe/plugins/{name}\n"
+        "```\n"
     )
 
 

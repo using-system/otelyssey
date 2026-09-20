@@ -49,3 +49,23 @@ VS Code, in `settings.json`:
 ```
 
 Kiro: Import power from GitHub, `https://github.com/langwatch/agent-plugin`.
+
+Hermes Agent:
+
+```text
+hermes plugins install langwatch/agent-plugin --ref 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
+hermes plugins enable langwatch
+```
+
+OpenClaw:
+
+```text
+openclaw plugins install git:langwatch/agent-plugin@5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d --force
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/langwatch/agent-plugin && git -C agent-plugin checkout 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
+mkdir -p ~/.vibe/plugins/langwatch && cp -r agent-plugin/. ~/.vibe/plugins/langwatch
+```

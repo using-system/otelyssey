@@ -49,3 +49,23 @@ VS Code, in `settings.json`:
 ```
 
 Kiro: Import power from GitHub, `https://github.com/dynatrace-oss/dynatrace-managed-mcp`.
+
+Hermes Agent:
+
+```text
+hermes plugins install dynatrace-oss/dynatrace-managed-mcp --ref 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+hermes plugins enable dynatrace-managed-mcp
+```
+
+OpenClaw:
+
+```text
+openclaw plugins install git:dynatrace-oss/dynatrace-managed-mcp@52959ebce94eb5e814f2cf807f8208edf3ee4ca0 --force
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+mkdir -p ~/.vibe/plugins/dynatrace-managed-mcp && cp -r dynatrace-managed-mcp/. ~/.vibe/plugins/dynatrace-managed-mcp
+```

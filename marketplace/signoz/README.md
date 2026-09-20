@@ -47,3 +47,24 @@ VS Code, in `settings.json`:
 ```json
 "chat.plugins.marketplaces": ["using-system/otelyssey"]
 ```
+
+Hermes Agent:
+
+```text
+hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+hermes plugins enable signoz
+```
+
+OpenClaw:
+
+```text
+git clone https://github.com/using-system/otelyssey
+openclaw plugins install signoz --marketplace ./otelyssey
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+mkdir -p ~/.vibe/plugins/signoz && cp -r agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
+```

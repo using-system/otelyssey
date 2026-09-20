@@ -47,3 +47,24 @@ VS Code, in `settings.json`:
 ```json
 "chat.plugins.marketplaces": ["using-system/otelyssey"]
 ```
+
+Hermes Agent:
+
+```text
+hermes plugins install BastiDood/skills/plugins/observability --ref 9dfab1713cb24ccb515563de166def3239e92f1a
+hermes plugins enable observability
+```
+
+OpenClaw:
+
+```text
+git clone https://github.com/using-system/otelyssey
+openclaw plugins install observability --marketplace ./otelyssey
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+mkdir -p ~/.vibe/plugins/observability && cp -r skills/plugins/observability/. ~/.vibe/plugins/observability
+```
