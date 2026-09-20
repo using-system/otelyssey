@@ -161,14 +161,15 @@ that no pull request against `.store/` is accepted from a contributor.
    repository at that sha (shallow, no credentials), checks that
    `<path>/plugin.json` exists and validates against the Agent Plugins
    1.0.0 schema (fetched once, cached under `tests/fixtures/`), that
-   the `name` matches the submission, that it carries a `version` (the
-   record's version is read from `plugin.json`), and
-   that every `skills/<x>/` carries a `SKILL.md`; directories the
-   format does not define (`agents/`, `commands/`, `hooks/`, a
-   `.claude-plugin/` carried next to `plugin.json`) are reported as
-   notes, never as errors: real plugins ship them; a plain file next
-   to `plugin.json` is never noted (a plugin at its repository's root
-   sits next to all of the repository's files, #31). A `plugin.json`
+   the `name` matches the submission, and that it carries a `version`
+   (the record's version is read from `plugin.json`). A `skills/<x>/`
+   without `SKILL.md` (not a skill; a client skips it, #63) and the
+   directories the format does not define (`agents/`, `commands/`,
+   `hooks/`, a `.claude-plugin/` carried next to `plugin.json`) are
+   reported as notes, never as errors: real plugins ship them; a plain
+   file next to `plugin.json` is never noted (a plugin at its
+   repository's root sits next to all of the repository's files, #31).
+   A `plugin.json`
    missing at the root is an error, named as the legacy layout when
    `.claude-plugin/plugin.json` exists.
 3. `scripts/smoke.py` writes a temporary marketplace holding a copy
