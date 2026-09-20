@@ -49,3 +49,23 @@ VS Code, in `settings.json`:
 ```
 
 Kiro: Import power from GitHub, `https://github.com/amiable-dev/skills-telemetry`.
+
+Hermes Agent:
+
+```text
+hermes plugins install amiable-dev/skills-telemetry --ref a95d23afc26150737a4eb6894b96a7235fa8f8da
+hermes plugins enable stdtel
+```
+
+OpenClaw:
+
+```text
+openclaw plugins install git:amiable-dev/skills-telemetry@a95d23afc26150737a4eb6894b96a7235fa8f8da --force
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+cp -r skills-telemetry ~/.vibe/plugins/stdtel
+```

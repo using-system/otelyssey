@@ -117,6 +117,28 @@ def test_plugin_page_carries_the_facts():
     )
 
 
+def test_repository_install_lines_pin_the_commit_and_follow_the_path():
+    record = records()["oddyssey"]
+    sha = record["sha"]
+    page = build.plugin_page(record)
+    assert f"hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref {sha}" in page
+    assert "hermes plugins enable oddyssey" in page
+    # OpenClaw's git install has no subdirectory form: the marketplace, cloned, read locally
+    assert "git clone https://github.com/using-system/otelyssey\n" in page
+    assert "openclaw plugins install oddyssey --marketplace ./otelyssey" in page
+    assert "openclaw plugins install git:" not in page
+    assert (
+        f"git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout {sha}"
+        in page
+    )
+    assert "cp -r oddyssey/marketplace/oddyssey ~/.vibe/plugins/oddyssey" in page
+    root = build.plugin_page({**record, "path": ""})
+    assert f"hermes plugins install using-system/oddyssey --ref {sha}" in root
+    assert f"openclaw plugins install git:using-system/oddyssey@{sha} --force" in root
+    assert "--marketplace" not in root
+    assert "cp -r oddyssey ~/.vibe/plugins/oddyssey" in root
+
+
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
     assert text.startswith("### Workflows\n\n")

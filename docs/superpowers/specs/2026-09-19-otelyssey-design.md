@@ -12,9 +12,14 @@ Claude Code and VS Code read `.claude-plugin/marketplace.json`: the
 generator writes the same content at both places), Codex CLI
 (`.agents/plugins/marketplace.json`, the same generator, with the
 git-backed sources Codex accepts), APM (`apm marketplace add`, the
-Claude Code schema, an Agent Plugins package for its `copilot` target)
-and Kiro (a plugin at its repository's root, imported by url) through
-the install lines on each plugin's page.
+Claude Code schema, an Agent Plugins package for its `copilot` target),
+Kiro (a plugin at its repository's root, imported by url), Hermes Agent
+(`hermes plugins install owner/repo[/path] --ref <sha>`), OpenClaw
+(`git:owner/repo@<sha>` for a plugin at the root; a clone of this
+repository read as a local marketplace otherwise, a remote one refusing
+git-backed entries) and Mistral Vibe (a directory under
+`~/.vibe/plugins/`, copied from a clone at the commit) through the
+install lines on each plugin's page.
 
 The existing marketplaces are curated by hand and age. This one is run
 by the repository: a contributor submits a plugin **once**, through
@@ -124,8 +129,9 @@ idempotently:
 - `marketplace/<name>/README.md`: the plugin's page: description,
   category, repository link, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code, Copilot
-  CLI, Codex CLI, APM, VS Code and, for a plugin at its repository's
-  root, Kiro, the issue it was admitted from;
+  CLI, Codex CLI, APM, VS Code, Hermes Agent, OpenClaw, Mistral Vibe
+  and, for a plugin at its repository's root, Kiro, the issue it was
+  admitted from;
 - the README's plugin list, between two markers: one subsection per
   category holding plugins, one entry per plugin (the plugin linked to
   its repository, the author, the description, a link to its page) and

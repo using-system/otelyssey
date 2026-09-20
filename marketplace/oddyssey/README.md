@@ -47,3 +47,24 @@ VS Code, in `settings.json`:
 ```json
 "chat.plugins.marketplaces": ["using-system/otelyssey"]
 ```
+
+Hermes Agent:
+
+```text
+hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref e7fd9fa96bf752f1caf31d4abce207fa6b40c107
+hermes plugins enable oddyssey
+```
+
+OpenClaw:
+
+```text
+git clone https://github.com/using-system/otelyssey
+openclaw plugins install oddyssey --marketplace ./otelyssey
+```
+
+Mistral Vibe:
+
+```text
+git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout e7fd9fa96bf752f1caf31d4abce207fa6b40c107
+cp -r oddyssey/marketplace/oddyssey ~/.vibe/plugins/oddyssey
+```
