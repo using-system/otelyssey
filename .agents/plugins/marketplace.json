@@ -34,6 +34,37 @@
       "homepage": "https://docs.langwatch.ai"
     },
     {
+      "name": "observability",
+      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation: one language-agnostic skill on spans as operation records, named log events, attributes under the OpenTelemetry semantic conventions, and exception recording, for adding or reviewing instrumentation in any OpenTelemetry SDK.",
+      "version": "0.1.7",
+      "keywords": [
+        "opentelemetry",
+        "instrumentation",
+        "semantic-conventions",
+        "spans",
+        "logs",
+        "best-practices"
+      ],
+      "author": {
+        "name": "Basti Ortiz",
+        "email": "ortiz@bastidood.dev",
+        "url": "https://bastidood.dev/"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/BastiDood/skills.git",
+        "path": "./plugins/observability",
+        "ref": "main",
+        "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://github.com/BastiDood/skills#readme"
+    },
+    {
       "name": "oddyssey",
       "description": "A CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack, or remote ones on any OpenTelemetry backend, and feed the next spec-driven improvement loop. Skills and agents to instrument a codebase with OpenTelemetry, benchmark it with k6, observe a run through its metrics, traces, logs and profiles, and verify that a fix landed. Submitted through the first end-to-end run (#5).",
       "version": "1.13.0",

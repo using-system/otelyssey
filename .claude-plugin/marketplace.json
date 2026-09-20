@@ -33,6 +33,34 @@
       "homepage": "https://docs.langwatch.ai"
     },
     {
+      "name": "observability",
+      "source": {
+        "source": "github",
+        "repo": "BastiDood/skills",
+        "path": "plugins/observability",
+        "ref": "main",
+        "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
+      },
+      "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation: one language-agnostic skill on spans as operation records, named log events, attributes under the OpenTelemetry semantic conventions, and exception recording, for adding or reviewing instrumentation in any OpenTelemetry SDK.",
+      "version": "0.1.7",
+      "category": "instrumentation",
+      "keywords": [
+        "opentelemetry",
+        "instrumentation",
+        "semantic-conventions",
+        "spans",
+        "logs",
+        "best-practices"
+      ],
+      "license": "MPL-2.0",
+      "author": {
+        "name": "Basti Ortiz",
+        "email": "ortiz@bastidood.dev",
+        "url": "https://bastidood.dev/"
+      },
+      "homepage": "https://github.com/BastiDood/skills#readme"
+    },
+    {
       "name": "oddyssey",
       "source": {
         "source": "github",
