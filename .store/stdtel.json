@@ -3,7 +3,7 @@
   "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
   "categories": [
     "instrumentation",
-    "observability"
+    "backend"
   ],
   "repository": "amiable-dev/skills-telemetry",
   "path": "",
