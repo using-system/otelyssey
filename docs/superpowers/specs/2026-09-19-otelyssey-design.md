@@ -239,8 +239,11 @@ cannot be told from the path: the ref is one segment (or GitHub's
 ### review (gh-aw, engine copilot, on `format-ok` labelled)
 
 Inputs: the intake comment's facts (name, version, repository, path,
-tag, sha), the plugin's README and `plugin.json` at the sha, the store,
-the open and closed submission issues. The agent:
+tag, sha), the plugin at the sha (`plugin.json`, the README, every
+`SKILL.md`, `mcp.json` when it exists, and a skill's annex files when
+the `SKILL.md` alone does not settle it: Markdown and JSON only, at
+most twenty files and two hundred lines each), the store, the open and
+closed submission issues. The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills and README, and states the
