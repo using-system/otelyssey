@@ -259,6 +259,11 @@ def test_resync_keeps_a_field_neither_source_gives_and_says_so():
         "plugin.json: no license, and the repository has none either: add a license",
     ]
     assert updated["description"] == "typed in the form" and updated["license"] == "MIT"
-    # the sources that did answer still win
+    # the sources that did answer still win, and an empty keywords list is a derived value
     assert updated["author"] == {"name": "contoso", "url": "https://github.com/contoso"}
-    assert updated["keywords"] == ["typed"]
+    assert updated["keywords"] == []
+    # an author from neither source: the record's is kept, not an empty one
+    updated, kept = derive.resync(record, bare, derive.metadata({}))
+    assert updated["author"] == {"name": "Typed"}
+    assert kept[-1].startswith("plugin.json: no author")
+    assert store.validate_record(updated) == []

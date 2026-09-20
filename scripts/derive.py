@@ -123,11 +123,13 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
 
 
 DERIVED = ("description", "license", "homepage", "author", "keywords")
+MISSING = "plugin.json: no "
 
 
 def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
     """An admitted record with its derived fields read again from its manifest and its
-    repository's metadata; a field neither gives keeps the record's value, and is reported.
+    repository's metadata. A description, a license or an author that neither gives keeps
+    the record's value, and is reported; an empty homepage or keywords is a derived value.
 
     What the record pins (name, version, ref, sha) and what the pipeline decided (category,
     submitted_in, admitted_at, stats) are untouched.
@@ -135,11 +137,9 @@ def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
     candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}
     validation = {"sha": record["sha"], "manifest": manifest}
     derived, errors, _ = derive(candidate, validation, meta)
-    kept = [e for e in errors if e.startswith("plugin.json: no ")]
-    updated = dict(record)
-    for field in DERIVED:
-        if derived[field] or not kept:
-            updated[field] = derived[field]
+    kept = [e for e in errors if e.startswith(MISSING)]
+    missing = {e.removeprefix(MISSING).split(",", 1)[0] for e in kept}
+    updated = {**record, **{f: derived[f] for f in DERIVED if f not in missing}}
     return updated, kept
 
 
