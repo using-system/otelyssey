@@ -201,10 +201,10 @@ def plugin_page(record: dict) -> str:
 
 
 def repository_install_lines(record: dict) -> str:
-    """The hosts that install from the plugin's repository, no marketplace read: Hermes Agent
-    pins the commit and takes a subdirectory, OpenClaw's git install takes the root only (a
-    subdirectory goes through a clone of this marketplace, read locally), Mistral Vibe has
-    no install command."""
+    """The hosts that install from the plugin's repository: Hermes Agent opens with the
+    marketplace's pack (every plugin, pinned), then pins this plugin's commit and takes a
+    subdirectory; OpenClaw's git install takes the root only (a subdirectory goes through a
+    clone of this marketplace, read locally); Mistral Vibe has no install command."""
     repository = record["repository"]
     repo_url = f"https://github.com/{repository}"
     clone_dir = repository.rsplit("/", 1)[1]
@@ -220,9 +220,9 @@ def repository_install_lines(record: dict) -> str:
     else:
         openclaw = f"openclaw plugins install git:{repository}@{sha} --force\n"
     return (
-        # the pack line first, like the marketplace line of the other blocks
         "\nHermes Agent:\n\n"
         "```text\n"
+        # the pack, every plugin pinned, first; the two lines below install this one alone
         f"hermes plugins pack install {HERMES_PACK_URL}\n"
         f"hermes plugins install {hermes_source} --ref {sha}\n"
         f"hermes plugins enable {name}\n"

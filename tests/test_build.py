@@ -182,6 +182,12 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
     assert "cp -r 'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
 
 
+def test_readme_install_block_carries_the_pack_url():
+    # the README's head is prose: the literal there must not drift from the constant
+    readme = (FIXTURES.parent.parent / "README.md").read_text(encoding="utf-8")
+    assert build.HERMES_PACK_URL in readme
+
+
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
     assert text.startswith("### Workflows\n\n")
