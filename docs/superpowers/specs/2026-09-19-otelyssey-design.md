@@ -161,13 +161,14 @@ idempotently:
   CLI, Codex CLI, Grok Build, APM, VS Code, Hermes Agent, OpenClaw,
   Mistral Vibe and, for a plugin at its repository's root, Kiro;
 - the README's plugin list, between two markers: one subsection per
-  principal category holding plugins, one entry per plugin (the plugin
-  linked to its page, the author, the description, its other
-  categories) and a line of live shields.io badges below it, anchored
-  at `#` (GitHub links a bare image to itself, and drops an anchor
-  without href): version, created, last commit, license, stars, forks,
-  watchers. The counts the store carries refresh the plugin's page, not
-  the README, which changes only when a record does.
+  principal category holding plugins, headed by a pictogram and a
+  one-line tagline; one entry per plugin (the repository owner's GitHub
+  avatar, the plugin linked to its page, the author, the description,
+  its other categories) and a line of four live shields.io badges below
+  it, each its own color, anchored at `#` (GitHub links a bare image to
+  itself, and drops an anchor without href): stars, version, last
+  commit, license. The counts the store carries refresh the plugin's
+  page, not the README, which changes only when a record does.
 
 A run of `build.py` on a store that did not change produces no diff.
 
