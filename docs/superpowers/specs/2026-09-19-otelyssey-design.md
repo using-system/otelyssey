@@ -256,7 +256,12 @@ tag, sha), the plugin at the sha (`plugin.json`, the README, every
 the manifest, the README, the `SKILL.md` files and `mcp.json` leave
 the relevance unsettled: Markdown and JSON under the skill's directory
 only, at most twenty files, two hundred lines and 64 KB each), the
-store, the open and closed submission issues. The agent:
+store, the open and closed submission issues, and the vendor registry
+read with the `web_fetch` tool (the shell's allowlist has no `curl`: on
+#103 and #112 a `curl` was refused and the agent asked the contributor
+instead; the page's source, `data/ecosystem/vendors.yaml` of
+`open-telemetry/opentelemetry.io`, read through GitHub by its path and
+only when the page cannot be fetched, is the fallback). The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills, `mcp.json` and README, and states the
