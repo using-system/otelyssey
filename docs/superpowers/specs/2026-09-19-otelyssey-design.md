@@ -260,8 +260,8 @@ store, the open and closed submission issues, and the vendor registry
 read with the `web_fetch` tool (the shell's allowlist has no `curl`: on
 #103 and #112 a `curl` was refused and the agent asked the contributor
 instead; the page's source, `data/ecosystem/vendors.yaml` of
-`open-telemetry/opentelemetry.io`, read through GitHub, is the
-fallback). The agent:
+`open-telemetry/opentelemetry.io`, read through GitHub by its path and
+only when the page cannot be fetched, is the fallback). The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills, `mcp.json` and README, and states the
