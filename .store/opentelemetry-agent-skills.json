@@ -1,0 +1,35 @@
+{
+  "name": "opentelemetry-agent-skills",
+  "description": "Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream sources: SDK setup per language, the Collector and OCB, OTTL, declarative configuration, semantic conventions, upgrades and migrations.",
+  "categories": [
+    "instrumentation",
+    "collector"
+  ],
+  "repository": "ollygarden/opentelemetry-agent-skills",
+  "path": "",
+  "ref": "main",
+  "sha": "cbdb25cd88ef66d086bc39fed8180b13bfb91e70",
+  "version": "1.0.0",
+  "author": {
+    "name": "OllyGarden",
+    "url": "https://github.com/ollygarden"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/ollygarden/opentelemetry-agent-skills",
+  "keywords": [
+    "opentelemetry",
+    "otel",
+    "observability",
+    "collector",
+    "semantic-conventions",
+    "skills"
+  ],
+  "submitted_in": 110,
+  "admitted_at": "2026-09-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-21T19:01:29Z"
+  }
+}
