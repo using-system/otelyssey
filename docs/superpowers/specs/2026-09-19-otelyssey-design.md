@@ -257,10 +257,11 @@ the manifest, the README, the `SKILL.md` files and `mcp.json` leave
 the relevance unsettled: Markdown and JSON under the skill's directory
 only, at most twenty files, two hundred lines and 64 KB each), the
 store, the open and closed submission issues, and the vendor registry
-read with the web-fetch tool (the shell has no network: on #103 and
-#112 a `curl` was refused and the agent asked the contributor instead;
-the registry's source under `data/registry/` of
-`open-telemetry/opentelemetry.io` is the fallback). The agent:
+read with the `web_fetch` tool (the shell's allowlist has no `curl`: on
+#103 and #112 a `curl` was refused and the agent asked the contributor
+instead; the page's source, `data/ecosystem/vendors.yaml` of
+`open-telemetry/opentelemetry.io`, read through GitHub, is the
+fallback). The agent:
 
 - rules on **relevance** to OpenTelemetry in the broad sense, from the
   plugin's own description, skills, `mcp.json` and README, and states the
