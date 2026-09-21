@@ -186,7 +186,7 @@
     {
       "name": "signoz",
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.9.200",
+      "version": "2026.9.1700",
       "keywords": [
         "signoz",
         "opentelemetry",
@@ -205,7 +205,7 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "./plugins/signoz",
         "ref": "main",
-        "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
+        "sha": "35fe186903e436950056b39d19ee83668b9f5f89"
       },
       "policy": {
         "installation": "AVAILABLE",

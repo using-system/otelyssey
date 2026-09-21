@@ -4,7 +4,7 @@ Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts
 
 - Repository: [SigNoz/agent-skills](https://github.com/SigNoz/agent-skills), the plugin at `plugins/signoz` in it
 - Categories: `backend`
-- Version: 2026.9.200 (`main`, commit `4cdc848eb480`)
+- Version: 2026.9.1700 (`main`, commit `35fe186903e4`)
 - Author: [SigNoz](https://signoz.io)
 - License: MIT
 - Keywords: `signoz`, `opentelemetry`, `observability`, `mcp`, `clickhouse`, `tracing`, `logging`
@@ -58,20 +58,20 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 35fe186903e436950056b39d19ee83668b9f5f89
 hermes plugins enable signoz
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 35fe186903e436950056b39d19ee83668b9f5f89
 openclaw plugins install ./agent-skills/plugins/signoz --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 35fe186903e436950056b39d19ee83668b9f5f89
 mkdir -p ~/.vibe/plugins/signoz && cp -r ./agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
 ```
