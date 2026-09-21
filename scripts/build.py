@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import shlex
 import shutil
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from scripts import store
 
@@ -24,10 +25,43 @@ CATEGORY_TITLES = {
     "backend": "Backends",
     "observability": "Observability",
 }
+CATEGORY_ICONS = {
+    "instrumentation": "🧭",
+    "collector": "🚢",
+    "backend": "🏛️",
+    "observability": "🔭",
+}
+CATEGORY_TAGLINES = {
+    "instrumentation": "Put the telemetry in: SDKs, semantic conventions, instrumentation advice.",
+    "collector": "Route it: the Collector, its configuration, OTTL, pipelines.",
+    "backend": "Talk to a backend: query it, its dashboards, alerts and issues.",
+    "observability": "Read it back: observe a run through its telemetry, wherever it lands.",
+}
 # live, from GitHub through shields.io: the README needs no refresh when a count moves; the
-# version is the record's, a repository releases with or without a tag
-BADGES = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
-BADGE_STYLE = "style=flat-square&labelColor=2b2b2b&color=6b6b6b"
+# version is the record's, a repository releases with or without a tag. Each badge its color;
+# the counts a visitor does not need (created-at, forks, watchers) stay on the plugin page
+STAR_COLOR = "e3b341"
+VERSION_COLOR = "3b7dd8"
+# the stars badge is a star and the count, no word: shields takes a custom logo as a data
+# uri, this one a yellow star, and an empty label leaves the logo alone on the left
+STAR_LOGO = (
+    "data:image/svg+xml;base64,"
+    + base64.b64encode(
+        (
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
+            f'<path fill="#{STAR_COLOR}" d="M12 1l3.4 7 7.6 1.1-5.5 5.4 1.3 7.6L12 18.5 '
+            '5.2 22.1l1.3-7.6L1 9.1 8.6 8z"/></svg>'
+        ).encode()
+    ).decode()
+)
+BADGES = {
+    "stars": urlencode({"label": "", "logo": STAR_LOGO, "color": STAR_COLOR}),
+    "version": f"color={VERSION_COLOR}",
+    "last-commit": "color=2ea44f",
+    "license": "color=6b6b6b",
+}
+BADGE_STYLE = "style=flat-square&labelColor=2b2b2b"
+AVATAR_SIZE = 20
 
 
 def source_of(record: dict) -> dict:
@@ -240,18 +274,29 @@ def repository_install_lines(record: dict) -> str:
 def badge(kind: str, record: dict) -> str:
     """A badge that goes nowhere: GitHub links a bare image to itself (and drops an anchor
     without href), so the anchor points at `#`, the nearest thing to no link."""
+    style = f"{BADGE_STYLE}&{BADGES[kind]}"
     if kind == "version":
         # shields' static badge: a dash or an underscore in the message is doubled
         message = record["version"].replace("-", "--").replace("_", "__")
-        src = f"https://img.shields.io/badge/version-{quote(message)}-6b6b6b?{BADGE_STYLE}"
+        src = f"https://img.shields.io/badge/version-{quote(message)}-{VERSION_COLOR}?{style}"
     else:
-        src = f"https://img.shields.io/github/{kind}/{record['repository']}?{BADGE_STYLE}"
+        src = f"https://img.shields.io/github/{kind}/{record['repository']}?{style}"
     return f'<a href="#"><img src="{src}" alt="{kind}"></a>'
 
 
+def avatar(record: dict) -> str:
+    """The organisation's picture, GitHub's own for the repository's owner (the store's
+    repository rule keeps the owner to letters, digits and dashes)."""
+    owner = record["repository"].split("/")[0]
+    return (
+        f'<img src="https://github.com/{owner}.png?size={2 * AVATAR_SIZE}" '
+        f'width="{AVATAR_SIZE}" height="{AVATAR_SIZE}" alt="">'
+    )
+
+
 def readme_entry(record: dict) -> str:
-    """One list item: the plugin linked to its page, its author, its description; its badges
-    below."""
+    """One list item: the owner's avatar, the plugin linked to its page, its author, its
+    description; its badges below."""
     author = record["author"]
     author_name = text(author["name"])
     author_text = f"[{author_name}]({author['url']})" if author.get("url") else author_name
@@ -259,8 +304,8 @@ def readme_entry(record: dict) -> str:
     others = ", ".join(CATEGORY_TITLES[c] for c in record["categories"][1:])
     also = f" · also in {others}" if others else ""
     return (
-        f"- [{record['name']}](marketplace/{record['name']}/README.md) by {author_text} - "
-        f"{text(record['description'])}{also}  \n"
+        f"- {avatar(record)} **[{record['name']}](marketplace/{record['name']}/README.md)** "
+        f"by {author_text} — {text(record['description'])}{also}  \n"
         + "&nbsp;&nbsp;".join(badge(kind, record) for kind in BADGES)
         + "\n\n"
     )
@@ -276,7 +321,10 @@ def readme_list(records: dict[str, dict]) -> str:
         names = sorted(name for name, r in records.items() if r["categories"][0] == category)
         if names:
             entries = "".join(readme_entry(records[name]) for name in names)
-            sections.append(f"### {CATEGORY_TITLES[category]}\n\n{entries}")
+            sections.append(
+                f"### {CATEGORY_ICONS[category]} {CATEGORY_TITLES[category]}\n\n"
+                f"{CATEGORY_TAGLINES[category]}\n\n{entries}"
+            )
     return "".join(sections)
 
 

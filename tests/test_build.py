@@ -198,38 +198,50 @@ def test_readme_install_block_carries_the_pack_url():
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
     # listed once, under the principal category; the other named in the line
-    assert text.startswith("### Observability\n\n")
-    assert "### Instrumentation" not in text
-    (entry, badges, blank) = text.splitlines()[2:5]
-    # the name links to the page, not to the repository; the badges link nowhere
-    assert entry.startswith("- [oddyssey](marketplace/oddyssey/README.md) by ")
-    assert " - " in entry and entry.endswith(" · also in Instrumentation  ")
+    assert text.startswith("### 🔭 Observability\n\nRead it back: ")
+    assert f"### {build.CATEGORY_ICONS['instrumentation']} Instrumentation" not in text
+    (tagline, blank_after_tagline, entry, badges, blank) = text.splitlines()[2:7]
+    assert tagline == build.CATEGORY_TAGLINES["observability"] and blank_after_tagline == ""
+    # the owner's avatar, then the name linked to the page, not to the repository
+    assert entry.startswith(
+        '- <img src="https://github.com/using-system.png?size=40" width="20" height="20" '
+        'alt=""> **[oddyssey](marketplace/oddyssey/README.md)** by '
+    )
+    assert " — " in entry and entry.endswith(" · also in Instrumentation  ")
     assert "https://github.com/using-system/oddyssey" not in entry
     assert "[install]" not in text
-    assert badges.count('<a href="#">') == 7 and badges.endswith('alt="watchers"></a>')
+    # four badges, each its color, none a link
+    assert badges.count('<a href="#">') == 4 and badges.endswith('alt="license"></a>')
     single = {**records()["oddyssey"], "categories": ["observability"]}
     assert "also" not in build.readme_entry(single)
-    kinds = ("version", "created-at", "last-commit", "license", "stars", "forks", "watchers")
+    kinds = ("stars", "version", "last-commit", "license")
     record = records()["oddyssey"]
     assert badges == "&nbsp;&nbsp;".join(build.badge(k, record) for k in kinds)
+    # the stars badge: a star drawn by shields from an inline svg, no word, the count
     assert badges.startswith(
-        '<a href="#"><img src="https://img.shields.io/badge/version-1.13.0-6b6b6b?'
+        '<a href="#"><img src="https://img.shields.io/github/stars/using-system/oddyssey?'
+        "style=flat-square&labelColor=2b2b2b&label=&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2C"
     )
+    assert "&color=e3b341" in badges and "logo=github" not in badges
+    assert "color=3b7dd8" in badges and "color=2ea44f" in badges and "color=6b6b6b" in badges
+    for absent in ("created-at", "forks", "watchers"):
+        assert absent not in text
     assert blank == ""
-    assert text.endswith('alt="watchers"></a>\n\n') and "\n\n\n" not in text
+    assert text.endswith('alt="license"></a>\n\n') and "\n\n\n" not in text
     assert "Stars" not in text and "| " not in text
 
 
 def test_version_badge_is_static_and_escapes_shields_separators():
     record = {**records()["oddyssey"], "version": "1.0.0-rc_1"}
-    assert 'src="https://img.shields.io/badge/version-1.0.0--rc__1-6b6b6b?' in (
+    assert 'src="https://img.shields.io/badge/version-1.0.0--rc__1-3b7dd8?' in (
         build.badge("version", record)
     )
     assert "github/v/release" not in build.badge("version", record)
 
 
-def test_every_category_has_a_title():
-    assert set(build.CATEGORY_TITLES) == set(store.CATEGORIES)
+def test_every_category_has_a_title_an_icon_and_a_tagline():
+    for table in (build.CATEGORY_TITLES, build.CATEGORY_ICONS, build.CATEGORY_TAGLINES):
+        assert set(table) == set(store.CATEGORIES)
 
 
 def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_ones():
@@ -238,12 +250,13 @@ def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_one
     third = {**first, "name": "col-a", "categories": ["collector"], "repository": "a/col-a"}
     text = build.readme_list({"oddyssey": first, "col-b": second, "col-a": third})
     headings = [line for line in text.splitlines() if line.startswith("### ")]
-    assert headings == ["### Collector", "### Observability"]
-    # two entries in one category: name order, one blank line between them
+    assert headings == ["### 🚢 Collector", "### 🔭 Observability"]
+    # two entries in one category, after the tagline: name order, one blank line between them
     lines = text.splitlines()
-    assert lines[2].startswith("- [col-a](") and lines[3].startswith("<a ") and lines[4] == ""
-    assert lines[5].startswith("- [col-b](") and lines[6].startswith("<a ") and lines[7] == ""
-    assert lines[8] == "### Observability"
+    assert lines[2] == build.CATEGORY_TAGLINES["collector"] and lines[3] == ""
+    assert "**[col-a](" in lines[4] and lines[5].startswith("<a ") and lines[6] == ""
+    assert "**[col-b](" in lines[7] and lines[8].startswith("<a ") and lines[9] == ""
+    assert lines[10] == "### 🔭 Observability"
 
 
 def test_readme_list_of_an_empty_store_says_so():
@@ -254,9 +267,9 @@ def test_readme_list_escapes_markdown_in_the_free_text():
     record = dict(records()["oddyssey"])
     record["description"] = "a [b](c) <d>\ne"
     record["author"] = {"name": "x_y"}
-    entry = build.readme_list({"oddyssey": record}).splitlines()[2]
+    entry = build.readme_list({"oddyssey": record}).splitlines()[4]
     assert "a \\[b\\](c) \\<d\\> e" in entry
-    assert " by x\\_y - " in entry
+    assert " by x\\_y — " in entry
 
 
 def test_splice_replaces_only_between_markers():
