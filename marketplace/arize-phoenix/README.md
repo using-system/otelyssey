@@ -65,13 +65,13 @@ hermes plugins enable arize-phoenix
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/otelyssey
-openclaw plugins install arize-phoenix --marketplace ./otelyssey
+git clone https://github.com/Arize-ai/phoenix && git -C phoenix checkout 767847c3386492f9783b623cf78e3eee47d0cea3
+openclaw plugins install ./phoenix/plugins/codex/arize-phoenix --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
 git clone https://github.com/Arize-ai/phoenix && git -C phoenix checkout 767847c3386492f9783b623cf78e3eee47d0cea3
-mkdir -p ~/.vibe/plugins/arize-phoenix && cp -r phoenix/plugins/codex/arize-phoenix/. ~/.vibe/plugins/arize-phoenix
+mkdir -p ~/.vibe/plugins/arize-phoenix && cp -r ./phoenix/plugins/codex/arize-phoenix/. ~/.vibe/plugins/arize-phoenix
 ```

@@ -67,12 +67,13 @@ hermes plugins enable dynatrace-managed-mcp
 OpenClaw:
 
 ```text
-openclaw plugins install git:dynatrace-oss/dynatrace-managed-mcp@52959ebce94eb5e814f2cf807f8208edf3ee4ca0 --force
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+openclaw plugins install ./dynatrace-managed-mcp --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
 git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
-mkdir -p ~/.vibe/plugins/dynatrace-managed-mcp && cp -r dynatrace-managed-mcp/. ~/.vibe/plugins/dynatrace-managed-mcp
+mkdir -p ~/.vibe/plugins/dynatrace-managed-mcp && cp -r ./dynatrace-managed-mcp/. ~/.vibe/plugins/dynatrace-managed-mcp
 ```

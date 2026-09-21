@@ -65,13 +65,13 @@ hermes plugins enable signoz
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/otelyssey
-openclaw plugins install signoz --marketplace ./otelyssey
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
+openclaw plugins install ./agent-skills/plugins/signoz --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
 git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 4cdc848eb480f02bc07d06cb8d4f8486f635cbd6
-mkdir -p ~/.vibe/plugins/signoz && cp -r agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
+mkdir -p ~/.vibe/plugins/signoz && cp -r ./agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
 ```

@@ -67,12 +67,13 @@ hermes plugins enable sumo-logic
 OpenClaw:
 
 ```text
-openclaw plugins install git:SumoLogic/sumologic-ai-plugins@f905b914984fabb5e0571290eafd3013c277d9b1 --force
+git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout f905b914984fabb5e0571290eafd3013c277d9b1
+openclaw plugins install ./sumologic-ai-plugins --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
 git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout f905b914984fabb5e0571290eafd3013c277d9b1
-mkdir -p ~/.vibe/plugins/sumo-logic && cp -r sumologic-ai-plugins/. ~/.vibe/plugins/sumo-logic
+mkdir -p ~/.vibe/plugins/sumo-logic && cp -r ./sumologic-ai-plugins/. ~/.vibe/plugins/sumo-logic
 ```
