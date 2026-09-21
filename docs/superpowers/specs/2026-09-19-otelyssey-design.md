@@ -136,10 +136,16 @@ idempotently:
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
   content: `name: otelyssey`, `owner: {"name": "using-system", "url":
   ...}`, one entry per record with
-  `source: {"source": "github", "repo": <repository>, "path": <path>
-  when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
-  accept; Copilot CLI rejects a `git-subdir` source, verified
-  2026-09-19),
+  `source: {"source": "url", "url": https://github.com/<repository>.git,
+  "path": <path> when set, "ref": <ref>, "sha": <sha>}` (the one form
+  both hosts accept and clone over https, checking out the sha; a
+  `github` source Claude Code clones over ssh, which fails without a
+  GitHub key; Copilot CLI rejects a `git-subdir` source, Claude Code a
+  `git` one; verified 2026-09-21 under an isolated HOME without a key:
+  a wrong sha fails on both, a wrong ref with the right sha installs on
+  Claude Code and fails on Copilot, which fetches the ref too). The
+  smoke keeps a local source and never clones: the url form is proven
+  by that check, not by the intake,
   `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,

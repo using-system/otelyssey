@@ -32,9 +32,11 @@ def test_marketplace_entry_pins_the_admitted_commit():
     assert payload["owner"] == {"name": "using-system", "url": "https://github.com/using-system"}
     [entry] = payload["plugins"]
     assert entry["name"] == "oddyssey"
+    # the url form: Claude Code and Copilot CLI clone it over https and check out the sha
+    # (a github source, Claude Code clones over ssh; verified 2026-09-21)
     assert entry["source"] == {
-        "source": "github",
-        "repo": "using-system/oddyssey",
+        "source": "url",
+        "url": "https://github.com/using-system/oddyssey.git",
         "path": "marketplace/oddyssey",
         "ref": "v1.13.0",
         "sha": "1" * 40,
@@ -49,8 +51,8 @@ def test_root_plugin_has_no_path():
     record["path"] = ""
     [entry] = build.marketplace_json({"oddyssey": record})["plugins"]
     assert entry["source"] == {
-        "source": "github",
-        "repo": "using-system/oddyssey",
+        "source": "url",
+        "url": "https://github.com/using-system/oddyssey.git",
         "ref": "v1.13.0",
         "sha": "1" * 40,
     }
