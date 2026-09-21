@@ -199,7 +199,7 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
     # listed once, under the principal category; the other named in the line
     assert text.startswith("### 🔭 Observability\n\nRead it back: ")
-    assert "Instrumentation\n" not in text
+    assert f"### {build.CATEGORY_ICONS['instrumentation']} Instrumentation" not in text
     (tagline, blank_after_tagline, entry, badges, blank) = text.splitlines()[2:7]
     assert tagline == build.CATEGORY_TAGLINES["observability"] and blank_after_tagline == ""
     # the owner's avatar, then the name linked to the page, not to the repository
@@ -217,10 +217,12 @@ def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     kinds = ("stars", "version", "last-commit", "license")
     record = records()["oddyssey"]
     assert badges == "&nbsp;&nbsp;".join(build.badge(k, record) for k in kinds)
+    # the stars badge: a star drawn by shields from an inline svg, no word, the count
     assert badges.startswith(
         '<a href="#"><img src="https://img.shields.io/github/stars/using-system/oddyssey?'
-        'style=flat-square&labelColor=2b2b2b&logo=github&color=e3b341" alt="stars"></a>'
+        "style=flat-square&labelColor=2b2b2b&label=&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2C"
     )
+    assert "&color=e3b341" in badges and "logo=github" not in badges
     assert "color=3b7dd8" in badges and "color=2ea44f" in badges and "color=6b6b6b" in badges
     for absent in ("created-at", "forks", "watchers"):
         assert absent not in text

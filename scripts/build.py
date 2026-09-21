@@ -3,12 +3,13 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import json
 import shlex
 import shutil
 import sys
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from scripts import store
 
@@ -39,9 +40,23 @@ CATEGORY_TAGLINES = {
 # live, from GitHub through shields.io: the README needs no refresh when a count moves; the
 # version is the record's, a repository releases with or without a tag. Each badge its color;
 # the counts a visitor does not need (created-at, forks, watchers) stay on the plugin page
+STAR_COLOR = "e3b341"
+VERSION_COLOR = "3b7dd8"
+# the stars badge is a star and the count, no word: shields takes a custom logo as a data
+# uri, this one a yellow star, and an empty label leaves the logo alone on the left
+STAR_LOGO = (
+    "data:image/svg+xml;base64,"
+    + base64.b64encode(
+        (
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">'
+            f'<path fill="#{STAR_COLOR}" d="M12 1l3.4 7 7.6 1.1-5.5 5.4 1.3 7.6L12 18.5 '
+            '5.2 22.1l1.3-7.6L1 9.1 8.6 8z"/></svg>'
+        ).encode()
+    ).decode()
+)
 BADGES = {
-    "stars": "logo=github&color=e3b341",
-    "version": "color=3b7dd8",
+    "stars": urlencode({"label": "", "logo": STAR_LOGO, "color": STAR_COLOR}),
+    "version": f"color={VERSION_COLOR}",
     "last-commit": "color=2ea44f",
     "license": "color=6b6b6b",
 }
@@ -263,7 +278,7 @@ def badge(kind: str, record: dict) -> str:
     if kind == "version":
         # shields' static badge: a dash or an underscore in the message is doubled
         message = record["version"].replace("-", "--").replace("_", "__")
-        src = f"https://img.shields.io/badge/version-{quote(message)}-3b7dd8?{style}"
+        src = f"https://img.shields.io/badge/version-{quote(message)}-{VERSION_COLOR}?{style}"
     else:
         src = f"https://img.shields.io/github/{kind}/{record['repository']}?{style}"
     return f'<a href="#"><img src="{src}" alt="{kind}"></a>'
