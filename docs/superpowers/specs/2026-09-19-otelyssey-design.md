@@ -24,9 +24,9 @@ with `openclaw plugins install ./<dir>[/<path>] --force
 --accept-capabilities`: the `git:` route wants a native OpenClaw
 package, "missing package.json" on an Agent Plugins bundle, and its
 marketplace route installs the root of a `url` entry, the `path`
-dropped; verified 2026-09-21 on 2026.9.5) and Mistral Vibe (a directory under
-`~/.vibe/plugins/`, copied from a clone at the commit) through the
-install lines on each plugin's page.
+dropped; verified 2026-09-21 on 2026.9.5) and Mistral Vibe (a
+directory under `~/.vibe/plugins/`, copied from a clone at the commit)
+through the install lines on each plugin's page.
 
 The existing marketplaces are curated by hand and age. This one is run
 by the repository: a contributor submits a plugin **once**, through
