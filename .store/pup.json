@@ -1,0 +1,35 @@
+{
+  "name": "pup",
+  "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
+  "categories": [
+    "backend"
+  ],
+  "repository": "DataDog/pup",
+  "path": "",
+  "ref": "v1.23.0",
+  "sha": "4c0d8720d94f787dc70b4c1672fa8ee4872811ad",
+  "version": "1.23.0",
+  "author": {
+    "name": "Datadog",
+    "email": "support@datadoghq.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/DataDog/pup#readme",
+  "keywords": [
+    "datadog",
+    "monitoring",
+    "logs",
+    "apm",
+    "metrics",
+    "security",
+    "infrastructure"
+  ],
+  "submitted_in": 112,
+  "admitted_at": "2026-09-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-21T19:18:23Z"
+  }
+}
