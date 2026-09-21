@@ -9,8 +9,8 @@
     {
       "name": "arize-phoenix",
       "source": {
-        "source": "github",
-        "repo": "Arize-ai/phoenix",
+        "source": "url",
+        "url": "https://github.com/Arize-ai/phoenix.git",
         "path": "plugins/codex/arize-phoenix",
         "ref": "main",
         "sha": "767847c3386492f9783b623cf78e3eee47d0cea3"
@@ -38,8 +38,8 @@
     {
       "name": "dynatrace-managed-mcp",
       "source": {
-        "source": "github",
-        "repo": "dynatrace-oss/dynatrace-managed-mcp",
+        "source": "url",
+        "url": "https://github.com/dynatrace-oss/dynatrace-managed-mcp.git",
         "ref": "main",
         "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
       },
@@ -67,8 +67,8 @@
     {
       "name": "langwatch",
       "source": {
-        "source": "github",
-        "repo": "langwatch/agent-plugin",
+        "source": "url",
+        "url": "https://github.com/langwatch/agent-plugin.git",
         "ref": "v1.2.0",
         "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
       },
@@ -92,8 +92,8 @@
     {
       "name": "observability",
       "source": {
-        "source": "github",
-        "repo": "BastiDood/skills",
+        "source": "url",
+        "url": "https://github.com/BastiDood/skills.git",
         "path": "plugins/observability",
         "ref": "main",
         "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
@@ -117,8 +117,8 @@
     {
       "name": "oddyssey",
       "source": {
-        "source": "github",
-        "repo": "using-system/oddyssey",
+        "source": "url",
+        "url": "https://github.com/using-system/oddyssey.git",
         "path": "marketplace/oddyssey",
         "ref": "v1.13.1",
         "sha": "e030f6114a35c433c9f826acd453898b42c978ec"
@@ -146,8 +146,8 @@
     {
       "name": "sentry",
       "source": {
-        "source": "github",
-        "repo": "getsentry/agent-plugin",
+        "source": "url",
+        "url": "https://github.com/getsentry/agent-plugin.git",
         "ref": "v1.4.0",
         "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
       },
@@ -170,8 +170,8 @@
     {
       "name": "signoz",
       "source": {
-        "source": "github",
-        "repo": "SigNoz/agent-skills",
+        "source": "url",
+        "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "plugins/signoz",
         "ref": "main",
         "sha": "4cdc848eb480f02bc07d06cb8d4f8486f635cbd6"
@@ -198,8 +198,8 @@
     {
       "name": "stdtel",
       "source": {
-        "source": "github",
-        "repo": "amiable-dev/skills-telemetry",
+        "source": "url",
+        "url": "https://github.com/amiable-dev/skills-telemetry.git",
         "ref": "v0.4.0",
         "sha": "a95d23afc26150737a4eb6894b96a7235fa8f8da"
       },
@@ -223,8 +223,8 @@
     {
       "name": "sumo-logic",
       "source": {
-        "source": "github",
-        "repo": "SumoLogic/sumologic-ai-plugins",
+        "source": "url",
+        "url": "https://github.com/SumoLogic/sumologic-ai-plugins.git",
         "ref": "v1.0.1",
         "sha": "f905b914984fabb5e0571290eafd3013c277d9b1"
       },

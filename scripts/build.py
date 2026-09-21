@@ -31,8 +31,10 @@ BADGE_STYLE = "style=flat-square&labelColor=2b2b2b&color=6b6b6b"
 
 
 def source_of(record: dict) -> dict:
-    """The `github` source both hosts accept, `path` added when the plugin is in a subdirectory."""
-    source = {"source": "github", "repo": record["repository"]}
+    """The `url` source Claude Code, Copilot CLI and APM all accept: cloned over https, the
+    sha checked out (a `github` source, Claude Code clones over ssh, which fails without a
+    GitHub key). `path` added when the plugin is in a subdirectory."""
+    source = {"source": "url", "url": f"https://github.com/{record['repository']}.git"}
     if record["path"]:
         source["path"] = record["path"]
     source["ref"] = record["ref"]

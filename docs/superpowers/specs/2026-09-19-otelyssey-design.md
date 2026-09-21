@@ -12,8 +12,8 @@ Claude Code and VS Code read `.claude-plugin/marketplace.json`: the
 generator writes the same content at both places), Codex CLI
 (`.agents/plugins/marketplace.json`, the same generator, with the
 git-backed sources Codex accepts), Grok Build
-(`.grok-plugin/marketplace.json`, Codex's content again: the github
-form gives it nothing, verified on 1.0.34), APM (`apm marketplace add`, the
+(`.grok-plugin/marketplace.json`, Codex's content again: it reads that
+place only, verified on 1.0.34), APM (`apm marketplace add`, the
 Claude Code schema, an Agent Plugins package for its `copilot` target),
 Kiro (a plugin at its repository's root, imported by url), Hermes Agent
 (`hermes plugins install owner/repo[/path] --ref <sha>`), OpenClaw
@@ -136,10 +136,18 @@ idempotently:
 - `marketplace.json` and `.claude-plugin/marketplace.json`, the same
   content: `name: otelyssey`, `owner: {"name": "using-system", "url":
   ...}`, one entry per record with
-  `source: {"source": "github", "repo": <repository>, "path": <path>
-  when set, "ref": <ref>, "sha": <sha>}` (the one form both hosts
-  accept; Copilot CLI rejects a `git-subdir` source, verified
-  2026-09-19),
+  `source: {"source": "url", "url": https://github.com/<repository>.git,
+  "path": <path> when set, "ref": <ref>, "sha": <sha>}` (the one form
+  Claude Code, Copilot CLI and APM all accept and clone over https,
+  checking out the sha; a `github` source Claude Code clones over ssh,
+  which fails without a GitHub key; Copilot CLI rejects a `git-subdir`
+  source, Claude Code a `git` one; verified 2026-09-21 under an
+  isolated HOME without a key, on Claude Code 2.1.278, Copilot CLI
+  1.0.86 and APM 0.31.0: a wrong sha fails on both CLIs, a wrong ref
+  with the right sha installs on Claude Code and fails on Copilot,
+  which fetches the ref too). The smoke keeps a local source and never
+  clones: the url form is proven by that hand check of 2026-09-21, not
+  by the pipeline,
   `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
