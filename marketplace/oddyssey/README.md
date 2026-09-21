@@ -65,8 +65,8 @@ hermes plugins enable oddyssey
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/otelyssey
-openclaw plugins install oddyssey --marketplace ./otelyssey
+git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout e030f6114a35c433c9f826acd453898b42c978ec
+openclaw plugins install ./oddyssey/marketplace/oddyssey --force --accept-capabilities
 ```
 
 Mistral Vibe:

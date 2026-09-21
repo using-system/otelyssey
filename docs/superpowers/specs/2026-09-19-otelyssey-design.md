@@ -16,10 +16,14 @@ git-backed sources Codex accepts), Grok Build
 place only, verified on 1.0.34), APM (`apm marketplace add`, the
 Claude Code schema, an Agent Plugins package for its `copilot` target),
 Kiro (a plugin at its repository's root, imported by url), Hermes Agent
-(`hermes plugins install owner/repo[/path] --ref <sha>`), OpenClaw
-(`git:owner/repo@<sha>` for a plugin at the root; a clone of this
-repository read as a local marketplace otherwise, a remote one refusing
-git-backed entries) and Mistral Vibe (a directory under
+(`hermes plugins install owner/repo[/path] --ref <sha>`; `--ref` is on
+Hermes's main, not in the 0.19.0 release, like the pack command; the
+`owner/repo/path` shorthand is), OpenClaw (a clone at the commit, its
+directory installed with `openclaw plugins install ./<dir>
+--accept-capabilities`: the `git:` route wants a native OpenClaw
+package, "missing package.json" on an Agent Plugins bundle, and a
+marketplace entry in the `url` form carries no path for it; verified
+2026-09-21 on 2026.9.5) and Mistral Vibe (a directory under
 `~/.vibe/plugins/`, copied from a clone at the commit) through the
 install lines on each plugin's page.
 

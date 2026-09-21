@@ -164,10 +164,12 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
         "https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml\n"
         "hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref"
     ) in page
-    # OpenClaw's git install has no subdirectory form: the marketplace, cloned, read locally
-    assert "git clone https://github.com/using-system/otelyssey\n" in page
-    assert "openclaw plugins install oddyssey --marketplace ./otelyssey" in page
-    assert "openclaw plugins install git:" not in page
+    # OpenClaw installs the directory of a clone at the sha: its git route wants a native
+    # package and its marketplace route drops the path (verified 2026-09-21 on 2026.9.5)
+    assert (
+        "openclaw plugins install ./oddyssey/marketplace/oddyssey --force --accept-capabilities"
+    ) in page
+    assert "--marketplace" not in page and "git:" not in page
     assert (
         f"git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout {sha}"
         in page
@@ -178,13 +180,13 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
     ) in page
     root = build.plugin_page({**record, "path": ""})
     assert f"hermes plugins install using-system/oddyssey --ref {sha}" in root
-    assert f"openclaw plugins install git:using-system/oddyssey@{sha} --force" in root
-    assert "--marketplace" not in root
+    assert "openclaw plugins install ./oddyssey --force --accept-capabilities" in root
     assert "cp -r oddyssey/. ~/.vibe/plugins/oddyssey" in root
     # a path the store accepts but a shell would split: quoted on the lines that carry it
     odd = build.plugin_page({**record, "path": "my plugins/otel"})
     assert "hermes plugins install 'using-system/oddyssey/my plugins/otel' --ref" in odd
     assert "cp -r 'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
+    assert "openclaw plugins install ./'oddyssey/my plugins/otel' --force" in odd
 
 
 def test_readme_install_block_carries_the_pack_url():

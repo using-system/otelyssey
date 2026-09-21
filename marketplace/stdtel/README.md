@@ -67,7 +67,8 @@ hermes plugins enable stdtel
 OpenClaw:
 
 ```text
-openclaw plugins install git:amiable-dev/skills-telemetry@a95d23afc26150737a4eb6894b96a7235fa8f8da --force
+git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+openclaw plugins install ./skills-telemetry --force --accept-capabilities
 ```
 
 Mistral Vibe:

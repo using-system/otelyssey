@@ -67,7 +67,8 @@ hermes plugins enable langwatch
 OpenClaw:
 
 ```text
-openclaw plugins install git:langwatch/agent-plugin@5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d --force
+git clone https://github.com/langwatch/agent-plugin && git -C agent-plugin checkout 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
+openclaw plugins install ./agent-plugin --force --accept-capabilities
 ```
 
 Mistral Vibe:

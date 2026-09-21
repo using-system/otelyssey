@@ -205,22 +205,17 @@ def plugin_page(record: dict) -> str:
 def repository_install_lines(record: dict) -> str:
     """The hosts that install from the plugin's repository: Hermes Agent opens with the
     marketplace's pack (every plugin, pinned), then pins this plugin's commit and takes a
-    subdirectory; OpenClaw's git install takes the root only (a subdirectory goes through a
-    clone of this marketplace, read locally); Mistral Vibe has no install command."""
+    subdirectory; OpenClaw and Mistral Vibe take a clone at the sha, OpenClaw installs the
+    directory (its git route wants a native package, its marketplace route drops the path),
+    Vibe copies it, having no install command."""
     repository = record["repository"]
     repo_url = f"https://github.com/{repository}"
     clone_dir = repository.rsplit("/", 1)[1]
     name, path, sha = record["name"], record["path"], record["sha"]
     # the store lets a path carry a space or a shell metacharacter: quoted, today's are bare
     hermes_source = shlex.quote(f"{repository}/{path}" if path else repository)
-    vibe_source = shlex.quote(f"{clone_dir}/{path}" if path else clone_dir)
-    if path:
-        openclaw = (
-            f"git clone https://github.com/{MARKETPLACE_REPO}\n"
-            f"openclaw plugins install {name} --marketplace ./{MARKETPLACE_NAME}\n"
-        )
-    else:
-        openclaw = f"openclaw plugins install git:{repository}@{sha} --force\n"
+    plugin_dir = shlex.quote(f"{clone_dir}/{path}" if path else clone_dir)
+    clone = f"git clone {repo_url} && git -C {clone_dir} checkout {sha}\n"
     return (
         "\nHermes Agent:\n\n"
         "```text\n"
@@ -231,12 +226,13 @@ def repository_install_lines(record: dict) -> str:
         "```\n\n"
         "OpenClaw:\n\n"
         "```text\n"
-        f"{openclaw}"
+        f"{clone}"
+        f"openclaw plugins install ./{plugin_dir} --force --accept-capabilities\n"
         "```\n\n"
         "Mistral Vibe:\n\n"
         "```text\n"
-        f"git clone {repo_url} && git -C {clone_dir} checkout {sha}\n"
-        f"mkdir -p ~/.vibe/plugins/{name} && cp -r {vibe_source}/. ~/.vibe/plugins/{name}\n"
+        f"{clone}"
+        f"mkdir -p ~/.vibe/plugins/{name} && cp -r {plugin_dir}/. ~/.vibe/plugins/{name}\n"
         "```\n"
     )
 

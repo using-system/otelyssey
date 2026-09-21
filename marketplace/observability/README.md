@@ -64,8 +64,8 @@ hermes plugins enable observability
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/otelyssey
-openclaw plugins install observability --marketplace ./otelyssey
+git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+openclaw plugins install ./skills/plugins/observability --force --accept-capabilities
 ```
 
 Mistral Vibe:

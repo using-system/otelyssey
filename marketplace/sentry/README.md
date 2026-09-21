@@ -67,7 +67,8 @@ hermes plugins enable sentry
 OpenClaw:
 
 ```text
-openclaw plugins install git:getsentry/agent-plugin@3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5 --force
+git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+openclaw plugins install ./agent-plugin --force --accept-capabilities
 ```
 
 Mistral Vibe:
