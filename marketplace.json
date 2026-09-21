@@ -170,6 +170,33 @@
       "homepage": "https://github.com/ollygarden/opentelemetry-agent-skills"
     },
     {
+      "name": "pup",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/DataDog/pup.git",
+        "ref": "v1.23.0",
+        "sha": "4c0d8720d94f787dc70b4c1672fa8ee4872811ad"
+      },
+      "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
+      "version": "1.23.0",
+      "category": "backend",
+      "keywords": [
+        "datadog",
+        "monitoring",
+        "logs",
+        "apm",
+        "metrics",
+        "security",
+        "infrastructure"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "Datadog",
+        "email": "support@datadoghq.com"
+      },
+      "homepage": "https://github.com/DataDog/pup#readme"
+    },
+    {
       "name": "sentry",
       "source": {
         "source": "url",
