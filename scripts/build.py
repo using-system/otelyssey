@@ -232,7 +232,7 @@ def repository_install_lines(record: dict) -> str:
         "Mistral Vibe:\n\n"
         "```text\n"
         f"{clone}"
-        f"mkdir -p ~/.vibe/plugins/{name} && cp -r {plugin_dir}/. ~/.vibe/plugins/{name}\n"
+        f"mkdir -p ~/.vibe/plugins/{name} && cp -r ./{plugin_dir}/. ~/.vibe/plugins/{name}\n"
         "```\n"
     )
 

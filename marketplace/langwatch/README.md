@@ -75,5 +75,5 @@ Mistral Vibe:
 
 ```text
 git clone https://github.com/langwatch/agent-plugin && git -C agent-plugin checkout 5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d
-mkdir -p ~/.vibe/plugins/langwatch && cp -r agent-plugin/. ~/.vibe/plugins/langwatch
+mkdir -p ~/.vibe/plugins/langwatch && cp -r ./agent-plugin/. ~/.vibe/plugins/langwatch
 ```

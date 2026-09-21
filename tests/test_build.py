@@ -176,16 +176,16 @@ def test_repository_install_lines_pin_the_commit_and_follow_the_path():
     )
     assert (
         "mkdir -p ~/.vibe/plugins/oddyssey && "
-        "cp -r oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey"
+        "cp -r ./oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey"
     ) in page
     root = build.plugin_page({**record, "path": ""})
     assert f"hermes plugins install using-system/oddyssey --ref {sha}" in root
     assert "openclaw plugins install ./oddyssey --force --accept-capabilities" in root
-    assert "cp -r oddyssey/. ~/.vibe/plugins/oddyssey" in root
+    assert "cp -r ./oddyssey/. ~/.vibe/plugins/oddyssey" in root
     # a path the store accepts but a shell would split: quoted on the lines that carry it
     odd = build.plugin_page({**record, "path": "my plugins/otel"})
     assert "hermes plugins install 'using-system/oddyssey/my plugins/otel' --ref" in odd
-    assert "cp -r 'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
+    assert "cp -r ./'oddyssey/my plugins/otel'/. ~/.vibe/plugins/oddyssey" in odd
     assert "openclaw plugins install ./'oddyssey/my plugins/otel' --force" in odd
 
 
