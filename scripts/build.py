@@ -125,6 +125,9 @@ def marketplace_json(records: dict[str, dict]) -> dict:
         entry = {
             "name": record["name"],
             "source": source_of(record),
+            # the plugin.json is the authority, the entry supplements it: Claude Code's
+            # default, declared for the scanners that want it explicit
+            "strict": True,
             "description": record["description"],
             "version": record["version"],
             "category": record["categories"][0],

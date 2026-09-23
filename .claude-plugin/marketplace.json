@@ -15,6 +15,7 @@
         "ref": "main",
         "sha": "767847c3386492f9783b623cf78e3eee47d0cea3"
       },
+      "strict": true,
       "description": "Connect to your Phoenix instance to debug, evaluate, and improve LLM applications.",
       "version": "0.1.0",
       "category": "backend",
@@ -43,6 +44,7 @@
         "ref": "main",
         "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
       },
+      "strict": true,
       "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
       "version": "1.1.1",
       "category": "backend",
@@ -72,6 +74,7 @@
         "ref": "v1.2.0",
         "sha": "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
       },
+      "strict": true,
       "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
       "version": "1.2.0",
       "category": "backend",
@@ -98,6 +101,7 @@
         "ref": "main",
         "sha": "9dfab1713cb24ccb515563de166def3239e92f1a"
       },
+      "strict": true,
       "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
       "version": "0.1.7",
       "category": "instrumentation",
@@ -123,6 +127,7 @@
         "ref": "v1.13.1",
         "sha": "e030f6114a35c433c9f826acd453898b42c978ec"
       },
+      "strict": true,
       "description": "CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack - or remote ones on any OpenTelemetry backend - and feed the next spec-driven improvement loop.",
       "version": "1.13.1",
       "category": "observability",
@@ -151,6 +156,7 @@
         "ref": "main",
         "sha": "cbdb25cd88ef66d086bc39fed8180b13bfb91e70"
       },
+      "strict": true,
       "description": "Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream sources: SDK setup per language, the Collector and OCB, OTTL, declarative configuration, semantic conventions, upgrades and migrations.",
       "version": "1.0.0",
       "category": "instrumentation",
@@ -177,6 +183,7 @@
         "ref": "v1.23.0",
         "sha": "4c0d8720d94f787dc70b4c1672fa8ee4872811ad"
       },
+      "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
       "version": "1.23.0",
       "category": "backend",
@@ -204,6 +211,7 @@
         "ref": "v1.4.0",
         "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
       },
+      "strict": true,
       "description": "Set up Sentry, debug production issues, and configure application monitoring.",
       "version": "1.4.0",
       "category": "backend",
@@ -229,6 +237,7 @@
         "ref": "main",
         "sha": "35fe186903e436950056b39d19ee83668b9f5f89"
       },
+      "strict": true,
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
       "version": "2026.9.1700",
       "category": "backend",
@@ -256,6 +265,7 @@
         "ref": "v0.4.0",
         "sha": "a95d23afc26150737a4eb6894b96a7235fa8f8da"
       },
+      "strict": true,
       "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
       "version": "0.4.0",
       "category": "instrumentation",
@@ -281,6 +291,7 @@
         "ref": "v1.0.1",
         "sha": "f905b914984fabb5e0571290eafd3013c277d9b1"
       },
+      "strict": true,
       "description": "Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.",
       "version": "1.0.1",
       "category": "backend",
