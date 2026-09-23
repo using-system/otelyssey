@@ -30,6 +30,7 @@ def test_marketplace_entry_pins_the_admitted_commit():
     payload = build.marketplace_json(records())
     assert payload["name"] == "otelyssey"
     assert payload["owner"] == {"name": "using-system", "url": "https://github.com/using-system"}
+    assert payload["strict"] is True
     [entry] = payload["plugins"]
     assert entry["name"] == "oddyssey"
     # the url form: Claude Code and Copilot CLI clone it over https and check out the sha
