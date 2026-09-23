@@ -142,6 +142,8 @@ def marketplace_json(records: dict[str, dict]) -> dict:
         "name": MARKETPLACE_NAME,
         "owner": OWNER,
         "description": "A self-run marketplace of OpenTelemetry agent plugins",
+        # at the root too: the HOL scanner reads it there only, Claude Code ignores it there
+        "strict": True,
         "plugins": plugins,
     }
 

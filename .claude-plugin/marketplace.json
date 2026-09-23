@@ -5,6 +5,7 @@
     "url": "https://github.com/using-system"
   },
   "description": "A self-run marketplace of OpenTelemetry agent plugins",
+  "strict": true,
   "plugins": [
     {
       "name": "arize-phoenix",

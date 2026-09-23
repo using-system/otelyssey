@@ -156,7 +156,9 @@ idempotently:
   `strict: true` (Claude Code's default, the plugin's `plugin.json` is
   the authority; declared for the scanners that want it explicit, and
   installed by hand on 2026-09-23 with no change on Claude Code 2.1.280 and
-  Copilot CLI 1.0.88),
+  Copilot CLI 1.0.88; declared at the catalog's root as well, where the
+  HOL plugin scanner reads it and Claude Code ignores it with a
+  `claude plugin validate` warning),
   `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
