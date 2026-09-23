@@ -41,6 +41,7 @@ def test_marketplace_entry_pins_the_admitted_commit():
         "ref": "v1.13.0",
         "sha": "1" * 40,
     }
+    assert entry["strict"] is True
     assert entry["version"] == "1.13.0"
     # a scalar in the catalogs: the principal category
     assert entry["category"] == "observability"

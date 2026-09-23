@@ -153,6 +153,10 @@ idempotently:
   which fetches the ref too). The smoke keeps a local source and never
   clones: the url form is proven by that hand check of 2026-09-21, not
   by the pipeline,
+  `strict: true` (Claude Code's default, the plugin's `plugin.json` is
+  the authority; declared for the scanners that want it explicit, and
+  installed by hand on 2026-09-23 with no change on Claude Code 2.1.280 and
+  Copilot CLI 1.0.88),
   `description`, `version`, `category` (the principal), `keywords`, `license`,
   `author`, `homepage`;
 - `marketplace/<name>/README.md`: the plugin's page: description,
