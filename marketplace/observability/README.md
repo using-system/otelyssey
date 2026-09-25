@@ -8,7 +8,7 @@ Opinionated guidance for clear and operationally useful OpenTelemetry instrument
 - Author: [Basti Ortiz](https://bastidood.dev/)
 - License: MPL-2.0
 - Keywords: `claude`, `codex`, `cursor`, `skills`
-- Stars 14, forks 0, watchers 0 (refreshed 2026-09-20T08:38:53Z)
+- Stars 15, forks 0, watchers 0 (refreshed 2026-09-25T08:52:49Z)
 
 ## Install
 

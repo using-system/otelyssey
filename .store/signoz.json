@@ -7,8 +7,8 @@
   "repository": "SigNoz/agent-skills",
   "path": "plugins/signoz",
   "ref": "main",
-  "sha": "35fe186903e436950056b39d19ee83668b9f5f89",
-  "version": "2026.9.1700",
+  "sha": "eac09ab84fc628261437617d8db12618c144e0c7",
+  "version": "2026.9.2500",
   "author": {
     "name": "SigNoz",
     "url": "https://signoz.io"
@@ -27,9 +27,9 @@
   "submitted_in": 50,
   "admitted_at": "2026-09-20",
   "stats": {
-    "stars": 16,
+    "stars": 17,
     "forks": 11,
     "watchers": 2,
-    "refreshed_at": "2026-09-20T08:38:53Z"
+    "refreshed_at": "2026-09-25T08:52:49Z"
   }
 }

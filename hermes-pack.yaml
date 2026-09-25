@@ -22,7 +22,7 @@ plugins:
     ref: "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
-    ref: "35fe186903e436950056b39d19ee83668b9f5f89"
+    ref: "eac09ab84fc628261437617d8db12618c144e0c7"
   - repo: amiable-dev/skills-telemetry
     ref: "a95d23afc26150737a4eb6894b96a7235fa8f8da"
   - repo: SumoLogic/sumologic-ai-plugins
