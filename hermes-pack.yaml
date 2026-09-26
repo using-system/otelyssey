@@ -29,3 +29,5 @@ plugins:
     ref: "a95d23afc26150737a4eb6894b96a7235fa8f8da"
   - repo: SumoLogic/sumologic-ai-plugins
     ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
+  - repo: using-system/vllm-on-tap
+    ref: "2644c5f3cf03bf0e0e7127470a0adfcf926a8858"

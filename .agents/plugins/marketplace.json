@@ -361,6 +361,35 @@
       },
       "category": "Backends",
       "homepage": "https://www.sumologic.com/help/docs/api/mcp-server/"
+    },
+    {
+      "name": "vllm-on-tap",
+      "description": "Serve vLLM presets on demand - locally, on Apple Silicon, in Docker or on Azure Container Apps serverless GPUs - with their traces exported over OTLP, and tear them down again.",
+      "version": "0.1.0",
+      "keywords": [
+        "vllm",
+        "inference",
+        "llm",
+        "azure-container-apps",
+        "gpu",
+        "opentelemetry"
+      ],
+      "author": {
+        "name": "using-system",
+        "url": "https://github.com/using-system"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/using-system/vllm-on-tap.git",
+        "ref": "v0.1.0",
+        "sha": "2644c5f3cf03bf0e0e7127470a0adfcf926a8858"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://github.com/using-system/vllm-on-tap#readme"
     }
   ]
 }
