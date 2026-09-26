@@ -77,3 +77,27 @@ Mistral Vibe:
 git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout f905b914984fabb5e0571290eafd3013c277d9b1
 mkdir -p ~/.vibe/plugins/sumo-logic && cp -r ./sumologic-ai-plugins/. ~/.vibe/plugins/sumo-logic
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/SumoLogic/sumologic-ai-plugins ~/.opencode-plugins/sumo-logic && git -C ~/.opencode-plugins/sumo-logic checkout f905b914984fabb5e0571290eafd3013c277d9b1
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/sumo-logic/skills"
+    ]
+  },
+  "mcp": {
+    "sumo-logic": {
+      "type": "remote",
+      "url": "https://not-setup/mcp"
+    }
+  }
+}
+```

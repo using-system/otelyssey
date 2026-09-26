@@ -75,3 +75,27 @@ Mistral Vibe:
 git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout eac09ab84fc628261437617d8db12618c144e0c7
 mkdir -p ~/.vibe/plugins/signoz && cp -r ./agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/SigNoz/agent-skills ~/.opencode-plugins/signoz && git -C ~/.opencode-plugins/signoz checkout eac09ab84fc628261437617d8db12618c144e0c7
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/signoz/plugins/signoz/skills"
+    ]
+  },
+  "mcp": {
+    "signoz": {
+      "type": "remote",
+      "url": "https://not-setup/mcp"
+    }
+  }
+}
+```

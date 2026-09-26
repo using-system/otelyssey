@@ -21,6 +21,13 @@
     "monitoring",
     "error-tracking"
   ],
+  "skills": true,
+  "mcp": {
+    "sentry": {
+      "type": "streamable-http",
+      "url": "https://mcp.sentry.dev/mcp?utm_source=plugin"
+    }
+  },
   "submitted_in": 75,
   "admitted_at": "2026-09-20",
   "stats": {

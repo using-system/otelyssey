@@ -5,6 +5,7 @@ from __future__ import annotations
 import argparse
 import base64
 import json
+import re
 import shlex
 import shutil
 import sys
@@ -62,6 +63,10 @@ BADGES = {
 }
 BADGE_STYLE = "style=flat-square&labelColor=2b2b2b"
 AVATAR_SIZE = 20
+# where the OpenCode lines clone a plugin; OpenCode expands `~` in skills.paths and
+# substitutes {env:NAME} in the rest of its configuration
+OPENCODE_HOME = ".opencode-plugins"
+ENV_REF_RE = re.compile(r"\$\{([A-Za-z_][A-Za-z0-9_]*)\}")
 
 
 def source_of(record: dict) -> dict:
@@ -238,6 +243,7 @@ def plugin_page(record: dict) -> str:
         # Kiro imports a power from its repository's url: a plugin at the root only
         + (f"\nKiro: Import power from GitHub, `{repo_url}`.\n" if not record["path"] else "")
         + repository_install_lines(record)
+        + opencode_install_lines(record)
     )
 
 
@@ -272,6 +278,73 @@ def repository_install_lines(record: dict) -> str:
         "```text\n"
         f"{clone}"
         f"mkdir -p ~/.vibe/plugins/{name} && cp -r ./{plugin_dir}/. ~/.vibe/plugins/{name}\n"
+        "```\n"
+    )
+
+
+def opencode_mcp(record: dict) -> dict:
+    """The record's MCP servers in OpenCode's shape: stdio a local command array, streamable
+    http a remote url; sse, which OpenCode's remote entry does not name, is left out. The
+    plugin's root and data directories stand for ${PLUGIN_ROOT} and ${PLUGIN_DATA} and a
+    `./` command or cwd, any other ${NAME} is read from the user's environment."""
+    clone = f"{{env:HOME}}/{OPENCODE_HOME}/{record['name']}"
+    root = f"{clone}/{record['path']}" if record["path"] else clone
+    data = f"{{env:HOME}}/{OPENCODE_HOME}/.data/{record['name']}"
+
+    def value(text: str) -> str:
+        text = text.replace("${PLUGIN_ROOT}", root).replace("${PLUGIN_DATA}", data)
+        return ENV_REF_RE.sub(r"{env:\1}", text)
+
+    def local(path: str) -> str:
+        return value(f"{root}{path[1:]}" if path.startswith("./") else path)
+
+    servers: dict = {}
+    for name, server in record["mcp"].items():
+        if server["type"] == "stdio":
+            entry = {"type": "local", "command": [local(server["command"])]}
+            entry["command"] += [value(a) for a in server.get("args", [])]
+            if "cwd" in server:
+                entry["cwd"] = local(server["cwd"])
+            if server.get("env"):
+                entry["environment"] = {k: value(v) for k, v in server["env"].items()}
+        elif server["type"] == "streamable-http":
+            entry = {"type": "remote", "url": value(server["url"])}
+            if server.get("headers"):
+                entry["headers"] = {k: value(v) for k, v in server["headers"].items()}
+        else:
+            continue
+        servers[name] = entry
+    return servers
+
+
+def opencode_install_lines(record: dict) -> str:
+    """OpenCode has no marketplace and installs no plugin: the plugin is cloned at the sha, and
+    its configuration names the skills directory and the MCP servers. Nothing when the plugin
+    carries neither."""
+    name, path = record["name"], record["path"]
+    config: dict = {}
+    if record["skills"]:
+        skills = (
+            f"~/{OPENCODE_HOME}/{name}/{path}/skills"
+            if path
+            else f"~/{OPENCODE_HOME}/{name}/skills"
+        )
+        config["skills"] = {"paths": [skills]}
+    mcp = opencode_mcp(record)
+    if mcp:
+        config["mcp"] = mcp
+    if not config:
+        return ""
+    clone_dir = f"~/{OPENCODE_HOME}/{name}"
+    return (
+        "\nOpenCode:\n\n"
+        "```text\n"
+        f"git clone https://github.com/{record['repository']} {clone_dir}"
+        f" && git -C {clone_dir} checkout {record['sha']}\n"
+        "```\n\n"
+        "Then merge into `~/.config/opencode/opencode.json`:\n\n"
+        "```json\n"
+        f"{json.dumps(config, indent=2, ensure_ascii=False)}\n"
         "```\n"
     )
 

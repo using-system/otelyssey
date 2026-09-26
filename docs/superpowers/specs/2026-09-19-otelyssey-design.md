@@ -24,9 +24,14 @@ with `openclaw plugins install ./<dir>[/<path>] --force
 --accept-capabilities`: the `git:` route wants a native OpenClaw
 package, "missing package.json" on an Agent Plugins bundle, and its
 marketplace route installs the root of a `url` entry, the `path`
-dropped; verified 2026-09-21 on 2026.9.5) and Mistral Vibe (a
+dropped; verified 2026-09-21 on 2026.9.5), Mistral Vibe (a
 directory under `~/.vibe/plugins/`, copied from a clone at the commit)
-through the install lines on each plugin's page.
+and OpenCode (no marketplace, and `opencode plugin` installs npm
+modules only: a clone at the commit under `~/.opencode-plugins/<name>`,
+and an `opencode.json` block naming its skills directory in
+`skills.paths` and its MCP servers in `mcp`, OpenCode's shape; its
+agents, commands and hooks are not read; verified 2026-09-26 on
+1.18.31) through the install lines on each plugin's page.
 
 The existing marketplaces are curated by hand and age. This one is run
 by the repository: a contributor submits a plugin **once**, through
@@ -107,6 +112,8 @@ tests/                               pytest on recorded fixtures
 | `sha` | the 40-hex commit the tag resolved to when admitted or last followed |
 | `version` | `plugin.json`'s version at that sha |
 | `author`, `license`, `homepage`, `keywords` | from `plugin.json` at that sha, the repository's metadata filling the gaps (its owner, its license, its homepage, its topics); a license from neither is a `needs-changes`, an author from neither too; keywords may be empty |
+| `skills` | whether the plugin has a skill (`skills/<x>/SKILL.md`) at that sha |
+| `mcp` | the servers of the plugin's `mcp.json` at that sha, the keys of the Agent Plugins MCP schema only; no backtick, no control character, no `{env:` or `{file:` (OpenCode would substitute them) in any value; empty without `mcp.json` |
 | `submitted_in` | the issue number |
 | `admitted_at` | UTC date |
 | `stats` | `stars`, `forks`, `watchers`, `refreshed_at` |
@@ -165,7 +172,11 @@ idempotently:
   repository link, categories, version and tag, author, license,
   keywords, statistics, the install lines for Claude Code, Copilot
   CLI, Codex CLI, Grok Build, APM, VS Code, Hermes Agent, OpenClaw,
-  Mistral Vibe and, for a plugin at its repository's root, Kiro;
+  Mistral Vibe, OpenCode (when the plugin has a skill or an MCP server
+  OpenCode reads: stdio a `local` command, streamable-http a `remote`
+  url, sse left out; `./` and `${PLUGIN_ROOT}` resolved to the clone,
+  `${NAME}` to `{env:NAME}`) and, for a plugin at its repository's
+  root, Kiro;
 - the README's plugin list, between two markers: one subsection per
   principal category holding plugins, headed by a pictogram and a
   one-line tagline; one entry per plugin (the repository owner's GitHub
@@ -220,7 +231,10 @@ cannot be told from the path: the ref is one segment (or GitHub's
    repository's root sits next to all of the repository's files, #31).
    A `plugin.json`
    missing at the root is an error, named as the legacy layout when
-   `.claude-plugin/plugin.json` exists.
+   `.claude-plugin/plugin.json` exists. An `mcp.json` that is not JSON,
+   a symbolic link, or whose servers are not of the Agent Plugins MCP
+   schema's shape is an error too, a `needs-changes` (at the nightly, a
+   release that stays on the previous one).
 3. `scripts/derive.py` builds the record: the manifest first
    (`name`, `version`, `description`, `license`, `homepage`, `author`,
    `keywords`), the repository's GitHub metadata next (its description,
@@ -228,8 +242,9 @@ cannot be told from the path: the ref is one segment (or GitHub's
    keywords), through the REST API with the app's token; a description,
    a license or an author from neither is an error the contributor
    fixes in `plugin.json`, a `needs-changes`. The comment says which
-   fields the repository filled. `scripts/resync.py`, run by hand
-   once (2026-09-20), read the derived fields of the records admitted
+   fields the repository filled. `skills` and `mcp` come from the
+   validation. `scripts/resync.py`, run by hand
+   (2026-09-20; 2026-09-26 for `skills` and `mcp`), read the derived fields of the records admitted
    from the old form again from their manifests, the same way.
 4. `scripts/smoke.py` writes a temporary marketplace holding a copy
    of the checked-out plugin (a relative source: no second clone, no

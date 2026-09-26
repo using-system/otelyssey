@@ -77,3 +77,21 @@ Mistral Vibe:
 git clone https://github.com/ollygarden/opentelemetry-agent-skills && git -C opentelemetry-agent-skills checkout cbdb25cd88ef66d086bc39fed8180b13bfb91e70
 mkdir -p ~/.vibe/plugins/opentelemetry-agent-skills && cp -r ./opentelemetry-agent-skills/. ~/.vibe/plugins/opentelemetry-agent-skills
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/ollygarden/opentelemetry-agent-skills ~/.opencode-plugins/opentelemetry-agent-skills && git -C ~/.opencode-plugins/opentelemetry-agent-skills checkout cbdb25cd88ef66d086bc39fed8180b13bfb91e70
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/opentelemetry-agent-skills/skills"
+    ]
+  }
+}
+```

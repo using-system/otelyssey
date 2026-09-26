@@ -77,3 +77,21 @@ Mistral Vibe:
 git clone https://github.com/DataDog/pup && git -C pup checkout 4493f8e0b6535f3599933df13673fb302a30bc5e
 mkdir -p ~/.vibe/plugins/pup && cp -r ./pup/. ~/.vibe/plugins/pup
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/DataDog/pup ~/.opencode-plugins/pup && git -C ~/.opencode-plugins/pup checkout 4493f8e0b6535f3599933df13673fb302a30bc5e
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/pup/skills"
+    ]
+  }
+}
+```

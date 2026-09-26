@@ -22,6 +22,8 @@
     "traces",
     "coding-agent"
   ],
+  "skills": true,
+  "mcp": {},
   "submitted_in": 42,
   "admitted_at": "2026-09-20",
   "stats": {

@@ -20,6 +20,8 @@
     "opentelemetry",
     "observability"
   ],
+  "skills": true,
+  "mcp": {},
   "submitted_in": 1,
   "admitted_at": "2026-09-19",
   "stats": {

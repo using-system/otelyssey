@@ -77,3 +77,21 @@ Mistral Vibe:
 git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout c7b453ba8ad05e8059661f3a59fb5aa4be848a56
 mkdir -p ~/.vibe/plugins/save-toolkit && cp -r ./save-toolkit/. ~/.vibe/plugins/save-toolkit
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/latent-sre/save-toolkit ~/.opencode-plugins/save-toolkit && git -C ~/.opencode-plugins/save-toolkit checkout c7b453ba8ad05e8059661f3a59fb5aa4be848a56
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/save-toolkit/skills"
+    ]
+  }
+}
+```

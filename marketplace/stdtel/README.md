@@ -77,3 +77,21 @@ Mistral Vibe:
 git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
 mkdir -p ~/.vibe/plugins/stdtel && cp -r ./skills-telemetry/. ~/.vibe/plugins/stdtel
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/amiable-dev/skills-telemetry ~/.opencode-plugins/stdtel && git -C ~/.opencode-plugins/stdtel checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/stdtel/skills"
+    ]
+  }
+}
+```

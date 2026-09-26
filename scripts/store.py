@@ -15,6 +15,18 @@ SHA_RE = re.compile(r"^[0-9a-f]{40}$")
 DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 STAMP_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 URL_RE = re.compile(r"^https://[^\s()<>\[\]]+$")  # no whitespace, no markdown link character
+MCP_NAME_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]*$")
+MCP_KEYS = {
+    "stdio": {"type", "command", "args", "env", "cwd"},
+    "streamable-http": {"type", "url", "headers"},
+    "sse": {"type", "url", "headers"},
+}
+MCP_TYPES = tuple(MCP_KEYS)  # a tuple: `in` compares, where a dict would hash a list
+# the schema's cwd: plugin-relative, or rooted at the plugin's root or data directory
+MCP_CWD_RE = re.compile(r"^(?:\./|\$\{PLUGIN_ROOT\}(?:/|$)|\$\{PLUGIN_DATA\}(?:/|$))")
+# OpenCode substitutes these in its configuration, where the page puts the servers: a
+# plugin's value must not make it read the user's environment or files beyond ${VAR}'s
+OPENCODE_SUBSTITUTION_RE = re.compile(r"\{(?:env|file):")
 FIELDS = (
     "name",
     "description",
@@ -28,6 +40,8 @@ FIELDS = (
     "license",
     "homepage",
     "keywords",
+    "skills",
+    "mcp",
     "submitted_in",
     "admitted_at",
     "stats",
@@ -42,6 +56,66 @@ def _is_text(value: object) -> bool:
 def _clean(value: str) -> bool:
     """No control character: a value that fits one key=value line and one page line."""
     return not any(ord(c) < 32 or c == "\x7f" for c in value)
+
+
+def _strings(value: object) -> bool:
+    return isinstance(value, list) and all(isinstance(v, str) for v in value)
+
+
+def _string_map(value: object) -> bool:
+    return isinstance(value, dict) and all(isinstance(v, str) for v in value.values())
+
+
+MCP_VALUE_CHECKS = {"args": _strings, "env": _string_map, "headers": _string_map}
+
+
+def mcp_server_shape_ok(server: object) -> bool:
+    """A stdio, streamable-http or sse server of the Agent Plugins MCP schema: its type's keys
+    only, its command or url a non-empty string, args a list of strings, env and headers
+    objects of strings, cwd a string relative to the plugin's root or data directory."""
+    if not isinstance(server, dict) or server.get("type") not in MCP_TYPES:
+        return False
+    kind = server["type"]
+    target = "command" if kind == "stdio" else "url"
+    return (
+        not set(server) - MCP_KEYS[kind]
+        and _is_text(server.get(target))
+        and ("cwd" not in server or bool(MCP_CWD_RE.match(str(server["cwd"]))))
+        and all(MCP_VALUE_CHECKS.get(k, lambda v: isinstance(v, str))(v) for k, v in server.items())
+    )
+
+
+def _mcp_strings(server: dict) -> list[str]:
+    """Every string a server carries, its env and header names among them."""
+    strings: list[str] = []
+    for value in server.values():
+        if isinstance(value, str):
+            strings.append(value)
+        elif isinstance(value, list):
+            strings += value
+        else:
+            strings += [s for pair in value.items() for s in pair]
+    return strings
+
+
+def validate_mcp(mcp: object) -> list[str]:
+    """The MCP servers' rules: the schema's shape, and strings that fit a JSON code block on
+    the pages (no backtick, no control character) and that OpenCode does not substitute."""
+    if not isinstance(mcp, dict):
+        return ["mcp: not an object"]
+    errors: list[str] = []
+    for name, server in mcp.items():
+        if not MCP_NAME_RE.match(name):
+            errors.append(f"mcp: server name {name!r} is not letters, digits, . _ -")
+        elif not mcp_server_shape_ok(server):
+            errors.append(f"mcp.{name}: not a stdio, streamable-http or sse server")
+        else:
+            strings = _mcp_strings(server)
+            if any("`" in v or not _clean(v) for v in strings):
+                errors.append(f"mcp.{name}: a backtick or a control character")
+            if any(OPENCODE_SUBSTITUTION_RE.search(v) for v in strings):
+                errors.append(f"mcp.{name}: {{env: or {{file:, which OpenCode would substitute")
+    return errors
 
 
 def validate_record(record: dict) -> list[str]:
@@ -100,6 +174,9 @@ def validate_record(record: dict) -> list[str]:
         errors.append("keywords: not a list of strings")
     elif any("`" in k for k in keywords):
         errors.append("keywords: a keyword carries a backtick")
+    if not isinstance(record["skills"], bool):
+        errors.append("skills: not a boolean")
+    errors += validate_mcp(record["mcp"])
     if not isinstance(record["submitted_in"], int) or record["submitted_in"] <= 0:
         errors.append("submitted_in: not an issue number")
     if not isinstance(record["admitted_at"], str) or not DATE_RE.match(record["admitted_at"]):
