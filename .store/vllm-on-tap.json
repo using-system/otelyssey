@@ -1,0 +1,36 @@
+{
+  "name": "vllm-on-tap",
+  "description": "Serve vLLM presets on demand - locally, on Apple Silicon, in Docker or on Azure Container Apps serverless GPUs - with their traces exported over OTLP, and tear them down again.",
+  "categories": [
+    "instrumentation"
+  ],
+  "repository": "using-system/vllm-on-tap",
+  "path": "",
+  "ref": "v0.1.0",
+  "sha": "2644c5f3cf03bf0e0e7127470a0adfcf926a8858",
+  "version": "0.1.0",
+  "author": {
+    "name": "using-system",
+    "url": "https://github.com/using-system"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/using-system/vllm-on-tap#readme",
+  "keywords": [
+    "vllm",
+    "inference",
+    "llm",
+    "azure-container-apps",
+    "gpu",
+    "opentelemetry"
+  ],
+  "skills": true,
+  "mcp": {},
+  "submitted_in": 128,
+  "admitted_at": "2026-09-26",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-26T18:04:58Z"
+  }
+}
