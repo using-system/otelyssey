@@ -125,12 +125,12 @@
         "source": "url",
         "url": "https://github.com/using-system/oddyssey.git",
         "path": "marketplace/oddyssey",
-        "ref": "v1.13.1",
-        "sha": "e030f6114a35c433c9f826acd453898b42c978ec"
+        "ref": "v1.13.2",
+        "sha": "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
       },
       "strict": true,
       "description": "CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack - or remote ones on any OpenTelemetry backend - and feed the next spec-driven improvement loop.",
-      "version": "1.13.1",
+      "version": "1.13.2",
       "category": "observability",
       "keywords": [
         "claude-code",
@@ -346,17 +346,18 @@
       "source": {
         "source": "url",
         "url": "https://github.com/using-system/vllm-on-tap.git",
-        "ref": "v0.1.0",
-        "sha": "2644c5f3cf03bf0e0e7127470a0adfcf926a8858"
+        "ref": "v0.2.0",
+        "sha": "872726f4b552cedf097bc4a2394597af61dd7131"
       },
       "strict": true,
-      "description": "Serve vLLM presets on demand - locally, on Apple Silicon, in Docker or on Azure Container Apps serverless GPUs - with their traces exported over OTLP, and tear them down again.",
-      "version": "0.1.0",
+      "description": "Serve vLLM presets on demand - locally, Kubernetes (KServe), Azure (Container Apps), AWS (ECS) or GCP (Cloud Run) - with their traces over OTLP, and tear them down again.",
+      "version": "0.2.0",
       "category": "instrumentation",
       "keywords": [
         "vllm",
         "inference",
         "llm",
+        "azure",
         "azure-container-apps",
         "gpu",
         "opentelemetry"

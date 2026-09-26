@@ -8,9 +8,9 @@
   ],
   "repository": "using-system/oddyssey",
   "path": "marketplace/oddyssey",
-  "ref": "v1.13.1",
-  "sha": "e030f6114a35c433c9f826acd453898b42c978ec",
-  "version": "1.13.1",
+  "ref": "v1.13.2",
+  "sha": "0ccec67b18ae05f87f6217b4357277b2a0d66d16",
+  "version": "1.13.2",
   "author": {
     "name": "using-system",
     "url": "https://github.com/using-system"
@@ -35,7 +35,7 @@
       "args": [
         "--refresh-package",
         "oddyssey-mcp",
-        "oddyssey-mcp==1.13.1"
+        "oddyssey-mcp==1.13.2"
       ]
     }
   },
