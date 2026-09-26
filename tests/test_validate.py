@@ -149,6 +149,9 @@ def test_components_read_the_skills_and_the_servers(tmp_path: Path):
         ({"s": "uvx"}, "'s' is not a stdio"),
         ({"s": {"type": "ws", "url": "https://x.example"}}, "'s' is not a stdio"),
         ({"s": {"type": "stdio", "args": ["x"]}}, "'s' is not a stdio"),
+        # a type that is not a string is an error, never a crash of the intake or the nightly
+        ({"s": {"type": ["stdio"], "command": "x"}}, "'s' is not a stdio"),
+        ({"s": {"type": {}, "command": "x"}}, "'s' is not a stdio"),
     ],
 )
 def test_a_malformed_mcp_json_is_an_error(tmp_path: Path, servers, fragment):

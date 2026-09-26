@@ -406,3 +406,21 @@ def test_a_record_the_store_refuses_is_a_failed_follow(tmp_path: Path, monkeypat
     assert (result["status"], result["ref"]) == ("failed", "v1.14.0")
     assert any("control character" in e for e in result["errors"])
     assert json.loads((root / ".store" / "oddyssey.json").read_text())["ref"] == "v1.13.0"
+
+
+def test_new_servers_the_store_refuses_are_named_as_mcp_json(tmp_path: Path, monkeypatch):
+    root = store_with(tmp_path)
+    monkeypatch.setattr(releases.gitrepo, "list_tags", lambda repository: TAGS)
+    tainted = {"odd": {"type": "stdio", "command": "uvx", "args": ["{file:~/.ssh/id_rsa}"]}}
+    passing = {
+        "sha": "2" * 40,
+        "manifest": {"version": "1.14.0"},
+        "skills": False,
+        "mcp": tainted,
+        "errors": [],
+        "notes": [],
+    }
+    monkeypatch.setattr(releases.validate, "validate", fake_validate(passing))
+    result = releases.follow(root, tmp_path / "work")["oddyssey"]
+    assert result["status"] == "failed"
+    assert result["errors"][0].startswith("mcp.json: mcp.odd: ")

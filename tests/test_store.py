@@ -131,6 +131,7 @@ def test_author_email_and_url_are_optional():
 
 SERVERS = {
     "odd": {"type": "stdio", "command": "uvx", "args": ["odd"], "env": {"K": "${K}"}},
+    "local": {"type": "stdio", "command": "./bin/x", "cwd": "${PLUGIN_DATA}/run"},
     "web": {"type": "streamable-http", "url": "https://mcp.example/mcp"},
 }
 
@@ -149,6 +150,11 @@ def test_mcp_servers_of_the_schemas_shape_are_valid():
         ({"s": {"type": "stdio", "command": "x", "url": "https://x.example"}}, "not a stdio"),
         ({"s": {"type": "stdio", "command": "x", "args": "a b"}}, "not a stdio"),
         ({"s": {"type": "stdio", "command": "x", "env": {"K": 1}}}, "not a stdio"),
+        ({"s": {"type": ["stdio"], "command": "x"}}, "not a stdio"),
+        ({"s": {"type": {}, "command": "x"}}, "not a stdio"),
+        # the schema's cwd: the plugin's root or data directory, never the user's
+        ({"s": {"type": "stdio", "command": "x", "cwd": "work"}}, "not a stdio"),
+        ({"s": {"type": "stdio", "command": "x", "cwd": "../x"}}, "not a stdio"),
         # a backtick would close the code block the page puts the servers in
         ({"s": {"type": "stdio", "command": "x", "args": ["```"]}}, "backtick"),
         ({"s": {"type": "streamable-http", "url": "https://x.example/\n"}}, "control"),

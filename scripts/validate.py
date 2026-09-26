@@ -156,7 +156,8 @@ def check_components(plugin_dir: Path) -> tuple[bool, dict, list[str]]:
     for name, server in servers.items():
         entry = server
         if isinstance(server, dict):
-            keys = store.MCP_KEYS.get(server.get("type"), set(server))
+            kind = server.get("type")
+            keys = store.MCP_KEYS[kind] if kind in store.MCP_TYPES else set(server)
             entry = {k: v for k, v in server.items() if k in keys}
         if not store.mcp_server_shape_ok(entry):
             errors.append(

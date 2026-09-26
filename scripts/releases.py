@@ -85,8 +85,9 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
         try:
             store.write_record(root, repinned)
         except ValueError as error:
-            # the value the store refuses is the manifest's: the contributor fixes plugin.json
-            result[name] = {"status": "failed", "ref": ref, "errors": [f"plugin.json: {error}"]}
+            # the value the store refuses is the plugin's: the contributor fixes the file named
+            source = "mcp.json" if str(error).startswith("mcp") else "plugin.json"
+            result[name] = {"status": "failed", "ref": ref, "errors": [f"{source}: {error}"]}
             continue
         result[name] = {"status": "updated", "ref": ref, "errors": []}
     return result

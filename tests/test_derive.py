@@ -291,3 +291,11 @@ def test_the_record_carries_the_skills_and_the_servers_the_validation_read():
     tainted = {"odd": {"type": "stdio", "command": "uvx", "args": ["{env:GH_TOKEN}"]}}
     _, errors, _ = derive.derive(CANDIDATE, {**checked, "mcp": tainted}, derive.metadata(RAW))
     assert errors and all(e.startswith("mcp.json: mcp.odd: ") for e in errors)
+
+
+def test_resync_reads_the_skills_and_the_servers_again():
+    record, _, _ = derive.derive(CANDIDATE, validation(MANIFEST), derive.metadata(RAW))
+    servers = {"odd": {"type": "stdio", "command": "uvx"}}
+    checked = {**validation(MANIFEST), "skills": True, "mcp": servers}
+    updated, kept = derive.resync(record, checked, derive.metadata(RAW))
+    assert kept == [] and updated["skills"] is True and updated["mcp"] == servers

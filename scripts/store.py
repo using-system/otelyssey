@@ -21,6 +21,9 @@ MCP_KEYS = {
     "streamable-http": {"type", "url", "headers"},
     "sse": {"type", "url", "headers"},
 }
+MCP_TYPES = tuple(MCP_KEYS)  # a tuple: `in` compares, where a dict would hash a list
+# the schema's cwd: plugin-relative, or rooted at the plugin's root or data directory
+MCP_CWD_RE = re.compile(r"^(?:\./|\$\{PLUGIN_ROOT\}(?:/|$)|\$\{PLUGIN_DATA\}(?:/|$))")
 # OpenCode substitutes these in its configuration, where the page puts the servers: a
 # plugin's value must not make it read the user's environment or files beyond ${VAR}'s
 OPENCODE_SUBSTITUTION_RE = re.compile(r"\{(?:env|file):")
@@ -69,14 +72,15 @@ MCP_VALUE_CHECKS = {"args": _strings, "env": _string_map, "headers": _string_map
 def mcp_server_shape_ok(server: object) -> bool:
     """A stdio, streamable-http or sse server of the Agent Plugins MCP schema: its type's keys
     only, its command or url a non-empty string, args a list of strings, env and headers
-    objects of strings, cwd a string."""
-    if not isinstance(server, dict) or server.get("type") not in MCP_KEYS:
+    objects of strings, cwd a string relative to the plugin's root or data directory."""
+    if not isinstance(server, dict) or server.get("type") not in MCP_TYPES:
         return False
     kind = server["type"]
     target = "command" if kind == "stdio" else "url"
     return (
         not set(server) - MCP_KEYS[kind]
         and _is_text(server.get(target))
+        and ("cwd" not in server or bool(MCP_CWD_RE.match(str(server["cwd"]))))
         and all(MCP_VALUE_CHECKS.get(k, lambda v: isinstance(v, str))(v) for k, v in server.items())
     )
 
