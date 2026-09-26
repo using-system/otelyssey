@@ -205,6 +205,32 @@
       "homepage": "https://github.com/DataDog/pup#readme"
     },
     {
+      "name": "save-toolkit",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/latent-sre/save-toolkit.git",
+        "ref": "main",
+        "sha": "c7b453ba8ad05e8059661f3a59fb5aa4be848a56"
+      },
+      "strict": true,
+      "description": "Application-engineering and site-reliability agents and reusable skills.",
+      "version": "0.50.0",
+      "category": "observability",
+      "keywords": [
+        "agents",
+        "skills",
+        "sre",
+        "observability",
+        "pcf"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "latent-sre",
+        "url": "https://github.com/latent-sre"
+      },
+      "homepage": "https://github.com/latent-sre/save-toolkit"
+    },
+    {
       "name": "sentry",
       "source": {
         "source": "url",

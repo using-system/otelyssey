@@ -18,6 +18,8 @@ plugins:
     ref: "cbdb25cd88ef66d086bc39fed8180b13bfb91e70"
   - repo: DataDog/pup
     ref: "4493f8e0b6535f3599933df13673fb302a30bc5e"
+  - repo: latent-sre/save-toolkit
+    ref: "c7b453ba8ad05e8059661f3a59fb5aa4be848a56"
   - repo: getsentry/agent-plugin
     ref: "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
   - repo: SigNoz/agent-skills
