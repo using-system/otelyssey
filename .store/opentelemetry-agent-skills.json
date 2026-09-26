@@ -24,6 +24,8 @@
     "semantic-conventions",
     "skills"
   ],
+  "skills": true,
+  "mcp": {},
   "submitted_in": 110,
   "admitted_at": "2026-09-21",
   "stats": {

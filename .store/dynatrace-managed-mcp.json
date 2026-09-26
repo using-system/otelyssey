@@ -26,6 +26,20 @@
     "metrics",
     "slo"
   ],
+  "skills": true,
+  "mcp": {
+    "dynatrace-managed": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@dynatrace-oss/dynatrace-managed-mcp-server@<2"
+      ],
+      "env": {
+        "DT_ENVIRONMENT_CONFIGS": "${DT_ENVIRONMENT_CONFIGS}"
+      }
+    }
+  },
   "submitted_in": 51,
   "admitted_at": "2026-09-20",
   "stats": {

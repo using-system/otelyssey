@@ -81,7 +81,7 @@ def follow(root: Path, workdir: Path, smoke_fn: SmokeFn | None = None) -> dict[s
             # the record's values stand in for the repository's: an unreadable API neither
             # holds a release back nor empties what the repository had given
             meta = derive.from_record(record)
-        repinned, _ = derive.resync(repinned, check["manifest"], meta)
+        repinned, _ = derive.resync(repinned, check, meta)
         try:
             store.write_record(root, repinned)
         except ValueError as error:

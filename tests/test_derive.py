@@ -34,7 +34,14 @@ RAW = {
 
 
 def validation(manifest: dict) -> dict:
-    return {"sha": "1" * 40, "manifest": manifest, "errors": [], "notes": []}
+    return {
+        "sha": "1" * 40,
+        "manifest": manifest,
+        "skills": False,
+        "mcp": {},
+        "errors": [],
+        "notes": [],
+    }
 
 
 def test_the_manifest_is_the_source_of_every_field():
@@ -56,6 +63,8 @@ def test_the_manifest_is_the_source_of_every_field():
         "license": "Apache-2.0",
         "homepage": "https://contoso.example/plugin",
         "keywords": ["opentelemetry", "tempo"],
+        "skills": False,
+        "mcp": {},
         "submitted_in": 7,
     }
     # the store's order, without the fields the admission adds
@@ -205,11 +214,13 @@ def test_resync_rewrites_the_derived_fields_and_keeps_what_is_pinned_or_decided(
         "license": "MIT",
         "homepage": "",
         "keywords": ["typed"],
+        "skills": False,
+        "mcp": {},
         "submitted_in": 7,
         "admitted_at": "2026-09-19",
         "stats": {"stars": 3, "forks": 0, "watchers": 1, "refreshed_at": "2026-09-20T00:00:00Z"},
     }
-    updated, kept = derive.resync(record, MANIFEST, derive.metadata(RAW))
+    updated, kept = derive.resync(record, validation(MANIFEST), derive.metadata(RAW))
     assert kept == []
     assert updated["description"] == "Queries traces in Tempo."
     assert updated["license"] == "Apache-2.0"
@@ -245,6 +256,8 @@ def test_resync_keeps_a_field_neither_source_gives_and_says_so():
         "license": "MIT",
         "homepage": "",
         "keywords": ["typed"],
+        "skills": False,
+        "mcp": {},
         "submitted_in": 7,
         "admitted_at": "2026-09-19",
         "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "2026-09-20T00:00:00Z"},
@@ -253,7 +266,7 @@ def test_resync_keeps_a_field_neither_source_gives_and_says_so():
     empty = derive.metadata(
         {"owner": {"login": "contoso", "html_url": "https://github.com/contoso"}}
     )
-    updated, kept = derive.resync(record, bare, empty)
+    updated, kept = derive.resync(record, validation(bare), empty)
     assert kept == [
         "plugin.json: no description, and the repository has none either: add a description",
         "plugin.json: no license, and the repository has none either: add a license",
@@ -263,7 +276,18 @@ def test_resync_keeps_a_field_neither_source_gives_and_says_so():
     assert updated["author"] == {"name": "contoso", "url": "https://github.com/contoso"}
     assert updated["keywords"] == []
     # an author from neither source: the record's is kept, not an empty one
-    updated, kept = derive.resync(record, bare, derive.metadata({}))
+    updated, kept = derive.resync(record, validation(bare), derive.metadata({}))
     assert updated["author"] == {"name": "Typed"}
     assert kept[-1].startswith("plugin.json: no author")
     assert store.validate_record(updated) == []
+
+
+def test_the_record_carries_the_skills_and_the_servers_the_validation_read():
+    servers = {"odd": {"type": "stdio", "command": "uvx"}}
+    checked = {**validation(MANIFEST), "skills": True, "mcp": servers}
+    record, errors, _ = derive.derive(CANDIDATE, checked, derive.metadata(RAW))
+    assert errors == [] and record["skills"] is True and record["mcp"] == servers
+    # a server the store refuses is named against mcp.json, where the contributor fixes it
+    tainted = {"odd": {"type": "stdio", "command": "uvx", "args": ["{env:GH_TOKEN}"]}}
+    _, errors, _ = derive.derive(CANDIDATE, {**checked, "mcp": tainted}, derive.metadata(RAW))
+    assert errors and all(e.startswith("mcp.json: mcp.odd: ") for e in errors)

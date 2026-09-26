@@ -17,6 +17,8 @@ RECORD = {
     "license": "MIT",
     "homepage": "",
     "keywords": ["typed"],
+    "skills": False,
+    "mcp": {},
     "submitted_in": 7,
     "admitted_at": "2026-09-19",
     "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "2026-09-20T00:00:00Z"},
@@ -30,7 +32,14 @@ def a_store(tmp_path: Path, record: dict) -> Path:
 
 
 def validating(manifest: dict):
-    return lambda *a, **k: {"sha": "1" * 40, "manifest": manifest, "errors": [], "notes": []}
+    return lambda *a, **k: {
+        "sha": "1" * 40,
+        "manifest": manifest,
+        "skills": False,
+        "mcp": {},
+        "errors": [],
+        "notes": [],
+    }
 
 
 def test_a_record_is_rewritten_from_its_manifest(tmp_path: Path, monkeypatch):
@@ -62,7 +71,14 @@ def test_a_record_that_no_longer_validates_or_whose_api_fails_is_skipped(
     monkeypatch.setattr(
         validate,
         "validate",
-        lambda *a, **k: {"sha": None, "manifest": {}, "errors": ["gone"], "notes": []},
+        lambda *a, **k: {
+            "sha": None,
+            "manifest": {},
+            "skills": False,
+            "mcp": {},
+            "errors": ["gone"],
+            "notes": [],
+        },
     )
     rewritten, kept, skipped = resync.resync_store(root, tmp_path / "work", None)
     assert (rewritten, kept, skipped) == ([], {}, {"my-otel-plugin": "gone"})
@@ -107,7 +123,14 @@ def test_main_exits_1_when_something_was_kept_or_skipped(tmp_path: Path, monkeyp
     monkeypatch.setattr(
         validate,
         "validate",
-        lambda *a, **k: {"sha": None, "manifest": {}, "errors": ["gone"], "notes": []},
+        lambda *a, **k: {
+            "sha": None,
+            "manifest": {},
+            "skills": False,
+            "mcp": {},
+            "errors": ["gone"],
+            "notes": [],
+        },
     )
     assert resync.main(["--root", str(root), "--workdir", str(tmp_path / "w2")]) == 1
     out = capsys.readouterr()

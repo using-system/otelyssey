@@ -42,7 +42,7 @@ def resync_store(
         except (OSError, http.client.HTTPException, ValueError) as error:
             skipped[name] = f"metadata unreadable ({error})"
             continue
-        updated, missing = derive.resync(record, check["manifest"], meta)
+        updated, missing = derive.resync(record, check, meta)
         if missing:
             kept[name] = [e.removeprefix(derive.MISSING).split(",", 1)[0] for e in missing]
         if updated == record:

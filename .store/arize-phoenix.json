@@ -25,6 +25,17 @@
     "llm",
     "mcp"
   ],
+  "skills": false,
+  "mcp": {
+    "phoenix": {
+      "type": "stdio",
+      "command": "./scripts/phoenix-mcp",
+      "env": {
+        "PHOENIX_ENDPOINT": "${PHOENIX_ENDPOINT}",
+        "PHOENIX_API_KEY": "${PHOENIX_API_KEY}"
+      }
+    }
+  },
   "submitted_in": 103,
   "admitted_at": "2026-09-20",
   "stats": {

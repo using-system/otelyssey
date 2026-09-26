@@ -398,3 +398,71 @@ def test_withdrawal_removes_a_page_directory_with_other_files(tmp_path: Path):
     (root / ".store" / "oddyssey.json").unlink()
     assert "marketplace/oddyssey/README.md" in build.build(root, check=False)
     assert not (root / "marketplace" / "oddyssey").exists()
+
+
+def test_opencode_lines_clone_at_the_sha_and_name_the_skills_and_the_servers():
+    record = {
+        **records()["oddyssey"],
+        "mcp": {
+            "odd": {
+                "type": "stdio",
+                "command": "./bin/server",
+                "args": ["--root", "${PLUGIN_ROOT}", "--data", "${PLUGIN_DATA}/x"],
+                "env": {"TOKEN": "${ODD_TOKEN}", "MODE": "local"},
+                "cwd": "./work",
+            },
+            "remote": {
+                "type": "streamable-http",
+                "url": "https://mcp.example/${REGION}/mcp",
+                "headers": {"Authorization": "Bearer ${API_KEY}"},
+            },
+            "legacy": {"type": "sse", "url": "https://sse.example/mcp"},
+        },
+    }
+    sha = record["sha"]
+    lines = build.opencode_install_lines(record)
+    assert (
+        "git clone https://github.com/using-system/oddyssey ~/.opencode-plugins/oddyssey"
+        f" && git -C ~/.opencode-plugins/oddyssey checkout {sha}"
+    ) in lines
+    config = json.loads(lines.split("```json\n", 1)[1].split("```", 1)[0])
+    root = "{env:HOME}/.opencode-plugins/oddyssey/marketplace/oddyssey"
+    assert config["skills"] == {
+        "paths": ["~/.opencode-plugins/oddyssey/marketplace/oddyssey/skills"]
+    }
+    assert config["mcp"] == {
+        "odd": {
+            "type": "local",
+            "command": [
+                f"{root}/bin/server",
+                "--root",
+                root,
+                "--data",
+                "{env:HOME}/.opencode-plugins/.data/oddyssey/x",
+            ],
+            "cwd": f"{root}/work",
+            "environment": {"TOKEN": "{env:ODD_TOKEN}", "MODE": "local"},
+        },
+        "remote": {
+            "type": "remote",
+            "url": "https://mcp.example/{env:REGION}/mcp",
+            "headers": {"Authorization": "Bearer {env:API_KEY}"},
+        },
+    }
+    assert lines in build.plugin_page(record)
+
+
+def test_opencode_lines_follow_what_the_plugin_carries():
+    record = records()["oddyssey"]
+    root = build.opencode_install_lines({**record, "path": "", "mcp": {}})
+    config = json.loads(root.split("```json\n", 1)[1].split("```", 1)[0])
+    assert config == {"skills": {"paths": ["~/.opencode-plugins/oddyssey/skills"]}}
+    servers_only = {**record, "skills": False, "mcp": {"s": {"type": "stdio", "command": "uvx"}}}
+    config = json.loads(
+        build.opencode_install_lines(servers_only).split("```json\n", 1)[1].split("```", 1)[0]
+    )
+    assert config == {"mcp": {"s": {"type": "local", "command": ["uvx"]}}}
+    # nothing OpenCode reads: no section at all
+    assert build.opencode_install_lines({**record, "skills": False, "mcp": {}}) == ""
+    sse_only = {"x": {"type": "sse", "url": "https://sse.example/mcp"}}
+    assert build.opencode_install_lines({**record, "skills": False, "mcp": sse_only}) == ""

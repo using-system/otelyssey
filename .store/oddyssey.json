@@ -27,6 +27,18 @@
     "opentelemetry",
     "developer-tools"
   ],
+  "skills": true,
+  "mcp": {
+    "oddyssey": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": [
+        "--refresh-package",
+        "oddyssey-mcp",
+        "oddyssey-mcp==1.13.1"
+      ]
+    }
+  },
   "submitted_in": 9,
   "admitted_at": "2026-09-19",
   "stats": {

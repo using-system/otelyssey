@@ -75,3 +75,32 @@ Mistral Vibe:
 git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout e030f6114a35c433c9f826acd453898b42c978ec
 mkdir -p ~/.vibe/plugins/oddyssey && cp -r ./oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/using-system/oddyssey ~/.opencode-plugins/oddyssey && git -C ~/.opencode-plugins/oddyssey checkout e030f6114a35c433c9f826acd453898b42c978ec
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/oddyssey/marketplace/oddyssey/skills"
+    ]
+  },
+  "mcp": {
+    "oddyssey": {
+      "type": "local",
+      "command": [
+        "uvx",
+        "--refresh-package",
+        "oddyssey-mcp",
+        "oddyssey-mcp==1.13.1"
+      ]
+    }
+  }
+}
+```

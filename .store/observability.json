@@ -22,6 +22,8 @@
     "cursor",
     "skills"
   ],
+  "skills": true,
+  "mcp": {},
   "submitted_in": 57,
   "admitted_at": "2026-09-20",
   "stats": {

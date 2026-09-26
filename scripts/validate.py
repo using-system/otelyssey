@@ -133,6 +133,40 @@ def check_layout(plugin_dir: Path) -> list[str]:
     return notes
 
 
+def check_components(plugin_dir: Path) -> tuple[bool, dict, list[str]]:
+    """Whether the plugin has a skill, its MCP servers as mcp.json declares them, and every
+    error in mcp.json's shape. A key the schema does not define is not carried."""
+    skills = plugin_dir / "skills"
+    has_skills = skills.is_dir() and any((s / "SKILL.md").is_file() for s in skills.iterdir())
+    path = plugin_dir / "mcp.json"
+    if path.is_symlink():
+        # read on the runner and carried into the record: never a file outside the plugin
+        return has_skills, {}, ["mcp.json: a symbolic link, not a file"]
+    if not path.is_file():
+        return has_skills, {}, []
+    try:
+        document = json.loads(path.read_text(encoding="utf-8"))
+    except ValueError as error:
+        return has_skills, {}, [f"mcp.json: not JSON ({error})"]
+    servers = document.get("mcpServers") if isinstance(document, dict) else None
+    if not isinstance(servers, dict):
+        return has_skills, {}, ["mcp.json: mcpServers is not an object (schema)"]
+    mcp: dict = {}
+    errors: list[str] = []
+    for name, server in servers.items():
+        entry = server
+        if isinstance(server, dict):
+            keys = store.MCP_KEYS.get(server.get("type"), set(server))
+            entry = {k: v for k, v in server.items() if k in keys}
+        if not store.mcp_server_shape_ok(entry):
+            errors.append(
+                f"mcp.json: server {name!r} is not a stdio, streamable-http or sse server (schema)"
+            )
+        else:
+            mcp[name] = entry
+    return has_skills, mcp, errors
+
+
 def validate(
     repository: str,
     ref: str,
@@ -141,9 +175,16 @@ def validate(
     expected_version: str,
     workdir: Path,
 ) -> dict:
-    """sha, manifest, errors and notes of the plugin at the ref (a tag, a branch, a full sha);
-    never raises on a bad input."""
-    result: dict = {"sha": None, "manifest": {}, "errors": [], "notes": []}
+    """sha, manifest, skills, MCP servers, errors and notes of the plugin at the ref (a tag,
+    a branch, a full sha); never raises on a bad input."""
+    result: dict = {
+        "sha": None,
+        "manifest": {},
+        "skills": False,
+        "mcp": {},
+        "errors": [],
+        "notes": [],
+    }
     if path.startswith("/") or ".." in path.split("/"):
         result["errors"].append("path: not a relative directory inside the repository")
         return result
@@ -160,8 +201,11 @@ def validate(
         result["errors"].append(f"path {path!r}: no such directory at {ref}")
         return result
     manifest, errors = check_manifest(plugin_dir, expected_name, expected_version)
+    skills, mcp, mcp_errors = check_components(plugin_dir)
     result["manifest"] = manifest
-    result["errors"] = errors
+    result["skills"] = skills
+    result["mcp"] = mcp
+    result["errors"] = errors + mcp_errors
     result["notes"] = check_layout(plugin_dir)
     return result
 

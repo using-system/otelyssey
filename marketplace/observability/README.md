@@ -74,3 +74,21 @@ Mistral Vibe:
 git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
 mkdir -p ~/.vibe/plugins/observability && cp -r ./skills/plugins/observability/. ~/.vibe/plugins/observability
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/BastiDood/skills ~/.opencode-plugins/observability && git -C ~/.opencode-plugins/observability checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/observability/plugins/observability/skills"
+    ]
+  }
+}
+```

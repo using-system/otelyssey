@@ -115,3 +115,51 @@ def test_a_directory_name_cannot_forge_a_line_of_the_intake_comment(tmp_path: Pa
         in " ".join(notes)
     )
     assert "skills/'c`d': not a skill, no SKILL.md" in notes
+
+
+def write_mcp(plugin_dir: Path, servers: object) -> None:
+    document = {"$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json"}
+    (plugin_dir / "mcp.json").write_text(json.dumps({**document, "mcpServers": servers}))
+
+
+def test_components_read_the_skills_and_the_servers(tmp_path: Path):
+    assert validate.check_components(tmp_path) == (False, {}, [])
+    (tmp_path / "skills" / "empty").mkdir(parents=True)
+    assert validate.check_components(tmp_path)[0] is False
+    (tmp_path / "skills" / "one").mkdir()
+    (tmp_path / "skills" / "one" / "SKILL.md").write_text("---\nname: one\n---\n")
+    servers = {
+        "odd": {"type": "stdio", "command": "uvx", "args": ["odd"], "extra": True},
+        "web": {"type": "streamable-http", "url": "https://mcp.example/mcp"},
+    }
+    write_mcp(tmp_path, servers)
+    skills, mcp, errors = validate.check_components(tmp_path)
+    # a key the schema does not define is not carried
+    assert (skills, errors) == (True, [])
+    assert mcp == {
+        "odd": {"type": "stdio", "command": "uvx", "args": ["odd"]},
+        **{"web": servers["web"]},
+    }
+
+
+@pytest.mark.parametrize(
+    "servers,fragment",
+    [
+        ([], "mcpServers is not an object"),
+        ({"s": "uvx"}, "'s' is not a stdio"),
+        ({"s": {"type": "ws", "url": "https://x.example"}}, "'s' is not a stdio"),
+        ({"s": {"type": "stdio", "args": ["x"]}}, "'s' is not a stdio"),
+    ],
+)
+def test_a_malformed_mcp_json_is_an_error(tmp_path: Path, servers, fragment):
+    write_mcp(tmp_path, servers)
+    _, mcp, errors = validate.check_components(tmp_path)
+    assert mcp == {} and any(fragment in e for e in errors), errors
+
+
+def test_mcp_json_is_not_json_or_a_link(tmp_path: Path):
+    (tmp_path / "mcp.json").write_text("{")
+    assert "not JSON" in validate.check_components(tmp_path)[2][0]
+    (tmp_path / "mcp.json").unlink()
+    (tmp_path / "mcp.json").symlink_to(tmp_path / "elsewhere.json")
+    assert validate.check_components(tmp_path)[2] == ["mcp.json: a symbolic link, not a file"]

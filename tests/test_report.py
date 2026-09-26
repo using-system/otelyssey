@@ -32,6 +32,8 @@ RECORD = {
     "license": "Apache-2.0",
     "homepage": "https://contoso.example/plugin",
     "keywords": ["opentelemetry"],
+    "skills": False,
+    "mcp": {},
     "submitted_in": 7,
 }
 DERIVED = {"record": RECORD, "errors": [], "from_repository": []}

@@ -24,6 +24,13 @@
     "tracing",
     "logging"
   ],
+  "skills": true,
+  "mcp": {
+    "signoz": {
+      "type": "streamable-http",
+      "url": "https://not-setup/mcp"
+    }
+  },
   "submitted_in": 50,
   "admitted_at": "2026-09-20",
   "stats": {

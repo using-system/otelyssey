@@ -77,3 +77,34 @@ Mistral Vibe:
 git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
 mkdir -p ~/.vibe/plugins/dynatrace-managed-mcp && cp -r ./dynatrace-managed-mcp/. ~/.vibe/plugins/dynatrace-managed-mcp
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp ~/.opencode-plugins/dynatrace-managed-mcp && git -C ~/.opencode-plugins/dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/dynatrace-managed-mcp/skills"
+    ]
+  },
+  "mcp": {
+    "dynatrace-managed": {
+      "type": "local",
+      "command": [
+        "npx",
+        "-y",
+        "@dynatrace-oss/dynatrace-managed-mcp-server@<2"
+      ],
+      "environment": {
+        "DT_ENVIRONMENT_CONFIGS": "{env:DT_ENVIRONMENT_CONFIGS}"
+      }
+    }
+  }
+}
+```

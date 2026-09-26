@@ -18,6 +18,8 @@ RECORD = {
     "license": "MIT",
     "homepage": "https://github.com/using-system/oddyssey#readme",
     "keywords": ["opentelemetry", "observability"],
+    "skills": False,
+    "mcp": {},
     "submitted_in": 1,
     "admitted_at": "2026-09-19",
     "stats": {"stars": 0, "forks": 0, "watchers": 0, "refreshed_at": "2026-09-19T00:00:00Z"},
@@ -125,3 +127,41 @@ def test_author_email_and_url_are_optional():
     author = {"name": "x", "email": "x@example.com", "url": "https://contoso.example"}
     assert store.validate_record({**RECORD, "author": author}) == []
     assert store.validate_record({**RECORD, "homepage": ""}) == []
+
+
+SERVERS = {
+    "odd": {"type": "stdio", "command": "uvx", "args": ["odd"], "env": {"K": "${K}"}},
+    "web": {"type": "streamable-http", "url": "https://mcp.example/mcp"},
+}
+
+
+def test_mcp_servers_of_the_schemas_shape_are_valid():
+    assert store.validate_record({**RECORD, "mcp": SERVERS}) == []
+
+
+@pytest.mark.parametrize(
+    "mcp,fragment",
+    [
+        ([], "mcp: not an object"),
+        ({"bad name": {"type": "stdio", "command": "x"}}, "server name"),
+        ({"s": {"type": "ws", "url": "https://x.example"}}, "not a stdio"),
+        ({"s": {"type": "stdio", "command": ""}}, "not a stdio"),
+        ({"s": {"type": "stdio", "command": "x", "url": "https://x.example"}}, "not a stdio"),
+        ({"s": {"type": "stdio", "command": "x", "args": "a b"}}, "not a stdio"),
+        ({"s": {"type": "stdio", "command": "x", "env": {"K": 1}}}, "not a stdio"),
+        # a backtick would close the code block the page puts the servers in
+        ({"s": {"type": "stdio", "command": "x", "args": ["```"]}}, "backtick"),
+        ({"s": {"type": "streamable-http", "url": "https://x.example/\n"}}, "control"),
+        ({"s": {"type": "stdio", "command": "x", "env": {"K`": "v"}}}, "backtick"),
+        # OpenCode would read the user's files or environment through them
+        ({"s": {"type": "stdio", "command": "x", "args": ["{file:~/.ssh/id_rsa}"]}}, "{file:"),
+        ({"s": {"type": "streamable-http", "url": "https://x.example/{env:GH_TOKEN}"}}, "{env:"),
+    ],
+)
+def test_mcp_servers_the_store_refuses(mcp, fragment):
+    errors = store.validate_record({**RECORD, "mcp": mcp})
+    assert any(fragment in e for e in errors), errors
+
+
+def test_skills_is_a_boolean():
+    assert "skills: not a boolean" in store.validate_record({**RECORD, "skills": "yes"})

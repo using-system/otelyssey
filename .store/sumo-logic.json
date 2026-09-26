@@ -27,6 +27,13 @@
     "search",
     "security"
   ],
+  "skills": true,
+  "mcp": {
+    "sumo-logic": {
+      "type": "streamable-http",
+      "url": "https://not-setup/mcp"
+    }
+  },
   "submitted_in": 101,
   "admitted_at": "2026-09-20",
   "stats": {

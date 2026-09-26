@@ -84,6 +84,8 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
         "ref": candidate["ref"],
         "sha": validation["sha"],
         "version": manifest["version"],
+        "skills": validation["skills"],
+        "mcp": validation["mcp"],
         "submitted_in": candidate["submitted_in"],
     }
     for field, key, meta_key in FALLBACKS:
@@ -131,27 +133,31 @@ def derive(candidate: dict, validation: dict, meta: dict) -> tuple[dict, list[st
     # admission would refuse is a needs-changes here, not a failed admission after a ruling
     if not errors:
         errors += [
-            f"plugin.json: {line}" for line in store.validate_record({**ordered, **PLACEHOLDERS})
+            f"{'mcp.json' if line.startswith('mcp') else 'plugin.json'}: {line}"
+            for line in store.validate_record({**ordered, **PLACEHOLDERS})
         ]
     return ordered, errors, from_repository
 
 
-DERIVED = ("description", "license", "homepage", "author", "keywords")
+DERIVED = ("description", "license", "homepage", "author", "keywords", "skills", "mcp")
 MISSING = "plugin.json: no "
 
 
-def resync(record: dict, manifest: dict, meta: dict) -> tuple[dict, list[str]]:
-    """An admitted record with its derived fields read again from its manifest and its
-    repository's metadata. A description, a license or an author that neither gives keeps
-    the record's value, and is reported; an empty homepage or keywords is a derived value.
+def resync(record: dict, check: dict, meta: dict) -> tuple[dict, list[str]]:
+    """An admitted record with its derived fields read again from the plugin at its sha (the
+    validation: its manifest, its skills, its MCP servers) and its repository's metadata. A
+    description, a license or an author that neither gives keeps the record's value, and is
+    reported; an empty homepage or keywords is a derived value.
 
     What the record pins (name, version, ref, sha) and what the pipeline decided (categories,
     submitted_in, admitted_at, stats) are untouched.
     """
     candidate = {k: record[k] for k in ("repository", "path", "ref", "submitted_in")}
     # the name and the version are the record's, pinned; the manifest gives the rest
-    pinned = {**manifest, "name": record["name"], "version": record["version"]}
-    derived, errors, _ = derive(candidate, {"sha": record["sha"], "manifest": pinned}, meta)
+    pinned = {**check["manifest"], "name": record["name"], "version": record["version"]}
+    derived, errors, _ = derive(
+        candidate, {**check, "sha": record["sha"], "manifest": pinned}, meta
+    )
     kept = [e for e in errors if e.startswith(MISSING)]
     missing = {e.removeprefix(MISSING).split(",", 1)[0] for e in kept}
     updated = {**record, **{f: derived[f] for f in DERIVED if f not in missing}}

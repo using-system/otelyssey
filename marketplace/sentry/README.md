@@ -77,3 +77,27 @@ Mistral Vibe:
 git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
 mkdir -p ~/.vibe/plugins/sentry && cp -r ./agent-plugin/. ~/.vibe/plugins/sentry
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/getsentry/agent-plugin ~/.opencode-plugins/sentry && git -C ~/.opencode-plugins/sentry checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "skills": {
+    "paths": [
+      "~/.opencode-plugins/sentry/skills"
+    ]
+  },
+  "mcp": {
+    "sentry": {
+      "type": "remote",
+      "url": "https://mcp.sentry.dev/mcp?utm_source=plugin"
+    }
+  }
+}
+```

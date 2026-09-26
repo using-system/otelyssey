@@ -75,3 +75,28 @@ Mistral Vibe:
 git clone https://github.com/Arize-ai/phoenix && git -C phoenix checkout 767847c3386492f9783b623cf78e3eee47d0cea3
 mkdir -p ~/.vibe/plugins/arize-phoenix && cp -r ./phoenix/plugins/codex/arize-phoenix/. ~/.vibe/plugins/arize-phoenix
 ```
+
+OpenCode:
+
+```text
+git clone https://github.com/Arize-ai/phoenix ~/.opencode-plugins/arize-phoenix && git -C ~/.opencode-plugins/arize-phoenix checkout 767847c3386492f9783b623cf78e3eee47d0cea3
+```
+
+Then merge into `~/.config/opencode/opencode.json`:
+
+```json
+{
+  "mcp": {
+    "phoenix": {
+      "type": "local",
+      "command": [
+        "{env:HOME}/.opencode-plugins/arize-phoenix/plugins/codex/arize-phoenix/scripts/phoenix-mcp"
+      ],
+      "environment": {
+        "PHOENIX_ENDPOINT": "{env:PHOENIX_ENDPOINT}",
+        "PHOENIX_API_KEY": "{env:PHOENIX_API_KEY}"
+      }
+    }
+  }
+}
+```
