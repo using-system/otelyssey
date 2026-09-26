@@ -27,10 +27,10 @@ CATEGORY_TITLES = {
     "observability": "Observability",
 }
 CATEGORY_ICONS = {
-    "instrumentation": "📡",
-    "collector": "🚢",
-    "backend": "🗄️",
-    "observability": "🔍",
+    "instrumentation": "🔧",
+    "collector": "🔀",
+    "backend": "☁️",
+    "observability": "👀",
 }
 CATEGORY_TAGLINES = {
     "instrumentation": "Put the telemetry in: SDKs, semantic conventions, instrumentation advice.",

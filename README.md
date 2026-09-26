@@ -45,7 +45,7 @@ every night. Bugs, ideas, code: see [CONTRIBUTING](CONTRIBUTING.md).
 ## Plugins
 
 <!-- otelyssey:plugins -->
-### 📡 Instrumentation
+### 🔧 Instrumentation
 
 Put the telemetry in: SDKs, semantic conventions, instrumentation advice.
 
@@ -58,7 +58,7 @@ Put the telemetry in: SDKs, semantic conventions, instrumentation advice.
 - <img src="https://github.com/amiable-dev.png?size=40" width="20" height="20" alt=""> **[stdtel](marketplace/stdtel/README.md)** by [amiable-dev](https://github.com/amiable-dev) — Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot. · also in Backends  
 <a href="#"><img src="https://img.shields.io/github/stars/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&label=&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2UzYjM0MSIgZD0iTTEyIDFsMy40IDcgNy42IDEuMS01LjUgNS40IDEuMyA3LjZMMTIgMTguNSA1LjIgMjIuMWwxLjMtNy42TDEgOS4xIDguNiA4eiIvPjwvc3ZnPg%3D%3D&color=e3b341" alt="stars"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/badge/version-0.4.0-3b7dd8?style=flat-square&labelColor=2b2b2b&color=3b7dd8" alt="version"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/github/last-commit/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=2ea44f" alt="last-commit"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/github/license/amiable-dev/skills-telemetry?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="license"></a>
 
-### 🗄️ Backends
+### ☁️ Backends
 
 Talk to a backend: query it, its dashboards, alerts and issues.
 
@@ -83,7 +83,7 @@ Talk to a backend: query it, its dashboards, alerts and issues.
 - <img src="https://github.com/SumoLogic.png?size=40" width="20" height="20" alt=""> **[sumo-logic](marketplace/sumo-logic/README.md)** by [Sumo Logic](https://www.sumologic.com) — Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.  
 <a href="#"><img src="https://img.shields.io/github/stars/SumoLogic/sumologic-ai-plugins?style=flat-square&labelColor=2b2b2b&label=&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI%2BPHBhdGggZmlsbD0iI2UzYjM0MSIgZD0iTTEyIDFsMy40IDcgNy42IDEuMS01LjUgNS40IDEuMyA3LjZMMTIgMTguNSA1LjIgMjIuMWwxLjMtNy42TDEgOS4xIDguNiA4eiIvPjwvc3ZnPg%3D%3D&color=e3b341" alt="stars"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/badge/version-1.0.1-3b7dd8?style=flat-square&labelColor=2b2b2b&color=3b7dd8" alt="version"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/github/last-commit/SumoLogic/sumologic-ai-plugins?style=flat-square&labelColor=2b2b2b&color=2ea44f" alt="last-commit"></a>&nbsp;&nbsp;<a href="#"><img src="https://img.shields.io/github/license/SumoLogic/sumologic-ai-plugins?style=flat-square&labelColor=2b2b2b&color=6b6b6b" alt="license"></a>
 
-### 🔍 Observability
+### 👀 Observability
 
 Read it back: observe a run through its telemetry, wherever it lands.
 
