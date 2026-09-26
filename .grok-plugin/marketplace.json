@@ -1,7 +1,10 @@
 {
   "name": "otelyssey",
   "interface": {
-    "displayName": "otelyssey"
+    "displayName": "otelyssey",
+    "websiteURL": "https://github.com/using-system/otelyssey",
+    "privacyPolicyURL": "https://github.com/using-system/otelyssey/blob/main/docs/PRIVACY.md",
+    "termsOfServiceURL": "https://github.com/using-system/otelyssey/blob/main/docs/TERMS.md"
   },
   "plugins": [
     {
