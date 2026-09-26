@@ -1,0 +1,36 @@
+{
+  "name": "save-toolkit",
+  "description": "Application-engineering and site-reliability agents and reusable skills.",
+  "categories": [
+    "observability",
+    "backend",
+    "instrumentation",
+    "collector"
+  ],
+  "repository": "latent-sre/save-toolkit",
+  "path": "",
+  "ref": "main",
+  "sha": "c7b453ba8ad05e8059661f3a59fb5aa4be848a56",
+  "version": "0.50.0",
+  "author": {
+    "name": "latent-sre",
+    "url": "https://github.com/latent-sre"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/latent-sre/save-toolkit",
+  "keywords": [
+    "agents",
+    "skills",
+    "sre",
+    "observability",
+    "pcf"
+  ],
+  "submitted_in": 122,
+  "admitted_at": "2026-09-26",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-09-26T13:06:21Z"
+  }
+}
