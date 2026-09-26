@@ -70,7 +70,12 @@ def test_codex_marketplace_uses_git_backed_sources_pinned_at_the_sha():
     # root, git-subdir with a ./-prefixed path otherwise, ref and sha on both
     payload = build.codex_marketplace_json(records())
     assert payload["name"] == "otelyssey"
-    assert payload["interface"] == {"displayName": "otelyssey"}
+    assert payload["interface"] == {
+        "displayName": "otelyssey",
+        "websiteURL": "https://github.com/using-system/otelyssey",
+        "privacyPolicyURL": "https://github.com/using-system/otelyssey/blob/main/docs/PRIVACY.md",
+        "termsOfServiceURL": "https://github.com/using-system/otelyssey/blob/main/docs/TERMS.md",
+    }
     [entry] = payload["plugins"]
     assert entry["name"] == "oddyssey"
     assert entry["source"] == {

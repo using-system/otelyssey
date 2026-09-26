@@ -17,6 +17,7 @@ from scripts import store
 MARKETPLACE_NAME = "otelyssey"
 MARKETPLACE_REPO = "using-system/otelyssey"
 HERMES_PACK_URL = f"https://raw.githubusercontent.com/{MARKETPLACE_REPO}/main/hermes-pack.yaml"
+REPO_URL = f"https://github.com/{MARKETPLACE_REPO}"
 OWNER = {"name": "using-system", "url": "https://github.com/using-system"}
 LIST_START = "<!-- otelyssey:plugins -->"
 LIST_END = "<!-- /otelyssey:plugins -->"
@@ -118,7 +119,12 @@ def codex_marketplace_json(records: dict[str, dict]) -> dict:
         plugins.append(entry)
     return {
         "name": MARKETPLACE_NAME,
-        "interface": {"displayName": MARKETPLACE_NAME},
+        "interface": {
+            "displayName": MARKETPLACE_NAME,
+            "websiteURL": REPO_URL,
+            "privacyPolicyURL": f"{REPO_URL}/blob/main/docs/PRIVACY.md",
+            "termsOfServiceURL": f"{REPO_URL}/blob/main/docs/TERMS.md",
+        },
         "plugins": plugins,
     }
 
