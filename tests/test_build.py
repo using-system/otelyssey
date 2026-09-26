@@ -200,7 +200,7 @@ def test_readme_install_block_carries_the_pack_url():
 def test_readme_list_groups_the_plugins_by_category_with_live_badges():
     text = build.readme_list(records())
     # listed once, under the principal category; the other named in the line
-    assert text.startswith("### 🔭 Observability\n\nRead it back: ")
+    assert text.startswith("### 👀 Observability\n\nRead it back: ")
     assert f"### {build.CATEGORY_ICONS['instrumentation']} Instrumentation" not in text
     (tagline, blank_after_tagline, entry, badges, blank) = text.splitlines()[2:7]
     assert tagline == build.CATEGORY_TAGLINES["observability"] and blank_after_tagline == ""
@@ -252,13 +252,13 @@ def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_one
     third = {**first, "name": "col-a", "categories": ["collector"], "repository": "a/col-a"}
     text = build.readme_list({"oddyssey": first, "col-b": second, "col-a": third})
     headings = [line for line in text.splitlines() if line.startswith("### ")]
-    assert headings == ["### 🚢 Collector", "### 🔭 Observability"]
+    assert headings == ["### 🔀 Collector", "### 👀 Observability"]
     # two entries in one category, after the tagline: name order, one blank line between them
     lines = text.splitlines()
     assert lines[2] == build.CATEGORY_TAGLINES["collector"] and lines[3] == ""
     assert "**[col-a](" in lines[4] and lines[5].startswith("<a ") and lines[6] == ""
     assert "**[col-b](" in lines[7] and lines[8].startswith("<a ") and lines[9] == ""
-    assert lines[10] == "### 🔭 Observability"
+    assert lines[10] == "### 👀 Observability"
 
 
 def test_readme_list_of_an_empty_store_says_so():
