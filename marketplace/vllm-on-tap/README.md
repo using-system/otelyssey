@@ -9,7 +9,7 @@ Serve vLLM presets on demand - locally, Kubernetes (KServe), Azure (Container Ap
 - License: MIT
 - Keywords: `vllm`, `inference`, `llm`, `azure`, `azure-container-apps`, `gpu`, `opentelemetry`
 - Homepage: <https://github.com/using-system/vllm-on-tap#readme>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-09-26T18:04:58Z)
+- Stars 1, forks 0, watchers 0 (refreshed 2026-09-27T09:19:05Z)
 
 ## Install
 
