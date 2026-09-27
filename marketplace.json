@@ -346,12 +346,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/using-system/vllm-on-tap.git",
-        "ref": "v0.2.2",
-        "sha": "b4b46dae7e7cca8c273f85b831cb3688cadc7a93"
+        "ref": "v0.2.3",
+        "sha": "2046ecc85212b800c10550db33da57e37c8b98b7"
       },
       "strict": true,
       "description": "Serve vLLM presets on demand - locally, Kubernetes (KServe), Azure (Container Apps), AWS (ECS) or GCP (Cloud Run) - with their traces over OTLP, and tear them down again.",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "category": "instrumentation",
       "keywords": [
         "vllm",

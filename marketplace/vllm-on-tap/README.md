@@ -4,7 +4,7 @@ Serve vLLM presets on demand - locally, Kubernetes (KServe), Azure (Container Ap
 
 - Repository: [using-system/vllm-on-tap](https://github.com/using-system/vllm-on-tap), the plugin at the root of it
 - Categories: `instrumentation`
-- Version: 0.2.2 (`v0.2.2`, commit `b4b46dae7e7c`)
+- Version: 0.2.3 (`v0.2.3`, commit `2046ecc85212`)
 - Author: [using-system](https://github.com/using-system)
 - License: MIT
 - Keywords: `vllm`, `inference`, `llm`, `azure`, `azure-container-apps`, `gpu`, `opentelemetry`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install using-system/vllm-on-tap --ref b4b46dae7e7cca8c273f85b831cb3688cadc7a93
+hermes plugins install using-system/vllm-on-tap --ref 2046ecc85212b800c10550db33da57e37c8b98b7
 hermes plugins enable vllm-on-tap
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/vllm-on-tap && git -C vllm-on-tap checkout b4b46dae7e7cca8c273f85b831cb3688cadc7a93
+git clone https://github.com/using-system/vllm-on-tap && git -C vllm-on-tap checkout 2046ecc85212b800c10550db33da57e37c8b98b7
 openclaw plugins install ./vllm-on-tap --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/using-system/vllm-on-tap && git -C vllm-on-tap checkout b4b46dae7e7cca8c273f85b831cb3688cadc7a93
+git clone https://github.com/using-system/vllm-on-tap && git -C vllm-on-tap checkout 2046ecc85212b800c10550db33da57e37c8b98b7
 mkdir -p ~/.vibe/plugins/vllm-on-tap && cp -r ./vllm-on-tap/. ~/.vibe/plugins/vllm-on-tap
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/using-system/vllm-on-tap ~/.opencode-plugins/vllm-on-tap && git -C ~/.opencode-plugins/vllm-on-tap checkout b4b46dae7e7cca8c273f85b831cb3688cadc7a93
+git clone https://github.com/using-system/vllm-on-tap ~/.opencode-plugins/vllm-on-tap && git -C ~/.opencode-plugins/vllm-on-tap checkout 2046ecc85212b800c10550db33da57e37c8b98b7
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
