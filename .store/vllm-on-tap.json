@@ -6,9 +6,9 @@
   ],
   "repository": "using-system/vllm-on-tap",
   "path": "",
-  "ref": "v0.2.1",
-  "sha": "4a129a32038ebd4373d61f7c5c0c2cda1ed20da4",
-  "version": "0.2.1",
+  "ref": "v0.2.2",
+  "sha": "b4b46dae7e7cca8c273f85b831cb3688cadc7a93",
+  "version": "0.2.2",
   "author": {
     "name": "using-system",
     "url": "https://github.com/using-system"
