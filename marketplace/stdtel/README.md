@@ -4,7 +4,7 @@ Telemetry for standards-as-skills: attributes token cost and policy outcomes to 
 
 - Repository: [amiable-dev/skills-telemetry](https://github.com/amiable-dev/skills-telemetry), the plugin at the root of it
 - Categories: `instrumentation`, `backend`
-- Version: 0.4.0 (`v0.4.0`, commit `a95d23afc261`)
+- Version: 0.6.0 (`v0.6.0`, commit `9da0e623c16f`)
 - Author: [amiable-dev](https://github.com/amiable-dev)
 - License: MIT
 - Keywords: `telemetry`, `opentelemetry`, `skills`, `standards`, `governance`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install amiable-dev/skills-telemetry --ref a95d23afc26150737a4eb6894b96a7235fa8f8da
+hermes plugins install amiable-dev/skills-telemetry --ref 9da0e623c16f0ddcb3d0200c6717013c7a384885
 hermes plugins enable stdtel
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout 9da0e623c16f0ddcb3d0200c6717013c7a384885
 openclaw plugins install ./skills-telemetry --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+git clone https://github.com/amiable-dev/skills-telemetry && git -C skills-telemetry checkout 9da0e623c16f0ddcb3d0200c6717013c7a384885
 mkdir -p ~/.vibe/plugins/stdtel && cp -r ./skills-telemetry/. ~/.vibe/plugins/stdtel
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/amiable-dev/skills-telemetry ~/.opencode-plugins/stdtel && git -C ~/.opencode-plugins/stdtel checkout a95d23afc26150737a4eb6894b96a7235fa8f8da
+git clone https://github.com/amiable-dev/skills-telemetry ~/.opencode-plugins/stdtel && git -C ~/.opencode-plugins/stdtel checkout 9da0e623c16f0ddcb3d0200c6717013c7a384885
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
