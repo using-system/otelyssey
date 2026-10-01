@@ -191,7 +191,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "1.23.6",
+      "version": "1.23.7",
       "keywords": [
         "datadog",
         "monitoring",
@@ -208,8 +208,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v1.23.6",
-        "sha": "230fe4447c502c2e96861b3427b7dd5c37afb1cb"
+        "ref": "v1.23.7",
+        "sha": "102fc73c0bc420f879babced4882d88789276815"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -249,7 +249,7 @@
     {
       "name": "sentry",
       "description": "Set up Sentry, debug production issues, and configure application monitoring.",
-      "version": "1.4.0",
+      "version": "1.4.1",
       "keywords": [
         "sentry",
         "debugging",
@@ -263,8 +263,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/getsentry/agent-plugin.git",
-        "ref": "v1.4.0",
-        "sha": "3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5"
+        "ref": "v1.4.1",
+        "sha": "156f3061a5489373ba01f04c8d6960c46e0034e9"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -307,7 +307,7 @@
     {
       "name": "stdtel",
       "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "keywords": [
         "telemetry",
         "opentelemetry",
@@ -322,8 +322,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/amiable-dev/skills-telemetry.git",
-        "ref": "v0.6.0",
-        "sha": "9da0e623c16f0ddcb3d0200c6717013c7a384885"
+        "ref": "v0.7.0",
+        "sha": "cf39e9e43cf0a37a94a4bab350dc3ebdf59b01e5"
       },
       "policy": {
         "installation": "AVAILABLE",

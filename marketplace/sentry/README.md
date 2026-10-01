@@ -4,7 +4,7 @@ Set up Sentry, debug production issues, and configure application monitoring.
 
 - Repository: [getsentry/agent-plugin](https://github.com/getsentry/agent-plugin), the plugin at the root of it
 - Categories: `backend`
-- Version: 1.4.0 (`v1.4.0`, commit `3dfc0eab9afb`)
+- Version: 1.4.1 (`v1.4.1`, commit `156f3061a548`)
 - Author: [Sentry](https://sentry.io)
 - License: MIT
 - Keywords: `sentry`, `debugging`, `monitoring`, `error-tracking`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install getsentry/agent-plugin --ref 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+hermes plugins install getsentry/agent-plugin --ref 156f3061a5489373ba01f04c8d6960c46e0034e9
 hermes plugins enable sentry
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 156f3061a5489373ba01f04c8d6960c46e0034e9
 openclaw plugins install ./agent-plugin --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+git clone https://github.com/getsentry/agent-plugin && git -C agent-plugin checkout 156f3061a5489373ba01f04c8d6960c46e0034e9
 mkdir -p ~/.vibe/plugins/sentry && cp -r ./agent-plugin/. ~/.vibe/plugins/sentry
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/getsentry/agent-plugin ~/.opencode-plugins/sentry && git -C ~/.opencode-plugins/sentry checkout 3dfc0eab9afb9fc649c10db1e3e247bbcd0f7be5
+git clone https://github.com/getsentry/agent-plugin ~/.opencode-plugins/sentry && git -C ~/.opencode-plugins/sentry checkout 156f3061a5489373ba01f04c8d6960c46e0034e9
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
