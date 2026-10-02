@@ -26,7 +26,7 @@ plugins:
     subdir: "plugins/signoz"
     ref: "eac09ab84fc628261437617d8db12618c144e0c7"
   - repo: amiable-dev/skills-telemetry
-    ref: "cf39e9e43cf0a37a94a4bab350dc3ebdf59b01e5"
+    ref: "0d3665164c59bb5f33690e476d604c61751aed74"
   - repo: SumoLogic/sumologic-ai-plugins
     ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
   - repo: using-system/vllm-on-tap
