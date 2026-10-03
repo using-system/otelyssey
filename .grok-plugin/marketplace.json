@@ -191,7 +191,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "1.23.7",
+      "version": "1.24.0",
       "keywords": [
         "datadog",
         "monitoring",
@@ -208,8 +208,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v1.23.7",
-        "sha": "102fc73c0bc420f879babced4882d88789276815"
+        "ref": "v1.24.0",
+        "sha": "86f20bac7ecea8f3ee03b0a24a620bb57e36196f"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -249,7 +249,7 @@
     {
       "name": "sentry",
       "description": "Set up Sentry, debug production issues, and configure application monitoring.",
-      "version": "1.4.1",
+      "version": "1.4.3",
       "keywords": [
         "sentry",
         "debugging",
@@ -263,8 +263,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/getsentry/agent-plugin.git",
-        "ref": "v1.4.1",
-        "sha": "156f3061a5489373ba01f04c8d6960c46e0034e9"
+        "ref": "v1.4.3",
+        "sha": "710c9a31475edba36ef48d15ade7d95e5dc39a77"
       },
       "policy": {
         "installation": "AVAILABLE",

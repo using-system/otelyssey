@@ -6,9 +6,9 @@
   ],
   "repository": "getsentry/agent-plugin",
   "path": "",
-  "ref": "v1.4.1",
-  "sha": "156f3061a5489373ba01f04c8d6960c46e0034e9",
-  "version": "1.4.1",
+  "ref": "v1.4.3",
+  "sha": "710c9a31475edba36ef48d15ade7d95e5dc39a77",
+  "version": "1.4.3",
   "author": {
     "name": "Sentry",
     "url": "https://sentry.io"
