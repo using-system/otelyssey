@@ -4,7 +4,7 @@ Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream s
 
 - Repository: [ollygarden/opentelemetry-agent-skills](https://github.com/ollygarden/opentelemetry-agent-skills), the plugin at the root of it
 - Categories: `instrumentation`, `collector`
-- Version: 1.0.0 (`main`, commit `cbdb25cd88ef`)
+- Version: 1.0.0 (`v1.0.0`, commit `ea1a9401c449`)
 - Author: [OllyGarden](https://github.com/ollygarden)
 - License: Apache-2.0
 - Keywords: `opentelemetry`, `otel`, `observability`, `collector`, `semantic-conventions`, `skills`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install ollygarden/opentelemetry-agent-skills --ref cbdb25cd88ef66d086bc39fed8180b13bfb91e70
+hermes plugins install ollygarden/opentelemetry-agent-skills --ref ea1a9401c449a43e319a634030bea66390173dff
 hermes plugins enable opentelemetry-agent-skills
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/ollygarden/opentelemetry-agent-skills && git -C opentelemetry-agent-skills checkout cbdb25cd88ef66d086bc39fed8180b13bfb91e70
+git clone https://github.com/ollygarden/opentelemetry-agent-skills && git -C opentelemetry-agent-skills checkout ea1a9401c449a43e319a634030bea66390173dff
 openclaw plugins install ./opentelemetry-agent-skills --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/ollygarden/opentelemetry-agent-skills && git -C opentelemetry-agent-skills checkout cbdb25cd88ef66d086bc39fed8180b13bfb91e70
+git clone https://github.com/ollygarden/opentelemetry-agent-skills && git -C opentelemetry-agent-skills checkout ea1a9401c449a43e319a634030bea66390173dff
 mkdir -p ~/.vibe/plugins/opentelemetry-agent-skills && cp -r ./opentelemetry-agent-skills/. ~/.vibe/plugins/opentelemetry-agent-skills
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/ollygarden/opentelemetry-agent-skills ~/.opencode-plugins/opentelemetry-agent-skills && git -C ~/.opencode-plugins/opentelemetry-agent-skills checkout cbdb25cd88ef66d086bc39fed8180b13bfb91e70
+git clone https://github.com/ollygarden/opentelemetry-agent-skills ~/.opencode-plugins/opentelemetry-agent-skills && git -C ~/.opencode-plugins/opentelemetry-agent-skills checkout ea1a9401c449a43e319a634030bea66390173dff
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

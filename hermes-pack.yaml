@@ -15,7 +15,7 @@ plugins:
     subdir: "marketplace/oddyssey"
     ref: "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
   - repo: ollygarden/opentelemetry-agent-skills
-    ref: "cbdb25cd88ef66d086bc39fed8180b13bfb91e70"
+    ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: DataDog/pup
     ref: "86f20bac7ecea8f3ee03b0a24a620bb57e36196f"
   - repo: latent-sre/save-toolkit
@@ -26,7 +26,7 @@ plugins:
     subdir: "plugins/signoz"
     ref: "eac09ab84fc628261437617d8db12618c144e0c7"
   - repo: amiable-dev/skills-telemetry
-    ref: "0d3665164c59bb5f33690e476d604c61751aed74"
+    ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins
     ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
   - repo: using-system/vllm-on-tap

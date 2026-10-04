@@ -7,8 +7,8 @@
   ],
   "repository": "ollygarden/opentelemetry-agent-skills",
   "path": "",
-  "ref": "main",
-  "sha": "cbdb25cd88ef66d086bc39fed8180b13bfb91e70",
+  "ref": "v1.0.0",
+  "sha": "ea1a9401c449a43e319a634030bea66390173dff",
   "version": "1.0.0",
   "author": {
     "name": "OllyGarden",

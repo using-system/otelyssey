@@ -154,8 +154,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/ollygarden/opentelemetry-agent-skills.git",
-        "ref": "main",
-        "sha": "cbdb25cd88ef66d086bc39fed8180b13bfb91e70"
+        "ref": "v1.0.0",
+        "sha": "ea1a9401c449a43e319a634030bea66390173dff"
       },
       "strict": true,
       "description": "Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream sources: SDK setup per language, the Collector and OCB, OTTL, declarative configuration, semantic conventions, upgrades and migrations.",
@@ -289,12 +289,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/amiable-dev/skills-telemetry.git",
-        "ref": "v0.9.0",
-        "sha": "0d3665164c59bb5f33690e476d604c61751aed74"
+        "ref": "v0.9.1",
+        "sha": "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
       },
       "strict": true,
       "description": "Telemetry for standards-as-skills: attributes token cost and policy outcomes to individual skills across Claude Code and GitHub Copilot.",
-      "version": "0.9.0",
+      "version": "0.9.1",
       "category": "instrumentation",
       "keywords": [
         "telemetry",
