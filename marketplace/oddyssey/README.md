@@ -9,7 +9,7 @@ CLI toolbox for Observability-Driven Development (ODD): coding agents observe lo
 - License: MIT
 - Keywords: `claude-code`, `claude-code-plugin`, `claude-skills`, `mcp`, `ai-agents`, `observability`, `opentelemetry`, `developer-tools`
 - Homepage: <https://github.com/using-system/oddyssey#readme>
-- Stars 9, forks 2, watchers 0 (refreshed 2026-09-19T20:41:13Z)
+- Stars 10, forks 2, watchers 0 (refreshed 2026-10-08T10:39:33Z)
 
 ## Install
 
