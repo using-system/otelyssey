@@ -19,7 +19,7 @@ plugins:
   - repo: DataDog/pup
     ref: "c07537542dfc4ced9eb81bf9fcbef0939700a3b0"
   - repo: latent-sre/save-toolkit
-    ref: "c76bba3f662047a079a417344f4d71e53450818d"
+    ref: "34634c25179c71a3965df29eebf7332cc277cc67"
   - repo: getsentry/agent-plugin
     ref: "710c9a31475edba36ef48d15ade7d95e5dc39a77"
   - repo: SigNoz/agent-skills

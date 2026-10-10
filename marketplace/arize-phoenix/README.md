@@ -9,7 +9,7 @@ Connect to your Phoenix instance to debug, evaluate, and improve LLM application
 - License: Apache-2.0
 - Keywords: `phoenix`, `arize`, `observability`, `tracing`, `evals`, `llm`, `mcp`
 - Homepage: <https://arize.com/docs/phoenix>
-- Stars 11766, forks 1198, watchers 61 (refreshed 2026-10-09T10:38:39Z)
+- Stars 11771, forks 1201, watchers 61 (refreshed 2026-10-10T09:54:40Z)
 
 ## Install
 

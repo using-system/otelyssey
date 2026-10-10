@@ -221,7 +221,7 @@
     {
       "name": "save-toolkit",
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.51.0",
+      "version": "0.51.1",
       "keywords": [
         "agents",
         "skills",
@@ -237,7 +237,7 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "c76bba3f662047a079a417344f4d71e53450818d"
+        "sha": "34634c25179c71a3965df29eebf7332cc277cc67"
       },
       "policy": {
         "installation": "AVAILABLE",
