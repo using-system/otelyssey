@@ -9,7 +9,7 @@ Set up Sentry, debug production issues, and configure application monitoring.
 - License: MIT
 - Keywords: `sentry`, `debugging`, `monitoring`, `error-tracking`
 - Homepage: <https://sentry.io>
-- Stars 3, forks 0, watchers 0 (refreshed 2026-09-20T12:38:02Z)
+- Stars 4, forks 0, watchers 0 (refreshed 2026-10-14T08:47:05Z)
 
 ## Install
 
