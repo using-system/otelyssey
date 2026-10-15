@@ -4,12 +4,12 @@ Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agen
 
 - Repository: [DataDog/pup](https://github.com/DataDog/pup), the plugin at the root of it
 - Categories: `backend`
-- Version: 1.27.0 (`v1.27.0`, commit `1efd799a3775`)
+- Version: 1.27.1 (`v1.27.1`, commit `a787cb9fd7e3`)
 - Author: Datadog
 - License: Apache-2.0
 - Keywords: `datadog`, `monitoring`, `logs`, `apm`, `metrics`, `security`, `infrastructure`
 - Homepage: <https://github.com/DataDog/pup#readme>
-- Stars 1028, forks 127, watchers 8 (refreshed 2026-10-10T09:54:40Z)
+- Stars 1029, forks 127, watchers 8 (refreshed 2026-10-15T08:22:00Z)
 
 ## Install
 
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install DataDog/pup --ref 1efd799a37753861b6e28a10b9eb7a00b3cfb025
+hermes plugins install DataDog/pup --ref a787cb9fd7e36ce837d1e899a0c7056b98890db8
 hermes plugins enable pup
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/DataDog/pup && git -C pup checkout 1efd799a37753861b6e28a10b9eb7a00b3cfb025
+git clone https://github.com/DataDog/pup && git -C pup checkout a787cb9fd7e36ce837d1e899a0c7056b98890db8
 openclaw plugins install ./pup --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/DataDog/pup && git -C pup checkout 1efd799a37753861b6e28a10b9eb7a00b3cfb025
+git clone https://github.com/DataDog/pup && git -C pup checkout a787cb9fd7e36ce837d1e899a0c7056b98890db8
 mkdir -p ~/.vibe/plugins/pup && cp -r ./pup/. ~/.vibe/plugins/pup
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/DataDog/pup ~/.opencode-plugins/pup && git -C ~/.opencode-plugins/pup checkout 1efd799a37753861b6e28a10b9eb7a00b3cfb025
+git clone https://github.com/DataDog/pup ~/.opencode-plugins/pup && git -C ~/.opencode-plugins/pup checkout a787cb9fd7e36ce837d1e899a0c7056b98890db8
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

@@ -17,11 +17,11 @@ plugins:
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: DataDog/pup
-    ref: "1efd799a37753861b6e28a10b9eb7a00b3cfb025"
+    ref: "a787cb9fd7e36ce837d1e899a0c7056b98890db8"
   - repo: latent-sre/save-toolkit
     ref: "34634c25179c71a3965df29eebf7332cc277cc67"
   - repo: getsentry/agent-plugin
-    ref: "710c9a31475edba36ef48d15ade7d95e5dc39a77"
+    ref: "3c3514191ed77f9808c6e08944d39063db83d583"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
     ref: "eac09ab84fc628261437617d8db12618c144e0c7"
