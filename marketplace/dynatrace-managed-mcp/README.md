@@ -9,7 +9,7 @@ MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, ent
 - License: Apache-2.0
 - Keywords: `dynatrace`, `dynatrace-managed`, `mcp`, `observability`, `monitoring`, `apm`, `logs`, `metrics`, `slo`
 - Homepage: <https://github.com/dynatrace-oss/dynatrace-managed-mcp#readme>
-- Stars 32, forks 13, watchers 0 (refreshed 2026-10-06T10:23:46Z)
+- Stars 32, forks 14, watchers 0 (refreshed 2026-10-17T07:51:24Z)
 
 ## Install
 
