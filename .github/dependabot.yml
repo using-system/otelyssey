@@ -1,0 +1,18 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    # the lock files are written by `gh aw compile` from .github/aw/actions-lock.json: CI
+    # compiles again and refuses any difference, their actions move with a gh-aw upgrade
+    exclude-paths:
+      - "**/*.lock.yml"
+    schedule:
+      interval: weekly
+    groups:
+      actions:
+        patterns: ["*"]
+    # no `dependencies`/`github_actions` labels: the repository's labels are the pipeline's
+    labels: []
+    commit-message:
+      prefix: ci
+      include: scope
