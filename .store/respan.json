@@ -1,0 +1,43 @@
+{
+  "name": "respan",
+  "description": "Respan for ChatGPT and Codex: inspect LLM logs and traces, and manage prompts, datasets, evaluators, experiments and monitors in your Respan workspace.",
+  "categories": [
+    "backend",
+    "instrumentation"
+  ],
+  "repository": "respanai/respan",
+  "path": "chatgpt-plugin",
+  "ref": "main",
+  "sha": "cc9a1e326b8191ff32c99bce2d8425d10867ba1f",
+  "version": "1.0.0",
+  "author": {
+    "name": "Respan",
+    "url": "https://respan.ai"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://respan.ai",
+  "keywords": [
+    "llm",
+    "observability",
+    "tracing",
+    "evals",
+    "prompts",
+    "datasets",
+    "mcp"
+  ],
+  "skills": true,
+  "mcp": {
+    "respan": {
+      "type": "streamable-http",
+      "url": "https://mcp.respan.ai/mcp"
+    }
+  },
+  "submitted_in": 146,
+  "admitted_at": "2026-10-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-10-21T19:35:31Z"
+  }
+}
