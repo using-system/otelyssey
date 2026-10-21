@@ -251,19 +251,30 @@ def test_every_category_has_a_title_an_icon_and_a_tagline():
         assert set(table) == set(store.CATEGORIES)
 
 
-def test_readme_list_orders_the_categories_as_the_store_does_and_skips_empty_ones():
+def test_readme_category_order_is_every_category_once_observability_first():
+    assert build.README_CATEGORY_ORDER == (
+        "observability",
+        "instrumentation",
+        "collector",
+        "backend",
+    )
+    assert sorted(build.README_CATEGORY_ORDER) == sorted(store.CATEGORIES)
+
+
+def test_readme_list_orders_the_categories_as_the_readme_does_and_skips_empty_ones():
     first = records()["oddyssey"]
     second = {**first, "name": "col-b", "categories": ["collector"], "repository": "a/col-b"}
     third = {**first, "name": "col-a", "categories": ["collector"], "repository": "a/col-a"}
     text = build.readme_list({"oddyssey": first, "col-b": second, "col-a": third})
     headings = [line for line in text.splitlines() if line.startswith("### ")]
-    assert headings == ["### 🔀 Collector", "### 👀 Observability"]
+    assert headings == ["### 👀 Observability", "### 🔀 Collector"]
     # two entries in one category, after the tagline: name order, one blank line between them
-    lines = text.splitlines()
+    all_lines = text.splitlines()
+    lines = all_lines[all_lines.index("### 🔀 Collector") :]
     assert lines[2] == build.CATEGORY_TAGLINES["collector"] and lines[3] == ""
     assert "**[col-a](" in lines[4] and lines[5].startswith("<a ") and lines[6] == ""
     assert "**[col-b](" in lines[7] and lines[8].startswith("<a ") and lines[9] == ""
-    assert lines[10] == "### 👀 Observability"
+    assert lines[10:] == []
 
 
 def test_readme_list_of_an_empty_store_says_so():

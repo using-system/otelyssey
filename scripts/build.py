@@ -33,6 +33,8 @@ CATEGORY_ICONS = {
     "backend": "☁️",
     "observability": "👀",
 }
+# the README's order, not the store's: a visitor meets Observability first
+README_CATEGORY_ORDER = ("observability", "instrumentation", "collector", "backend")
 CATEGORY_TAGLINES = {
     "instrumentation": "Put the telemetry in: SDKs, semantic conventions, instrumentation advice.",
     "collector": "Route it: the Collector, its configuration, OTTL, pipelines.",
@@ -396,12 +398,12 @@ def readme_entry(record: dict) -> str:
 
 
 def readme_list(records: dict[str, dict]) -> str:
-    """The plugins by principal category, in the store's category order, the empty categories
+    """The plugins by principal category, in the README's category order, the empty categories
     left out."""
     if not records:
         return "No plugin listed yet.\n"
     sections = []
-    for category in store.CATEGORIES:
+    for category in README_CATEGORY_ORDER:
         names = sorted(name for name, r in records.items() if r["categories"][0] == category)
         if names:
             entries = "".join(readme_entry(records[name]) for name in names)
