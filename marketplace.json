@@ -259,6 +259,35 @@
       "homepage": "https://github.com/DataDog/pup#readme"
     },
     {
+      "name": "respan",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/respanai/respan.git",
+        "path": "chatgpt-plugin",
+        "ref": "main",
+        "sha": "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
+      },
+      "strict": true,
+      "description": "Respan for ChatGPT and Codex: inspect LLM logs and traces, and manage prompts, datasets, evaluators, experiments and monitors in your Respan workspace.",
+      "version": "1.0.0",
+      "category": "backend",
+      "keywords": [
+        "llm",
+        "observability",
+        "tracing",
+        "evals",
+        "prompts",
+        "datasets",
+        "mcp"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "Respan",
+        "url": "https://respan.ai"
+      },
+      "homepage": "https://respan.ai"
+    },
+    {
       "name": "save-toolkit",
       "source": {
         "source": "url",

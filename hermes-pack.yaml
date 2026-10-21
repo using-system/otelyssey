@@ -24,6 +24,9 @@ plugins:
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
     ref: "b1be503586f117f5a35c0ff0d59ca7b70dcfe234"
+  - repo: respanai/respan
+    subdir: "chatgpt-plugin"
+    ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
   - repo: latent-sre/save-toolkit
     ref: "a704ed5aa2d10831ff2fab03368493aa914365c1"
   - repo: getsentry/agent-plugin
