@@ -1,0 +1,35 @@
+{
+  "name": "trogonstack-datadog",
+  "description": "Datadog observability skills for designing, redesigning, and auditing dashboards with proper widget selection, layout patterns, template variables, and operational readiness validation using the pup CLI, and for checking metrics against Datadog's no-cost metrics before creating custom ones",
+  "categories": [
+    "backend",
+    "instrumentation"
+  ],
+  "repository": "TrogonStack/agentskills",
+  "path": "plugins/trogonstack-datadog",
+  "ref": "main",
+  "sha": "8a6be53417e3f6b472e0919fa922a4514810c29a",
+  "version": "0.5.0",
+  "author": {
+    "name": "TrogonStack",
+    "url": "https://github.com/TrogonStack"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-datadog",
+  "keywords": [
+    "trogonstack",
+    "datadog",
+    "observability",
+    "dashboards"
+  ],
+  "skills": true,
+  "mcp": {},
+  "submitted_in": 141,
+  "admitted_at": "2026-10-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-10-21T19:17:30Z"
+  }
+}
