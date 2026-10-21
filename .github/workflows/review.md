@@ -42,9 +42,12 @@ safe-outputs:
   add-comment:
     max: 1
     target: triggering
+  # gh-aw forwards the agent's intent metadata by default, and a label or a close it marks
+  # `suggest` is only proposed on the issue: the ruling's label would never start admission.yml
   add-labels:
     allowed: [under-review, rejected, admissible]
     max: 2
+    issue-intent: false
   remove-labels:
     allowed: [under-review, format-ok]
     max: 2
@@ -52,6 +55,7 @@ safe-outputs:
     target: triggering
     state-reason: not_planned
     max: 1
+    issue-intent: false
   noop:
     report-as-issue: false
 max-ai-credits: 400
