@@ -189,6 +189,32 @@
       "homepage": "https://github.com/ollygarden/opentelemetry-agent-skills"
     },
     {
+      "name": "otel-instrumentation-skills",
+      "description": "OpenTelemetry signal quality with durable workflows and fresh, version-correct upstream evidence.",
+      "version": "2.0.0",
+      "keywords": [
+        "opentelemetry",
+        "instrumentation",
+        "collector",
+        "semantic-conventions"
+      ],
+      "author": {
+        "name": "Rob Knight"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/rknightion/otel-instrumentation-skills.git",
+        "path": "./plugins/otel-instrumentation-skills",
+        "ref": "main",
+        "sha": "d007ea95f1c17684345239da92e6d42e0f393d08"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation"
+    },
+    {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
       "version": "2.1.0",

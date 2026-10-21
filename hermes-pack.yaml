@@ -16,6 +16,9 @@ plugins:
     ref: "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
+  - repo: rknightion/otel-instrumentation-skills
+    subdir: "plugins/otel-instrumentation-skills"
+    ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
     ref: "b1be503586f117f5a35c0ff0d59ca7b70dcfe234"
   - repo: latent-sre/save-toolkit
