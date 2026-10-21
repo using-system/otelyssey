@@ -1,0 +1,34 @@
+{
+  "name": "trogonstack-otel",
+  "description": "OpenTelemetry skills for naming metrics and spans following OTel Semantic Conventions",
+  "categories": [
+    "instrumentation"
+  ],
+  "repository": "TrogonStack/agentskills",
+  "path": "plugins/trogonstack-otel",
+  "ref": "main",
+  "sha": "8a6be53417e3f6b472e0919fa922a4514810c29a",
+  "version": "0.2.0",
+  "author": {
+    "name": "TrogonStack",
+    "url": "https://github.com/TrogonStack"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-otel",
+  "keywords": [
+    "trogonstack",
+    "opentelemetry",
+    "observability",
+    "semantic-conventions"
+  ],
+  "skills": true,
+  "mcp": {},
+  "submitted_in": 139,
+  "admitted_at": "2026-10-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-10-21T19:03:43Z"
+  }
+}
