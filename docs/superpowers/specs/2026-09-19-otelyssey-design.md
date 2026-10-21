@@ -360,9 +360,11 @@ listens to every pull request event to find the admission one.
 `duplicates.md` (gh-aw, weekly): audits the store for the same plugin
 listed twice, on the review's definition (the same repository, the
 same skills' content at any version or, when neither record has a
-skill, the same `mcp.json` servers), and opens one review issue with
-the evidence, nothing else; pairs a maintainer ruled `keep both` or
-`not duplicates` on a past issue are not reported again.
+skill, the same `mcp.json` servers, a placeholder `url` the user
+configures naming none), and opens one review issue with the
+evidence, nothing else; pairs the owner ruled `keep both` or
+`not duplicates` in a comment on a closed issue are not reported
+again: the owner rules and closes, the next audits read the ruling.
 
 ## Errors and guard rails
 
