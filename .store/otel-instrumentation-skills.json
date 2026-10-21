@@ -1,0 +1,34 @@
+{
+  "name": "otel-instrumentation-skills",
+  "description": "OpenTelemetry signal quality with durable workflows and fresh, version-correct upstream evidence.",
+  "categories": [
+    "instrumentation",
+    "collector"
+  ],
+  "repository": "rknightion/otel-instrumentation-skills",
+  "path": "plugins/otel-instrumentation-skills",
+  "ref": "main",
+  "sha": "d007ea95f1c17684345239da92e6d42e0f393d08",
+  "version": "2.0.0",
+  "author": {
+    "name": "Rob Knight"
+  },
+  "license": "Apache-2.0",
+  "homepage": "",
+  "keywords": [
+    "opentelemetry",
+    "instrumentation",
+    "collector",
+    "semantic-conventions"
+  ],
+  "skills": true,
+  "mcp": {},
+  "submitted_in": 137,
+  "admitted_at": "2026-10-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-10-21T18:57:39Z"
+  }
+}
