@@ -33,6 +33,9 @@ plugins:
   - repo: SumoLogic/sumologic-ai-plugins
     ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
   - repo: TrogonStack/agentskills
+    subdir: "plugins/trogonstack-datadog"
+    ref: "8a6be53417e3f6b472e0919fa922a4514810c29a"
+  - repo: TrogonStack/agentskills
     subdir: "plugins/trogonstack-otel"
     ref: "8a6be53417e3f6b472e0919fa922a4514810c29a"
   - repo: using-system/vllm-on-tap
