@@ -366,6 +366,32 @@
       "homepage": "https://www.sumologic.com/help/docs/api/mcp-server/"
     },
     {
+      "name": "trogonstack-otel",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/TrogonStack/agentskills.git",
+        "path": "plugins/trogonstack-otel",
+        "ref": "main",
+        "sha": "8a6be53417e3f6b472e0919fa922a4514810c29a"
+      },
+      "strict": true,
+      "description": "OpenTelemetry skills for naming metrics and spans following OTel Semantic Conventions",
+      "version": "0.2.0",
+      "category": "instrumentation",
+      "keywords": [
+        "trogonstack",
+        "opentelemetry",
+        "observability",
+        "semantic-conventions"
+      ],
+      "license": "MIT",
+      "author": {
+        "name": "TrogonStack",
+        "url": "https://github.com/TrogonStack"
+      },
+      "homepage": "https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-otel"
+    },
+    {
       "name": "vllm-on-tap",
       "source": {
         "source": "url",

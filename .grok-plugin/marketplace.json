@@ -392,6 +392,34 @@
       "homepage": "https://www.sumologic.com/help/docs/api/mcp-server/"
     },
     {
+      "name": "trogonstack-otel",
+      "description": "OpenTelemetry skills for naming metrics and spans following OTel Semantic Conventions",
+      "version": "0.2.0",
+      "keywords": [
+        "trogonstack",
+        "opentelemetry",
+        "observability",
+        "semantic-conventions"
+      ],
+      "author": {
+        "name": "TrogonStack",
+        "url": "https://github.com/TrogonStack"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/TrogonStack/agentskills.git",
+        "path": "./plugins/trogonstack-otel",
+        "ref": "main",
+        "sha": "8a6be53417e3f6b472e0919fa922a4514810c29a"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Instrumentation",
+      "homepage": "https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-otel"
+    },
+    {
       "name": "vllm-on-tap",
       "description": "Serve vLLM presets on demand - locally, Kubernetes (KServe), Azure (Container Apps), AWS (ECS) or GCP (Cloud Run) - with their traces over OTLP, and tear them down again.",
       "version": "0.2.3",
