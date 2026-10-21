@@ -1,0 +1,43 @@
+{
+  "name": "oneuptime",
+  "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
+  "categories": [
+    "backend"
+  ],
+  "repository": "OneUptime/oneuptime",
+  "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
+  "ref": "14.0.82",
+  "sha": "22f01243e17cb6687fc692b0c54535e662c6331d",
+  "version": "1.0.0",
+  "author": {
+    "name": "OneUptime",
+    "email": "support@oneuptime.com",
+    "url": "https://oneuptime.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://oneuptime.com/docs/ai/mcp-server",
+  "keywords": [
+    "incident management",
+    "monitoring",
+    "status page",
+    "on-call",
+    "observability",
+    "alerts",
+    "logs"
+  ],
+  "skills": false,
+  "mcp": {
+    "oneuptime": {
+      "type": "streamable-http",
+      "url": "https://oneuptime.com/mcp"
+    }
+  },
+  "submitted_in": 144,
+  "admitted_at": "2026-10-21",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-10-21T19:24:41Z"
+  }
+}
