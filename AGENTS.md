@@ -6,8 +6,9 @@ Never commit on `main`: branch first, `type/short-description`. Commit
 messages, PR titles and issue titles follow Conventional Commits,
 `type(scope): lowercase imperative description`; never a `!` or
 `BREAKING CHANGE` marker without discussing it first. One logical change
-per PR; every PR references an existing issue (`Closes #N`). Every
-committed artifact is in English.
+per PR; every PR references an existing issue (`Closes #N`), except
+Dependabot's, which `.github/dependabot.yml` opens for the hand-written
+workflows' actions. Every committed artifact is in English.
 
 ## Every implementation is reviewed by two sub-agents
 
