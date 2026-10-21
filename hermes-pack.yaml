@@ -14,6 +14,9 @@ plugins:
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
     ref: "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
+  - repo: OneUptime/oneuptime
+    subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
+    ref: "22f01243e17cb6687fc692b0c54535e662c6331d"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills

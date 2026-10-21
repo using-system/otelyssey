@@ -160,6 +160,38 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "oneuptime",
+      "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
+      "version": "1.0.0",
+      "keywords": [
+        "incident management",
+        "monitoring",
+        "status page",
+        "on-call",
+        "observability",
+        "alerts",
+        "logs"
+      ],
+      "author": {
+        "name": "OneUptime",
+        "email": "support@oneuptime.com",
+        "url": "https://oneuptime.com"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/OneUptime/oneuptime.git",
+        "path": "./packages/App/FeatureSet/MCP/ChatGPTPlugin",
+        "ref": "14.0.82",
+        "sha": "22f01243e17cb6687fc692b0c54535e662c6331d"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://oneuptime.com/docs/ai/mcp-server"
+    },
+    {
       "name": "opentelemetry-agent-skills",
       "description": "Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream sources: SDK setup per language, the Collector and OCB, OTTL, declarative configuration, semantic conventions, upgrades and migrations.",
       "version": "1.0.0",

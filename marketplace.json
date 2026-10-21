@@ -150,6 +150,36 @@
       "homepage": "https://github.com/using-system/oddyssey#readme"
     },
     {
+      "name": "oneuptime",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/OneUptime/oneuptime.git",
+        "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
+        "ref": "14.0.82",
+        "sha": "22f01243e17cb6687fc692b0c54535e662c6331d"
+      },
+      "strict": true,
+      "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
+      "version": "1.0.0",
+      "category": "backend",
+      "keywords": [
+        "incident management",
+        "monitoring",
+        "status page",
+        "on-call",
+        "observability",
+        "alerts",
+        "logs"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "OneUptime",
+        "email": "support@oneuptime.com",
+        "url": "https://oneuptime.com"
+      },
+      "homepage": "https://oneuptime.com/docs/ai/mcp-server"
+    },
+    {
       "name": "opentelemetry-agent-skills",
       "source": {
         "source": "url",
