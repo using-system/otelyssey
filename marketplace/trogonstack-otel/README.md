@@ -9,7 +9,7 @@ OpenTelemetry skills for naming metrics and spans following OTel Semantic Conven
 - License: MIT
 - Keywords: `trogonstack`, `opentelemetry`, `observability`, `semantic-conventions`
 - Homepage: <https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-otel>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-10-21T19:03:43Z)
+- Stars 11, forks 3, watchers 0 (refreshed 2026-10-22T08:40:25Z)
 
 ## Install
 

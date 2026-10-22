@@ -6,9 +6,9 @@
   ],
   "repository": "DataDog/pup",
   "path": "",
-  "ref": "v2.1.0",
-  "sha": "b1be503586f117f5a35c0ff0d59ca7b70dcfe234",
-  "version": "2.1.0",
+  "ref": "v2.2.1",
+  "sha": "a69b3889850f51e7dde751c4c616127eb78e84a9",
+  "version": "2.2.1",
   "author": {
     "name": "Datadog",
     "email": "support@datadoghq.com"
@@ -29,9 +29,9 @@
   "submitted_in": 112,
   "admitted_at": "2026-09-21",
   "stats": {
-    "stars": 1031,
-    "forks": 128,
+    "stars": 1032,
+    "forks": 129,
     "watchers": 8,
-    "refreshed_at": "2026-10-21T08:38:06Z"
+    "refreshed_at": "2026-10-22T08:40:25Z"
   }
 }

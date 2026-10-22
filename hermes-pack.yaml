@@ -13,17 +13,17 @@ plugins:
     ref: "9dfab1713cb24ccb515563de166def3239e92f1a"
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
-    ref: "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
+    ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime
     subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
-    ref: "22f01243e17cb6687fc692b0c54535e662c6331d"
+    ref: "3fe4f63e8680d23c6cc22190baadacb815db17ce"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
-    ref: "b1be503586f117f5a35c0ff0d59ca7b70dcfe234"
+    ref: "a69b3889850f51e7dde751c4c616127eb78e84a9"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
@@ -37,7 +37,7 @@ plugins:
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins
-    ref: "f905b914984fabb5e0571290eafd3013c277d9b1"
+    ref: "22833ef646edd916ea8a3e3f94feda300bb78dcf"
   - repo: TrogonStack/agentskills
     subdir: "plugins/trogonstack-datadog"
     ref: "8a6be53417e3f6b472e0919fa922a4514810c29a"

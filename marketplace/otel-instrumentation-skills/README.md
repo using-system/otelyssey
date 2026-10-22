@@ -8,7 +8,7 @@ OpenTelemetry signal quality with durable workflows and fresh, version-correct u
 - Author: Rob Knight
 - License: Apache-2.0
 - Keywords: `opentelemetry`, `instrumentation`, `collector`, `semantic-conventions`
-- Stars 0, forks 0, watchers 0 (refreshed 2026-10-21T18:57:39Z)
+- Stars 1, forks 0, watchers 0 (refreshed 2026-10-22T08:40:25Z)
 
 ## Install
 

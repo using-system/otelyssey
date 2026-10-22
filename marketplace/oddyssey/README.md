@@ -4,7 +4,7 @@ CLI toolbox for Observability-Driven Development (ODD): coding agents observe lo
 
 - Repository: [using-system/oddyssey](https://github.com/using-system/oddyssey), the plugin at `marketplace/oddyssey` in it
 - Categories: `observability`, `instrumentation`, `backend`
-- Version: 1.13.2 (`v1.13.2`, commit `0ccec67b18ae`)
+- Version: 1.13.3 (`v1.13.3`, commit `bad606e2031e`)
 - Author: [using-system](https://github.com/using-system)
 - License: MIT
 - Keywords: `claude-code`, `claude-code-plugin`, `claude-skills`, `mcp`, `ai-agents`, `observability`, `opentelemetry`, `developer-tools`
@@ -58,28 +58,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref 0ccec67b18ae05f87f6217b4357277b2a0d66d16
+hermes plugins install using-system/oddyssey/marketplace/oddyssey --ref bad606e2031e644dc72b38d17c8282c5f0b292a0
 hermes plugins enable oddyssey
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout 0ccec67b18ae05f87f6217b4357277b2a0d66d16
+git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout bad606e2031e644dc72b38d17c8282c5f0b292a0
 openclaw plugins install ./oddyssey/marketplace/oddyssey --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout 0ccec67b18ae05f87f6217b4357277b2a0d66d16
+git clone https://github.com/using-system/oddyssey && git -C oddyssey checkout bad606e2031e644dc72b38d17c8282c5f0b292a0
 mkdir -p ~/.vibe/plugins/oddyssey && cp -r ./oddyssey/marketplace/oddyssey/. ~/.vibe/plugins/oddyssey
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/using-system/oddyssey ~/.opencode-plugins/oddyssey && git -C ~/.opencode-plugins/oddyssey checkout 0ccec67b18ae05f87f6217b4357277b2a0d66d16
+git clone https://github.com/using-system/oddyssey ~/.opencode-plugins/oddyssey && git -C ~/.opencode-plugins/oddyssey checkout bad606e2031e644dc72b38d17c8282c5f0b292a0
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
@@ -98,7 +98,7 @@ Then merge into `~/.config/opencode/opencode.json`:
         "uvx",
         "--refresh-package",
         "oddyssey-mcp",
-        "oddyssey-mcp==1.13.2"
+        "oddyssey-mcp==1.13.3"
       ]
     }
   }

@@ -1,13 +1,13 @@
 {
   "name": "sumo-logic",
-  "description": "Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.",
+  "description": "Query logs, alerts, dashboards, SIEM insights, and detection rules from Sumo Logic for production debugging, incident response, and security investigation",
   "categories": [
     "backend"
   ],
   "repository": "SumoLogic/sumologic-ai-plugins",
   "path": "",
-  "ref": "v1.0.1",
-  "sha": "f905b914984fabb5e0571290eafd3013c277d9b1",
+  "ref": "v1.0.2",
+  "sha": "22833ef646edd916ea8a3e3f94feda300bb78dcf",
   "version": "1.0.1",
   "author": {
     "name": "Sumo Logic",
@@ -16,16 +16,29 @@
   "license": "Apache-2.0",
   "homepage": "https://www.sumologic.com/help/docs/api/mcp-server/",
   "keywords": [
-    "sumo-logic",
+    "sumo logic",
     "observability",
     "logs",
-    "mcp",
+    "log search",
     "monitoring",
     "alerts",
-    "copilot",
+    "siem",
+    "insights",
+    "incidents",
+    "dashboards",
+    "detection rules",
+    "cloud operations",
+    "root cause analysis",
+    "security",
     "devops",
-    "search",
-    "security"
+    "error",
+    "latency",
+    "troubleshoot",
+    "investigate",
+    "sumo-logic",
+    "mcp",
+    "copilot",
+    "search"
   ],
   "skills": true,
   "mcp": {

@@ -125,12 +125,12 @@
         "source": "url",
         "url": "https://github.com/using-system/oddyssey.git",
         "path": "marketplace/oddyssey",
-        "ref": "v1.13.2",
-        "sha": "0ccec67b18ae05f87f6217b4357277b2a0d66d16"
+        "ref": "v1.13.3",
+        "sha": "bad606e2031e644dc72b38d17c8282c5f0b292a0"
       },
       "strict": true,
       "description": "CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack - or remote ones on any OpenTelemetry backend - and feed the next spec-driven improvement loop.",
-      "version": "1.13.2",
+      "version": "1.13.3",
       "category": "observability",
       "keywords": [
         "claude-code",
@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.82",
-        "sha": "22f01243e17cb6687fc692b0c54535e662c6331d"
+        "ref": "14.0.84",
+        "sha": "3fe4f63e8680d23c6cc22190baadacb815db17ce"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
@@ -235,12 +235,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.1.0",
-        "sha": "b1be503586f117f5a35c0ff0d59ca7b70dcfe234"
+        "ref": "v2.2.1",
+        "sha": "a69b3889850f51e7dde751c4c616127eb78e84a9"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.1.0",
+      "version": "2.2.1",
       "category": "backend",
       "keywords": [
         "datadog",
@@ -398,24 +398,37 @@
       "source": {
         "source": "url",
         "url": "https://github.com/SumoLogic/sumologic-ai-plugins.git",
-        "ref": "v1.0.1",
-        "sha": "f905b914984fabb5e0571290eafd3013c277d9b1"
+        "ref": "v1.0.2",
+        "sha": "22833ef646edd916ea8a3e3f94feda300bb78dcf"
       },
       "strict": true,
-      "description": "Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.",
+      "description": "Query logs, alerts, dashboards, SIEM insights, and detection rules from Sumo Logic for production debugging, incident response, and security investigation",
       "version": "1.0.1",
       "category": "backend",
       "keywords": [
-        "sumo-logic",
+        "sumo logic",
         "observability",
         "logs",
-        "mcp",
+        "log search",
         "monitoring",
         "alerts",
-        "copilot",
+        "siem",
+        "insights",
+        "incidents",
+        "dashboards",
+        "detection rules",
+        "cloud operations",
+        "root cause analysis",
+        "security",
         "devops",
-        "search",
-        "security"
+        "error",
+        "latency",
+        "troubleshoot",
+        "investigate",
+        "sumo-logic",
+        "mcp",
+        "copilot",
+        "search"
       ],
       "license": "Apache-2.0",
       "author": {

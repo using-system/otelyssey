@@ -1,13 +1,13 @@
 # sumo-logic
 
-Query Sumo Logic logs, alerts, dashboards, and SIEM insights directly from Copilot. Connects to the Sumo Logic MCP server for natural language observability investigations.
+Query logs, alerts, dashboards, SIEM insights, and detection rules from Sumo Logic for production debugging, incident response, and security investigation
 
 - Repository: [SumoLogic/sumologic-ai-plugins](https://github.com/SumoLogic/sumologic-ai-plugins), the plugin at the root of it
 - Categories: `backend`
-- Version: 1.0.1 (`v1.0.1`, commit `f905b914984f`)
+- Version: 1.0.1 (`v1.0.2`, commit `22833ef646ed`)
 - Author: [Sumo Logic](https://www.sumologic.com)
 - License: Apache-2.0
-- Keywords: `sumo-logic`, `observability`, `logs`, `mcp`, `monitoring`, `alerts`, `copilot`, `devops`, `search`, `security`
+- Keywords: `sumo logic`, `observability`, `logs`, `log search`, `monitoring`, `alerts`, `siem`, `insights`, `incidents`, `dashboards`, `detection rules`, `cloud operations`, `root cause analysis`, `security`, `devops`, `error`, `latency`, `troubleshoot`, `investigate`, `sumo-logic`, `mcp`, `copilot`, `search`
 - Homepage: <https://www.sumologic.com/help/docs/api/mcp-server/>
 - Stars 0, forks 0, watchers 0 (refreshed 2026-09-20T15:10:54Z)
 
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install SumoLogic/sumologic-ai-plugins --ref f905b914984fabb5e0571290eafd3013c277d9b1
+hermes plugins install SumoLogic/sumologic-ai-plugins --ref 22833ef646edd916ea8a3e3f94feda300bb78dcf
 hermes plugins enable sumo-logic
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout f905b914984fabb5e0571290eafd3013c277d9b1
+git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout 22833ef646edd916ea8a3e3f94feda300bb78dcf
 openclaw plugins install ./sumologic-ai-plugins --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout f905b914984fabb5e0571290eafd3013c277d9b1
+git clone https://github.com/SumoLogic/sumologic-ai-plugins && git -C sumologic-ai-plugins checkout 22833ef646edd916ea8a3e3f94feda300bb78dcf
 mkdir -p ~/.vibe/plugins/sumo-logic && cp -r ./sumologic-ai-plugins/. ~/.vibe/plugins/sumo-logic
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/SumoLogic/sumologic-ai-plugins ~/.opencode-plugins/sumo-logic && git -C ~/.opencode-plugins/sumo-logic checkout f905b914984fabb5e0571290eafd3013c277d9b1
+git clone https://github.com/SumoLogic/sumologic-ai-plugins ~/.opencode-plugins/sumo-logic && git -C ~/.opencode-plugins/sumo-logic checkout 22833ef646edd916ea8a3e3f94feda300bb78dcf
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
