@@ -16,24 +16,24 @@ plugins:
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime
     subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
-    ref: "3fe4f63e8680d23c6cc22190baadacb815db17ce"
+    ref: "55506c5e68aa48d15c1df7e9c16b20f1ada3962b"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
-    ref: "a69b3889850f51e7dde751c4c616127eb78e84a9"
+    ref: "a2fdf86cbfd34164503d624f7074ce90ecea2d77"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
   - repo: latent-sre/save-toolkit
-    ref: "a704ed5aa2d10831ff2fab03368493aa914365c1"
+    ref: "6c94587dbadebd4ea39e569f7df2d3545693d0b8"
   - repo: getsentry/agent-plugin
-    ref: "c81bffc0d6b852e68a1d1ae469e0b615196816ff"
+    ref: "2eee4ec823972c222aae89c9213c64c056b64048"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
-    ref: "eac09ab84fc628261437617d8db12618c144e0c7"
+    ref: "6bd555327dee977d14d6d850b1cfb9fe872df102"
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins

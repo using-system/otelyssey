@@ -181,8 +181,8 @@
         "source": "git-subdir",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "./packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.84",
-        "sha": "3fe4f63e8680d23c6cc22190baadacb815db17ce"
+        "ref": "14.0.85",
+        "sha": "55506c5e68aa48d15c1df7e9c16b20f1ada3962b"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -249,7 +249,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.2.1",
+      "version": "2.3.0",
       "keywords": [
         "datadog",
         "monitoring",
@@ -266,8 +266,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.2.1",
-        "sha": "a69b3889850f51e7dde751c4c616127eb78e84a9"
+        "ref": "v2.3.0",
+        "sha": "a2fdf86cbfd34164503d624f7074ce90ecea2d77"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -310,7 +310,7 @@
     {
       "name": "save-toolkit",
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.51.2",
+      "version": "0.51.3",
       "keywords": [
         "agents",
         "skills",
@@ -326,7 +326,7 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "a704ed5aa2d10831ff2fab03368493aa914365c1"
+        "sha": "6c94587dbadebd4ea39e569f7df2d3545693d0b8"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -338,7 +338,7 @@
     {
       "name": "sentry",
       "description": "Set up Sentry, debug production issues, and configure application monitoring.",
-      "version": "1.4.5",
+      "version": "1.4.6",
       "keywords": [
         "sentry",
         "debugging",
@@ -352,8 +352,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/getsentry/agent-plugin.git",
-        "ref": "v1.4.5",
-        "sha": "c81bffc0d6b852e68a1d1ae469e0b615196816ff"
+        "ref": "v1.4.6",
+        "sha": "2eee4ec823972c222aae89c9213c64c056b64048"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -365,7 +365,7 @@
     {
       "name": "signoz",
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.9.2500",
+      "version": "2026.10.2300",
       "keywords": [
         "signoz",
         "opentelemetry",
@@ -384,7 +384,7 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "./plugins/signoz",
         "ref": "main",
-        "sha": "eac09ab84fc628261437617d8db12618c144e0c7"
+        "sha": "6bd555327dee977d14d6d850b1cfb9fe872df102"
       },
       "policy": {
         "installation": "AVAILABLE",

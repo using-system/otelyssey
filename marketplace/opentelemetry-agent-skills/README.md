@@ -9,7 +9,7 @@ Vendor-neutral OpenTelemetry skills for AI coding agents, grounded in upstream s
 - License: Apache-2.0
 - Keywords: `opentelemetry`, `otel`, `observability`, `collector`, `semantic-conventions`, `skills`
 - Homepage: <https://github.com/ollygarden/opentelemetry-agent-skills>
-- Stars 112, forks 13, watchers 3 (refreshed 2026-10-18T08:05:32Z)
+- Stars 114, forks 13, watchers 3 (refreshed 2026-10-23T08:36:24Z)
 
 ## Install
 

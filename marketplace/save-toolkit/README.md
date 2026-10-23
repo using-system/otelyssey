@@ -4,7 +4,7 @@ Application-engineering and site-reliability agents and reusable skills.
 
 - Repository: [latent-sre/save-toolkit](https://github.com/latent-sre/save-toolkit), the plugin at the root of it
 - Categories: `observability`, `backend`, `instrumentation`, `collector`
-- Version: 0.51.2 (`main`, commit `a704ed5aa2d1`)
+- Version: 0.51.3 (`main`, commit `6c94587dbade`)
 - Author: [latent-sre](https://github.com/latent-sre)
 - License: MIT
 - Keywords: `agents`, `skills`, `sre`, `observability`, `pcf`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install latent-sre/save-toolkit --ref a704ed5aa2d10831ff2fab03368493aa914365c1
+hermes plugins install latent-sre/save-toolkit --ref 6c94587dbadebd4ea39e569f7df2d3545693d0b8
 hermes plugins enable save-toolkit
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout a704ed5aa2d10831ff2fab03368493aa914365c1
+git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout 6c94587dbadebd4ea39e569f7df2d3545693d0b8
 openclaw plugins install ./save-toolkit --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout a704ed5aa2d10831ff2fab03368493aa914365c1
+git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout 6c94587dbadebd4ea39e569f7df2d3545693d0b8
 mkdir -p ~/.vibe/plugins/save-toolkit && cp -r ./save-toolkit/. ~/.vibe/plugins/save-toolkit
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit ~/.opencode-plugins/save-toolkit && git -C ~/.opencode-plugins/save-toolkit checkout a704ed5aa2d10831ff2fab03368493aa914365c1
+git clone https://github.com/latent-sre/save-toolkit ~/.opencode-plugins/save-toolkit && git -C ~/.opencode-plugins/save-toolkit checkout 6c94587dbadebd4ea39e569f7df2d3545693d0b8
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
