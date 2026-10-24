@@ -181,8 +181,8 @@
         "source": "git-subdir",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "./packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.85",
-        "sha": "55506c5e68aa48d15c1df7e9c16b20f1ada3962b"
+        "ref": "14.0.87",
+        "sha": "c0d569fdbcd272bb36fed73454f26cca6c6086f0"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -310,7 +310,7 @@
     {
       "name": "save-toolkit",
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.51.3",
+      "version": "0.51.4",
       "keywords": [
         "agents",
         "skills",
@@ -326,7 +326,7 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "6c94587dbadebd4ea39e569f7df2d3545693d0b8"
+        "sha": "e797823795949afd248a8a03b5c8f29f4ff3b39c"
       },
       "policy": {
         "installation": "AVAILABLE",

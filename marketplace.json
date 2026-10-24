@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.85",
-        "sha": "55506c5e68aa48d15c1df7e9c16b20f1ada3962b"
+        "ref": "14.0.87",
+        "sha": "c0d569fdbcd272bb36fed73454f26cca6c6086f0"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
@@ -293,11 +293,11 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "6c94587dbadebd4ea39e569f7df2d3545693d0b8"
+        "sha": "e797823795949afd248a8a03b5c8f29f4ff3b39c"
       },
       "strict": true,
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.51.3",
+      "version": "0.51.4",
       "category": "observability",
       "keywords": [
         "agents",

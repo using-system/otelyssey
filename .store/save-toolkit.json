@@ -10,8 +10,8 @@
   "repository": "latent-sre/save-toolkit",
   "path": "",
   "ref": "main",
-  "sha": "6c94587dbadebd4ea39e569f7df2d3545693d0b8",
-  "version": "0.51.3",
+  "sha": "e797823795949afd248a8a03b5c8f29f4ff3b39c",
+  "version": "0.51.4",
   "author": {
     "name": "latent-sre",
     "url": "https://github.com/latent-sre"
