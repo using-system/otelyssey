@@ -16,7 +16,7 @@ plugins:
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime
     subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
-    ref: "c0d569fdbcd272bb36fed73454f26cca6c6086f0"
+    ref: "7df7e324ef95e408b42f7f77490b6dbcf62da753"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
