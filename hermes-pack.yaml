@@ -16,14 +16,14 @@ plugins:
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime
     subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
-    ref: "f6a03d03575003d8810610572e71b60a60d582fb"
+    ref: "54e8230d1caf65b80608752fe103987bf39eed08"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
-    ref: "a2fdf86cbfd34164503d624f7074ce90ecea2d77"
+    ref: "8cc06da7bcce0ccb0b70aa41e43c8105acac8aea"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"

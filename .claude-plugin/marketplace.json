@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.91",
-        "sha": "f6a03d03575003d8810610572e71b60a60d582fb"
+        "ref": "14.0.93",
+        "sha": "54e8230d1caf65b80608752fe103987bf39eed08"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
@@ -235,12 +235,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.3.0",
-        "sha": "a2fdf86cbfd34164503d624f7074ce90ecea2d77"
+        "ref": "v2.3.3",
+        "sha": "8cc06da7bcce0ccb0b70aa41e43c8105acac8aea"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.3.0",
+      "version": "2.3.3",
       "category": "backend",
       "keywords": [
         "datadog",
