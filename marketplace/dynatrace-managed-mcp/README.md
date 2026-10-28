@@ -4,7 +4,7 @@ MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, ent
 
 - Repository: [dynatrace-oss/dynatrace-managed-mcp](https://github.com/dynatrace-oss/dynatrace-managed-mcp), the plugin at the root of it
 - Categories: `backend`
-- Version: 1.1.1 (`main`, commit `52959ebce94e`)
+- Version: 2.0.0 (`v2.0.0`, commit `857cecf40383`)
 - Author: [Dynatrace](https://www.dynatrace.com)
 - License: Apache-2.0
 - Keywords: `dynatrace`, `dynatrace-managed`, `mcp`, `observability`, `monitoring`, `apm`, `logs`, `metrics`, `slo`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install dynatrace-oss/dynatrace-managed-mcp --ref 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+hermes plugins install dynatrace-oss/dynatrace-managed-mcp --ref 857cecf40383335b90fffb8bf67c5b0dd2447a64
 hermes plugins enable dynatrace-managed-mcp
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 857cecf40383335b90fffb8bf67c5b0dd2447a64
 openclaw plugins install ./dynatrace-managed-mcp --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp && git -C dynatrace-managed-mcp checkout 857cecf40383335b90fffb8bf67c5b0dd2447a64
 mkdir -p ~/.vibe/plugins/dynatrace-managed-mcp && cp -r ./dynatrace-managed-mcp/. ~/.vibe/plugins/dynatrace-managed-mcp
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp ~/.opencode-plugins/dynatrace-managed-mcp && git -C ~/.opencode-plugins/dynatrace-managed-mcp checkout 52959ebce94eb5e814f2cf807f8208edf3ee4ca0
+git clone https://github.com/dynatrace-oss/dynatrace-managed-mcp ~/.opencode-plugins/dynatrace-managed-mcp && git -C ~/.opencode-plugins/dynatrace-managed-mcp checkout 857cecf40383335b90fffb8bf67c5b0dd2447a64
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
@@ -99,7 +99,7 @@ Then merge into `~/.config/opencode/opencode.json`:
       "command": [
         "npx",
         "-y",
-        "@dynatrace-oss/dynatrace-managed-mcp-server@<2"
+        "@dynatrace-oss/dynatrace-managed-mcp-server@<3"
       ],
       "environment": {
         "DT_ENVIRONMENT_CONFIGS": "{env:DT_ENVIRONMENT_CONFIGS}"

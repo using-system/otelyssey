@@ -6,8 +6,8 @@
   ],
   "repository": "OneUptime/oneuptime",
   "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-  "ref": "14.0.93",
-  "sha": "54e8230d1caf65b80608752fe103987bf39eed08",
+  "ref": "14.0.95",
+  "sha": "1e4f217269a55e216aa6c0da6ec265a6cc50159f",
   "version": "1.0.0",
   "author": {
     "name": "OneUptime",
@@ -35,9 +35,9 @@
   "submitted_in": 144,
   "admitted_at": "2026-10-21",
   "stats": {
-    "stars": 7763,
-    "forks": 481,
+    "stars": 7765,
+    "forks": 482,
     "watchers": 27,
-    "refreshed_at": "2026-10-27T09:04:13Z"
+    "refreshed_at": "2026-10-28T09:44:54Z"
   }
 }

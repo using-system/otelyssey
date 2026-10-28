@@ -42,12 +42,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/dynatrace-oss/dynatrace-managed-mcp.git",
-        "ref": "main",
-        "sha": "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
+        "ref": "v2.0.0",
+        "sha": "857cecf40383335b90fffb8bf67c5b0dd2447a64"
       },
       "strict": true,
       "description": "MCP server for Dynatrace Managed (self-hosted): query logs, metrics, events, entities, problems, security vulnerabilities and SLOs across one or more clusters.",
-      "version": "1.1.1",
+      "version": "2.0.0",
       "category": "backend",
       "keywords": [
         "dynatrace",
@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.93",
-        "sha": "54e8230d1caf65b80608752fe103987bf39eed08"
+        "ref": "14.0.95",
+        "sha": "1e4f217269a55e216aa6c0da6ec265a6cc50159f"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
@@ -235,12 +235,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.3.3",
-        "sha": "8cc06da7bcce0ccb0b70aa41e43c8105acac8aea"
+        "ref": "v2.3.5",
+        "sha": "046f84944be784d554d20fbbcb6c1ed8d8f46283"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.3.3",
+      "version": "2.3.5",
       "category": "backend",
       "keywords": [
         "datadog",

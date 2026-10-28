@@ -5,7 +5,7 @@ plugins:
     subdir: "plugins/codex/arize-phoenix"
     ref: "767847c3386492f9783b623cf78e3eee47d0cea3"
   - repo: dynatrace-oss/dynatrace-managed-mcp
-    ref: "52959ebce94eb5e814f2cf807f8208edf3ee4ca0"
+    ref: "857cecf40383335b90fffb8bf67c5b0dd2447a64"
   - repo: langwatch/agent-plugin
     ref: "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
   - repo: BastiDood/skills
@@ -16,14 +16,14 @@ plugins:
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime
     subdir: "packages/App/FeatureSet/MCP/ChatGPTPlugin"
-    ref: "54e8230d1caf65b80608752fe103987bf39eed08"
+    ref: "1e4f217269a55e216aa6c0da6ec265a6cc50159f"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
-    ref: "8cc06da7bcce0ccb0b70aa41e43c8105acac8aea"
+    ref: "046f84944be784d554d20fbbcb6c1ed8d8f46283"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
