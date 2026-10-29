@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.95",
-        "sha": "1e4f217269a55e216aa6c0da6ec265a6cc50159f"
+        "ref": "14.0.96",
+        "sha": "216a7fc90cc703f37247996aca8ee3a90cb81d8d"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",

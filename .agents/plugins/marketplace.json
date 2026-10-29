@@ -181,8 +181,8 @@
         "source": "git-subdir",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "./packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.95",
-        "sha": "1e4f217269a55e216aa6c0da6ec265a6cc50159f"
+        "ref": "14.0.96",
+        "sha": "216a7fc90cc703f37247996aca8ee3a90cb81d8d"
       },
       "policy": {
         "installation": "AVAILABLE",
