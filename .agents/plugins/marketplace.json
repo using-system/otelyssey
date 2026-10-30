@@ -181,8 +181,8 @@
         "source": "git-subdir",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "./packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.96",
-        "sha": "216a7fc90cc703f37247996aca8ee3a90cb81d8d"
+        "ref": "14.0.97",
+        "sha": "7bf77a507b2db9d8ccd3c6e55f33c8c5d4b033db"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -249,7 +249,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.3.5",
+      "version": "2.3.8",
       "keywords": [
         "datadog",
         "monitoring",
@@ -266,8 +266,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.3.5",
-        "sha": "046f84944be784d554d20fbbcb6c1ed8d8f46283"
+        "ref": "v2.3.8",
+        "sha": "1f19fce046944c8de4f5d03599ab48ce5e21d254"
       },
       "policy": {
         "installation": "AVAILABLE",
