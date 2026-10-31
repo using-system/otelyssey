@@ -155,8 +155,8 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.97",
-        "sha": "7bf77a507b2db9d8ccd3c6e55f33c8c5d4b033db"
+        "ref": "14.0.98",
+        "sha": "53cd45fd6a616802b90d251aff1a4468e9acd63d"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
@@ -235,12 +235,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.3.8",
-        "sha": "1f19fce046944c8de4f5d03599ab48ce5e21d254"
+        "ref": "v2.3.10",
+        "sha": "73bca847b975169e981a61009e176b34e1a5d027"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.3.8",
+      "version": "2.3.10",
       "category": "backend",
       "keywords": [
         "datadog",
@@ -345,11 +345,11 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "plugins/signoz",
         "ref": "main",
-        "sha": "6bd555327dee977d14d6d850b1cfb9fe872df102"
+        "sha": "5bda89e13755e4c7c1c7feb0af215d7a228b84a4"
       },
       "strict": true,
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.10.2300",
+      "version": "2026.10.3000",
       "category": "backend",
       "keywords": [
         "signoz",
