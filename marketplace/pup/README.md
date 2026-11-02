@@ -9,7 +9,7 @@ Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agen
 - License: Apache-2.0
 - Keywords: `datadog`, `monitoring`, `logs`, `apm`, `metrics`, `security`, `infrastructure`
 - Homepage: <https://github.com/DataDog/pup#readme>
-- Stars 1038, forks 138, watchers 4 (refreshed 2026-10-31T09:42:30Z)
+- Stars 1040, forks 138, watchers 4 (refreshed 2026-11-02T11:16:00Z)
 
 ## Install
 
