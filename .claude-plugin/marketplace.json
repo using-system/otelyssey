@@ -155,12 +155,12 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime.git",
         "path": "packages/App/FeatureSet/MCP/ChatGPTPlugin",
-        "ref": "14.0.101",
-        "sha": "e0bbebebec283c512ab1455ccb5e4ec3fdeb6237"
+        "ref": "14.0.103",
+        "sha": "4e7c056fe45cd0b952fcf20ba4475f0b5df69be4"
       },
       "strict": true,
       "description": "Work with your OneUptime project from ChatGPT: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "category": "backend",
       "keywords": [
         "incident management",
@@ -235,12 +235,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.3.10",
-        "sha": "73bca847b975169e981a61009e176b34e1a5d027"
+        "ref": "v2.4.1",
+        "sha": "dd4db1a46ab1474200a99b0f71db4880dad0dd81"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.3.10",
+      "version": "2.4.1",
       "category": "backend",
       "keywords": [
         "datadog",
@@ -293,11 +293,11 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "e797823795949afd248a8a03b5c8f29f4ff3b39c"
+        "sha": "2441fe4497510dd81507bf644d6d6f2360047e72"
       },
       "strict": true,
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.51.4",
+      "version": "0.52.0",
       "category": "observability",
       "keywords": [
         "agents",

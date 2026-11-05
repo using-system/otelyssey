@@ -4,12 +4,12 @@ Work with your OneUptime project from ChatGPT: investigate and respond to incide
 
 - Repository: [OneUptime/oneuptime](https://github.com/OneUptime/oneuptime), the plugin at `packages/App/FeatureSet/MCP/ChatGPTPlugin` in it
 - Categories: `backend`
-- Version: 1.0.0 (`14.0.101`, commit `e0bbebebec28`)
+- Version: 1.1.0 (`14.0.103`, commit `4e7c056fe45c`)
 - Author: [OneUptime](https://oneuptime.com)
 - License: Apache-2.0
 - Keywords: `incident management`, `monitoring`, `status page`, `on-call`, `observability`, `alerts`, `logs`
 - Homepage: <https://oneuptime.com/docs/ai/mcp-server>
-- Stars 7785, forks 485, watchers 27 (refreshed 2026-11-03T10:56:30Z)
+- Stars 7793, forks 485, watchers 27 (refreshed 2026-11-05T11:00:23Z)
 
 ## Install
 
@@ -58,28 +58,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install OneUptime/oneuptime/packages/App/FeatureSet/MCP/ChatGPTPlugin --ref e0bbebebec283c512ab1455ccb5e4ec3fdeb6237
+hermes plugins install OneUptime/oneuptime/packages/App/FeatureSet/MCP/ChatGPTPlugin --ref 4e7c056fe45cd0b952fcf20ba4475f0b5df69be4
 hermes plugins enable oneuptime
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/OneUptime/oneuptime && git -C oneuptime checkout e0bbebebec283c512ab1455ccb5e4ec3fdeb6237
+git clone https://github.com/OneUptime/oneuptime && git -C oneuptime checkout 4e7c056fe45cd0b952fcf20ba4475f0b5df69be4
 openclaw plugins install ./oneuptime/packages/App/FeatureSet/MCP/ChatGPTPlugin --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/OneUptime/oneuptime && git -C oneuptime checkout e0bbebebec283c512ab1455ccb5e4ec3fdeb6237
+git clone https://github.com/OneUptime/oneuptime && git -C oneuptime checkout 4e7c056fe45cd0b952fcf20ba4475f0b5df69be4
 mkdir -p ~/.vibe/plugins/oneuptime && cp -r ./oneuptime/packages/App/FeatureSet/MCP/ChatGPTPlugin/. ~/.vibe/plugins/oneuptime
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/OneUptime/oneuptime ~/.opencode-plugins/oneuptime && git -C ~/.opencode-plugins/oneuptime checkout e0bbebebec283c512ab1455ccb5e4ec3fdeb6237
+git clone https://github.com/OneUptime/oneuptime ~/.opencode-plugins/oneuptime && git -C ~/.opencode-plugins/oneuptime checkout 4e7c056fe45cd0b952fcf20ba4475f0b5df69be4
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
