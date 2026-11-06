@@ -9,7 +9,7 @@ Work with your OneUptime project from ChatGPT: investigate and respond to incide
 - License: Apache-2.0
 - Keywords: `incident management`, `monitoring`, `status page`, `on-call`, `observability`, `alerts`, `logs`
 - Homepage: <https://oneuptime.com/docs/ai/mcp-server>
-- Stars 7793, forks 485, watchers 27 (refreshed 2026-11-05T11:00:23Z)
+- Stars 7795, forks 486, watchers 27 (refreshed 2026-11-06T10:58:16Z)
 
 ## Install
 
