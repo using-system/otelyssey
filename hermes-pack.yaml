@@ -10,7 +10,7 @@ plugins:
     ref: "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
   - repo: BastiDood/skills
     subdir: "plugins/observability"
-    ref: "9dfab1713cb24ccb515563de166def3239e92f1a"
+    ref: "83f2204e7d6b5af7e91795388ef7602733b0d7d5"
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"

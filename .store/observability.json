@@ -7,8 +7,8 @@
   "repository": "BastiDood/skills",
   "path": "plugins/observability",
   "ref": "main",
-  "sha": "9dfab1713cb24ccb515563de166def3239e92f1a",
-  "version": "0.1.7",
+  "sha": "83f2204e7d6b5af7e91795388ef7602733b0d7d5",
+  "version": "0.2.2",
   "author": {
     "name": "Basti Ortiz",
     "email": "ortiz@bastidood.dev",

@@ -4,7 +4,7 @@ Opinionated guidance for clear and operationally useful OpenTelemetry instrument
 
 - Repository: [BastiDood/skills](https://github.com/BastiDood/skills), the plugin at `plugins/observability` in it
 - Categories: `instrumentation`
-- Version: 0.1.7 (`main`, commit `9dfab1713cb2`)
+- Version: 0.2.2 (`main`, commit `83f2204e7d6b`)
 - Author: [Basti Ortiz](https://bastidood.dev/)
 - License: MPL-2.0
 - Keywords: `claude`, `codex`, `cursor`, `skills`
@@ -57,28 +57,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install BastiDood/skills/plugins/observability --ref 9dfab1713cb24ccb515563de166def3239e92f1a
+hermes plugins install BastiDood/skills/plugins/observability --ref 83f2204e7d6b5af7e91795388ef7602733b0d7d5
 hermes plugins enable observability
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+git clone https://github.com/BastiDood/skills && git -C skills checkout 83f2204e7d6b5af7e91795388ef7602733b0d7d5
 openclaw plugins install ./skills/plugins/observability --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/BastiDood/skills && git -C skills checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+git clone https://github.com/BastiDood/skills && git -C skills checkout 83f2204e7d6b5af7e91795388ef7602733b0d7d5
 mkdir -p ~/.vibe/plugins/observability && cp -r ./skills/plugins/observability/. ~/.vibe/plugins/observability
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/BastiDood/skills ~/.opencode-plugins/observability && git -C ~/.opencode-plugins/observability checkout 9dfab1713cb24ccb515563de166def3239e92f1a
+git clone https://github.com/BastiDood/skills ~/.opencode-plugins/observability && git -C ~/.opencode-plugins/observability checkout 83f2204e7d6b5af7e91795388ef7602733b0d7d5
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
