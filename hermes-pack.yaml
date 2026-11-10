@@ -23,7 +23,7 @@ plugins:
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
   - repo: DataDog/pup
-    ref: "eef6fed60f203c4c5f27da17fb7b5ee6bed1772e"
+    ref: "5afbebf091e3d4f79475241dfbbc157e3c8643ca"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
