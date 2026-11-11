@@ -17,10 +17,12 @@ concurrency:
 
 jobs:
   admit:
+    # not on `format-ok`: the review may remove it with the ruling's label, and a run skipped
+    # for that leaves the issue admissible and still; the intake comment ends with its
+    # candidate block under that verdict only, and the record's step reads no other
     if: >-
       github.event.label.name == 'admissible' &&
       contains(github.event.issue.labels.*.name, 'submission') &&
-      contains(github.event.issue.labels.*.name, 'format-ok') &&
       !contains(github.event.issue.labels.*.name, 'admitted')
     runs-on: ubuntu-26.04
     env:
