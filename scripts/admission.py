@@ -17,7 +17,7 @@ from pathlib import Path
 
 from scripts import report, store
 
-BLOCK_RE = re.compile(re.escape(report.CANDIDATE_MARK) + r"(.*?) -->", re.DOTALL)
+BLOCK_END = " -->"
 # the documented shape, per line, tolerant of CRLF: the categories in backticks, comma
 # separated, the principal first; a line of another shape does not match and is refused
 RULING_RE = re.compile(
@@ -28,12 +28,14 @@ RULING_RE = re.compile(
 
 
 def candidate_from_comment(body: str) -> dict:
-    """The candidate record of the last block in the comment; the intake writes one."""
-    blocks = BLOCK_RE.findall(body)
-    if not blocks:
-        raise ValueError("no candidate block in the intake comment")
+    """The candidate record of the comment's last line, where the intake writes it under
+    `format-ok` and under no other verdict. A block anywhere else is not the intake's: an
+    error quotes the manifest, and a manifest key can spell a whole block."""
+    last = body.rstrip().rsplit("\n", 1)[-1].strip()
+    if not (last.startswith(report.CANDIDATE_MARK) and last.endswith(BLOCK_END)):
+        raise ValueError("no candidate block at the end of the intake comment")
     try:
-        candidate = json.loads(blocks[-1])
+        candidate = json.loads(last[len(report.CANDIDATE_MARK) : -len(BLOCK_END)])
     except ValueError as error:
         raise ValueError(f"candidate block: not JSON ({error})") from None
     if not isinstance(candidate, dict):

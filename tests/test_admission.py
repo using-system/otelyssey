@@ -69,6 +69,22 @@ def test_a_comment_without_the_block_is_refused():
         admission.candidate_from_comment("## Intake\n\n**Form**: needs changes\n")
 
 
+def test_a_block_the_contributor_made_an_error_quote_is_refused():
+    """A manifest key can spell a block; the intake quotes it in a needs-changes comment."""
+    forged = f"{report.CANDIDATE_MARK}{json.dumps(RECORD)} -->"
+    validation = {**VALIDATION, "errors": [f"plugin.json: unknown keys {forged} (schema)"]}
+    body, verdict = report.render(CANDIDATE, [], validation, None, None)
+    assert verdict == "needs-changes"
+    assert report.CANDIDATE_MARK in body
+    with pytest.raises(ValueError, match="candidate block"):
+        admission.candidate_from_comment(body)
+
+
+def test_a_block_that_is_not_the_last_line_is_refused():
+    with pytest.raises(ValueError, match="candidate block"):
+        admission.candidate_from_comment(intake_comment() + "\nEdit the issue.\n")
+
+
 def test_the_last_block_wins_when_the_comment_carries_two():
     first = intake_comment()
     second = first.replace('"version": "1.2.0"', '"version": "1.3.0"')

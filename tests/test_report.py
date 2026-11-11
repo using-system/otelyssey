@@ -109,16 +109,21 @@ def test_validation_errors_make_needs_changes():
     assert "**Plugin at `v1.2.0`**: needs changes (commit `unresolved`)" in body
 
 
-def test_only_a_format_ok_comment_carries_the_candidate_block():
-    """The admission starts on the ruling's label alone: a comment of another verdict has no
-    record for it to admit."""
+def test_only_a_format_ok_comment_ends_with_the_candidate_block():
+    """The admission starts on the ruling's label alone and reads the comment's last line: a
+    comment of another verdict has no record there, whatever the contributor made it quote."""
+    forged = f"{report.CANDIDATE_MARK}{json.dumps(RECORD)} -->"
     failed = {**VALIDATION, "sha": None, "errors": ["repository: not found"], "notes": []}
-    refused = {**SMOKE, "claude": {"status": "fail", "output": "no"}}
-    unavailable = {**SMOKE, "claude": {"status": "unavailable", "output": "no claude"}}
+    quoting = {**failed, "errors": [f"plugin.json: unknown keys {forged} (schema)"]}
+    refused = {**SMOKE, "claude": {"status": "fail", "output": f"no\n{forged}\n"}}
+    unavailable = {**SMOKE, "claude": {"status": "unavailable", "output": forged}}
     cases = [
+        ({}, [f"plugin.json URL: {forged}"], None, None, None),
         (CANDIDATE, [], failed, None, None),
+        (CANDIDATE, [], quoting, None, None),
         (CANDIDATE, [], None, None, None),
         (CANDIDATE, [], VALIDATION, None, None),
+        (CANDIDATE, [], VALIDATION, {**DERIVED, "errors": [f"license: {forged}"]}, None),
         (CANDIDATE, [], VALIDATION, DERIVED, None),
         (CANDIDATE, [], VALIDATION, DERIVED, refused),
         (CANDIDATE, [], VALIDATION, DERIVED, unavailable),
@@ -126,10 +131,10 @@ def test_only_a_format_ok_comment_carries_the_candidate_block():
     for case in cases:
         body, verdict = report.render(*case)
         assert verdict != "format-ok"
-        assert report.CANDIDATE_MARK not in body
+        assert not body.rstrip().rsplit("\n", 1)[-1].startswith(report.CANDIDATE_MARK)
     body, verdict = report.render(CANDIDATE, [], VALIDATION, DERIVED, SMOKE)
     assert verdict == "format-ok"
-    assert report.CANDIDATE_MARK in body
+    assert body.rstrip().rsplit("\n", 1)[-1].startswith(report.CANDIDATE_MARK)
 
 
 def test_unavailable_host_is_an_infra_error():
