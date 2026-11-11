@@ -108,6 +108,42 @@
       "homepage": "https://github.com/dynatrace-oss/dynatrace-managed-mcp#readme"
     },
     {
+      "name": "grafana-cloud-mcp",
+      "description": "For Grafana Cloud: a hosted MCP server with OAuth sign-in for dashboards, metrics, logs, traces, alerts, and incidents. Nothing to install.",
+      "version": "0.3.1",
+      "keywords": [
+        "grafana",
+        "mcp",
+        "cloud",
+        "observability",
+        "dashboards",
+        "prometheus",
+        "loki",
+        "tempo",
+        "alerting",
+        "incidents",
+        "oncall",
+        "monitoring"
+      ],
+      "author": {
+        "name": "Grafana Labs",
+        "email": "grafana-assistant@grafana.com"
+      },
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/grafana/ai-marketplace.git",
+        "path": "./kiro/grafana-cloud-mcp",
+        "ref": "main",
+        "sha": "77a6f1a277c35d3205dc34abf78d85e49ca5ccf1"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-cloud-mcp"
+    },
+    {
       "name": "langwatch",
       "description": "Records which repository and branch each coding-agent session worked in, and teaches the agent to read its own traces back from LangWatch.",
       "version": "1.2.0",
