@@ -109,6 +109,29 @@ def test_validation_errors_make_needs_changes():
     assert "**Plugin at `v1.2.0`**: needs changes (commit `unresolved`)" in body
 
 
+def test_only_a_format_ok_comment_carries_the_candidate_block():
+    """The admission starts on the ruling's label alone: a comment of another verdict has no
+    record for it to admit."""
+    failed = {**VALIDATION, "sha": None, "errors": ["repository: not found"], "notes": []}
+    refused = {**SMOKE, "claude": {"status": "fail", "output": "no"}}
+    unavailable = {**SMOKE, "claude": {"status": "unavailable", "output": "no claude"}}
+    cases = [
+        (CANDIDATE, [], failed, None, None),
+        (CANDIDATE, [], None, None, None),
+        (CANDIDATE, [], VALIDATION, None, None),
+        (CANDIDATE, [], VALIDATION, DERIVED, None),
+        (CANDIDATE, [], VALIDATION, DERIVED, refused),
+        (CANDIDATE, [], VALIDATION, DERIVED, unavailable),
+    ]
+    for case in cases:
+        body, verdict = report.render(*case)
+        assert verdict != "format-ok"
+        assert report.CANDIDATE_MARK not in body
+    body, verdict = report.render(CANDIDATE, [], VALIDATION, DERIVED, SMOKE)
+    assert verdict == "format-ok"
+    assert report.CANDIDATE_MARK in body
+
+
 def test_unavailable_host_is_an_infra_error():
     smoke = {**SMOKE, "claude": {"status": "unavailable", "output": "no claude"}}
     _, verdict = report.render(CANDIDATE, [], VALIDATION, DERIVED, smoke)
