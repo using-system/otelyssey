@@ -1,0 +1,44 @@
+{
+  "name": "oneuptime",
+  "description": "Work with your OneUptime project from your coding agent: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
+  "categories": [
+    "backend",
+    "instrumentation"
+  ],
+  "repository": "OneUptime/oneuptime-agent-plugin",
+  "path": "",
+  "ref": "main",
+  "sha": "d0664f5126b6571b8a7cfcb2fdc63f46b12c2ba6",
+  "version": "14.0.103",
+  "author": {
+    "name": "OneUptime",
+    "email": "support@oneuptime.com",
+    "url": "https://oneuptime.com"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://oneuptime.com/docs/ai/mcp-server",
+  "keywords": [
+    "incident management",
+    "monitoring",
+    "status page",
+    "on-call",
+    "observability",
+    "alerts",
+    "logs"
+  ],
+  "skills": true,
+  "mcp": {
+    "oneuptime": {
+      "type": "streamable-http",
+      "url": "https://oneuptime.com/mcp"
+    }
+  },
+  "submitted_in": 171,
+  "admitted_at": "2026-11-11",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-11-11T13:53:35Z"
+  }
+}
