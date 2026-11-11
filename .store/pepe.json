@@ -1,0 +1,52 @@
+{
+  "name": "pepe",
+  "description": "Find why an HTTP endpoint is slow and prove a fix: ping it by phase, load-test it, see which operation inside the service the time goes to (from its OpenTelemetry spans), and compare before and after. A skill and pepe's MCP server, under guardrails.",
+  "categories": [
+    "observability",
+    "instrumentation"
+  ],
+  "repository": "omarmhaimdat/pepe",
+  "path": "",
+  "ref": "v0.58.0",
+  "sha": "753dca53eca3b1673ce627671b000a035da74a51",
+  "version": "0.58.0",
+  "author": {
+    "name": "Omar Mhaimdat",
+    "url": "https://github.com/omarmhaimdat"
+  },
+  "license": "MIT",
+  "homepage": "https://pepe.mhaimdat.com/docs/agents.html",
+  "keywords": [
+    "http",
+    "load-testing",
+    "latency",
+    "performance",
+    "opentelemetry",
+    "benchmark",
+    "mcp"
+  ],
+  "skills": true,
+  "mcp": {
+    "pepe": {
+      "type": "stdio",
+      "command": "pepe",
+      "args": [
+        "mcp",
+        "--max-requests",
+        "10000",
+        "--max-rate",
+        "500",
+        "--max-concurrency",
+        "64"
+      ]
+    }
+  },
+  "submitted_in": 155,
+  "admitted_at": "2026-11-11",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-11-11T12:04:58Z"
+  }
+}
