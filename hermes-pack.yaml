@@ -16,6 +16,8 @@ plugins:
     ref: "77a6f1a277c35d3205dc34abf78d85e49ca5ccf1"
   - repo: langwatch/agent-plugin
     ref: "5ca4f7addc97fd2bb8cfdfe3f086fc7c5407b88d"
+  - repo: LogPacer/logpacer-marketplace
+    ref: "e1d62893fe420523e50eadecbd1d882adb795a67"
   - repo: BastiDood/skills
     subdir: "plugins/observability"
     ref: "83f2204e7d6b5af7e91795388ef7602733b0d7d5"

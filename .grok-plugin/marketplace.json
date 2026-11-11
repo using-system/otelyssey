@@ -206,6 +206,36 @@
       "homepage": "https://docs.langwatch.ai"
     },
     {
+      "name": "logpacer",
+      "description": "Connect your coding agent to the hosted LogPacer MCP server, with skills for setting up collection, instrumenting apps and investigating logs.",
+      "version": "0.1.2",
+      "keywords": [
+        "logpacer",
+        "logs",
+        "observability",
+        "mcp",
+        "otlp",
+        "metrics",
+        "traces"
+      ],
+      "author": {
+        "name": "LogPacer",
+        "url": "https://logpacer.com"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/LogPacer/logpacer-marketplace.git",
+        "ref": "main",
+        "sha": "e1d62893fe420523e50eadecbd1d882adb795a67"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Backends",
+      "homepage": "https://logpacer.com"
+    },
+    {
       "name": "observability",
       "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
       "version": "0.2.2",
