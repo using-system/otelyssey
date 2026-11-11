@@ -264,6 +264,36 @@
       "category": "Instrumentation"
     },
     {
+      "name": "observe-lens",
+      "description": "Read-only investigation skills across CI pipelines (Jenkins, GitHub Actions), CD (Argo CD, Flux, Helm, Kubernetes), databases (PostgreSQL, MySQL, MongoDB) and telemetry (Grafana, Loki, Tempo, Prometheus).",
+      "version": "1.1.0",
+      "keywords": [
+        "observability",
+        "debugging",
+        "ci",
+        "cd",
+        "database",
+        "grafana",
+        "skills"
+      ],
+      "author": {
+        "name": "Evren Tan",
+        "url": "https://github.com/evrentan"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/evrentan/observe-lens.git",
+        "ref": "v1.1.0",
+        "sha": "888ba18bf68f85247218d347e705b74fea29a636"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Observability",
+      "homepage": "https://github.com/evrentan/observe-lens"
+    },
+    {
       "name": "oddyssey",
       "description": "CLI toolbox for Observability-Driven Development (ODD): coding agents observe local runs on an OpenTelemetry/Grafana stack - or remote ones on any OpenTelemetry backend - and feed the next spec-driven improvement loop.",
       "version": "1.13.3",

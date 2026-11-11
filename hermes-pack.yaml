@@ -21,6 +21,8 @@ plugins:
   - repo: BastiDood/skills
     subdir: "plugins/observability"
     ref: "83f2204e7d6b5af7e91795388ef7602733b0d7d5"
+  - repo: evrentan/observe-lens
+    ref: "888ba18bf68f85247218d347e705b74fea29a636"
   - repo: using-system/oddyssey
     subdir: "marketplace/oddyssey"
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
