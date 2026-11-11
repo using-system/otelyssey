@@ -1,0 +1,43 @@
+{
+  "name": "logpacer",
+  "description": "Connect your coding agent to the hosted LogPacer MCP server, with skills for setting up collection, instrumenting apps and investigating logs.",
+  "categories": [
+    "backend",
+    "instrumentation"
+  ],
+  "repository": "LogPacer/logpacer-marketplace",
+  "path": "",
+  "ref": "main",
+  "sha": "e1d62893fe420523e50eadecbd1d882adb795a67",
+  "version": "0.1.2",
+  "author": {
+    "name": "LogPacer",
+    "url": "https://logpacer.com"
+  },
+  "license": "MIT",
+  "homepage": "https://logpacer.com",
+  "keywords": [
+    "logpacer",
+    "logs",
+    "observability",
+    "mcp",
+    "otlp",
+    "metrics",
+    "traces"
+  ],
+  "skills": true,
+  "mcp": {
+    "logpacer": {
+      "type": "streamable-http",
+      "url": "https://app.logpacer.com/mcp"
+    }
+  },
+  "submitted_in": 164,
+  "admitted_at": "2026-11-11",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-11-11T12:46:26Z"
+  }
+}
