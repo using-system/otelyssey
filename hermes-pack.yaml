@@ -22,6 +22,8 @@ plugins:
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
     ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
+  - repo: omarmhaimdat/pepe
+    ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup
     ref: "2a095ebd877896523c658f6d073285f99c8df03c"
   - repo: respanai/respan

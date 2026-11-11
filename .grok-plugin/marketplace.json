@@ -247,6 +247,36 @@
       "category": "Instrumentation"
     },
     {
+      "name": "pepe",
+      "description": "Find why an HTTP endpoint is slow and prove a fix: ping it by phase, load-test it, see which operation inside the service the time goes to (from its OpenTelemetry spans), and compare before and after. A skill and pepe's MCP server, under guardrails.",
+      "version": "0.58.0",
+      "keywords": [
+        "http",
+        "load-testing",
+        "latency",
+        "performance",
+        "opentelemetry",
+        "benchmark",
+        "mcp"
+      ],
+      "author": {
+        "name": "Omar Mhaimdat",
+        "url": "https://github.com/omarmhaimdat"
+      },
+      "source": {
+        "source": "url",
+        "url": "https://github.com/omarmhaimdat/pepe.git",
+        "ref": "v0.58.0",
+        "sha": "753dca53eca3b1673ce627671b000a035da74a51"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Observability",
+      "homepage": "https://pepe.mhaimdat.com/docs/agents.html"
+    },
+    {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
       "version": "2.4.4",
