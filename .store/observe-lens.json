@@ -1,0 +1,38 @@
+{
+  "name": "observe-lens",
+  "description": "Read-only investigation skills across CI pipelines (Jenkins, GitHub Actions), CD (Argo CD, Flux, Helm, Kubernetes), databases (PostgreSQL, MySQL, MongoDB) and telemetry (Grafana, Loki, Tempo, Prometheus).",
+  "categories": [
+    "observability",
+    "backend"
+  ],
+  "repository": "evrentan/observe-lens",
+  "path": "",
+  "ref": "v1.1.0",
+  "sha": "888ba18bf68f85247218d347e705b74fea29a636",
+  "version": "1.1.0",
+  "author": {
+    "name": "Evren Tan",
+    "url": "https://github.com/evrentan"
+  },
+  "license": "Apache-2.0",
+  "homepage": "https://github.com/evrentan/observe-lens",
+  "keywords": [
+    "observability",
+    "debugging",
+    "ci",
+    "cd",
+    "database",
+    "grafana",
+    "skills"
+  ],
+  "skills": true,
+  "mcp": {},
+  "submitted_in": 166,
+  "admitted_at": "2026-11-11",
+  "stats": {
+    "stars": 0,
+    "forks": 0,
+    "watchers": 0,
+    "refreshed_at": "2026-11-11T12:53:27Z"
+  }
+}
