@@ -136,6 +136,38 @@
       "homepage": "https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-cloud-mcp"
     },
     {
+      "name": "grafana-mcp",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/grafana/ai-marketplace.git",
+        "path": "kiro/grafana-mcp",
+        "ref": "main",
+        "sha": "77a6f1a277c35d3205dc34abf78d85e49ca5ccf1"
+      },
+      "strict": true,
+      "description": "For self-hosted Grafana, or any Grafana with a service-account token: dashboards, Prometheus, Loki, alerting, incidents, and OnCall via the Grafana MCP server, run locally in Docker.",
+      "version": "0.3.1",
+      "category": "backend",
+      "keywords": [
+        "grafana",
+        "mcp",
+        "observability",
+        "dashboards",
+        "prometheus",
+        "loki",
+        "alerting",
+        "incidents",
+        "oncall",
+        "monitoring"
+      ],
+      "license": "Apache-2.0",
+      "author": {
+        "name": "Grafana Labs",
+        "email": "grafana-assistant@grafana.com"
+      },
+      "homepage": "https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-mcp"
+    },
+    {
       "name": "langwatch",
       "source": {
         "source": "url",
