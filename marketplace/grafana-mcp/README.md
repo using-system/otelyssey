@@ -9,7 +9,7 @@ For self-hosted Grafana, or any Grafana with a service-account token: dashboards
 - License: Apache-2.0
 - Keywords: `grafana`, `mcp`, `observability`, `dashboards`, `prometheus`, `loki`, `alerting`, `incidents`, `oncall`, `monitoring`
 - Homepage: <https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-mcp>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-11-11T12:39:53Z)
+- Stars 20, forks 6, watchers 0 (refreshed 2026-11-12T11:21:19Z)
 
 ## Install
 

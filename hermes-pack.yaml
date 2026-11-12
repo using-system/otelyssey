@@ -36,7 +36,7 @@ plugins:
   - repo: omarmhaimdat/pepe
     ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup
-    ref: "2a095ebd877896523c658f6d073285f99c8df03c"
+    ref: "d36c6c9bfbcaedc5a238360c69a1deb9ed0305fb"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"

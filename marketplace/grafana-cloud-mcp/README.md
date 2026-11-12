@@ -9,7 +9,7 @@ For Grafana Cloud: a hosted MCP server with OAuth sign-in for dashboards, metric
 - License: Apache-2.0
 - Keywords: `grafana`, `mcp`, `cloud`, `observability`, `dashboards`, `prometheus`, `loki`, `tempo`, `alerting`, `incidents`, `oncall`, `monitoring`
 - Homepage: <https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-cloud-mcp>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-11-11T12:33:16Z)
+- Stars 20, forks 6, watchers 0 (refreshed 2026-11-12T11:21:19Z)
 
 ## Install
 

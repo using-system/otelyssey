@@ -9,7 +9,7 @@ Find why an HTTP endpoint is slow and prove a fix: ping it by phase, load-test i
 - License: MIT
 - Keywords: `http`, `load-testing`, `latency`, `performance`, `opentelemetry`, `benchmark`, `mcp`
 - Homepage: <https://pepe.mhaimdat.com/docs/agents.html>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-11-11T12:04:58Z)
+- Stars 97, forks 3, watchers 1 (refreshed 2026-11-12T11:21:19Z)
 
 ## Install
 
