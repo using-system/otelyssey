@@ -4,7 +4,7 @@ Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts
 
 - Repository: [SigNoz/agent-skills](https://github.com/SigNoz/agent-skills), the plugin at `plugins/signoz` in it
 - Categories: `backend`
-- Version: 2026.10.3000 (`main`, commit `5bda89e13755`)
+- Version: 2026.11.1200 (`main`, commit `03c8f19a3b0a`)
 - Author: [SigNoz](https://signoz.io)
 - License: MIT
 - Keywords: `signoz`, `opentelemetry`, `observability`, `mcp`, `clickhouse`, `tracing`, `logging`
@@ -58,28 +58,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 5bda89e13755e4c7c1c7feb0af215d7a228b84a4
+hermes plugins install SigNoz/agent-skills/plugins/signoz --ref 03c8f19a3b0aef044f2be4775c35e91a3a9382f2
 hermes plugins enable signoz
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 5bda89e13755e4c7c1c7feb0af215d7a228b84a4
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 03c8f19a3b0aef044f2be4775c35e91a3a9382f2
 openclaw plugins install ./agent-skills/plugins/signoz --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 5bda89e13755e4c7c1c7feb0af215d7a228b84a4
+git clone https://github.com/SigNoz/agent-skills && git -C agent-skills checkout 03c8f19a3b0aef044f2be4775c35e91a3a9382f2
 mkdir -p ~/.vibe/plugins/signoz && cp -r ./agent-skills/plugins/signoz/. ~/.vibe/plugins/signoz
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/SigNoz/agent-skills ~/.opencode-plugins/signoz && git -C ~/.opencode-plugins/signoz checkout 5bda89e13755e4c7c1c7feb0af215d7a228b84a4
+git clone https://github.com/SigNoz/agent-skills ~/.opencode-plugins/signoz && git -C ~/.opencode-plugins/signoz checkout 03c8f19a3b0aef044f2be4775c35e91a3a9382f2
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

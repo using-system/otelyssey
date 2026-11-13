@@ -20,7 +20,7 @@ plugins:
     ref: "e1d62893fe420523e50eadecbd1d882adb795a67"
   - repo: BastiDood/skills
     subdir: "plugins/observability"
-    ref: "83f2204e7d6b5af7e91795388ef7602733b0d7d5"
+    ref: "a0999a9beb0ca5faada8e3d92382df2cfe1dedcb"
   - repo: evrentan/observe-lens
     ref: "888ba18bf68f85247218d347e705b74fea29a636"
   - repo: using-system/oddyssey
@@ -36,7 +36,7 @@ plugins:
   - repo: omarmhaimdat/pepe
     ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup
-    ref: "d36c6c9bfbcaedc5a238360c69a1deb9ed0305fb"
+    ref: "c601017bd135bb2b21ee0cc14820187ff27de911"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
@@ -46,7 +46,7 @@ plugins:
     ref: "2eee4ec823972c222aae89c9213c64c056b64048"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
-    ref: "5bda89e13755e4c7c1c7feb0af215d7a228b84a4"
+    ref: "03c8f19a3b0aef044f2be4775c35e91a3a9382f2"
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins

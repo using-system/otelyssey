@@ -228,11 +228,11 @@
         "url": "https://github.com/BastiDood/skills.git",
         "path": "plugins/observability",
         "ref": "main",
-        "sha": "83f2204e7d6b5af7e91795388ef7602733b0d7d5"
+        "sha": "a0999a9beb0ca5faada8e3d92382df2cfe1dedcb"
       },
       "strict": true,
       "description": "Opinionated guidance for clear and operationally useful OpenTelemetry instrumentation.",
-      "version": "0.2.2",
+      "version": "0.2.3",
       "category": "instrumentation",
       "keywords": [
         "claude",
@@ -418,12 +418,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.4.5",
-        "sha": "d36c6c9bfbcaedc5a238360c69a1deb9ed0305fb"
+        "ref": "v2.4.7",
+        "sha": "c601017bd135bb2b21ee0cc14820187ff27de911"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.4.5",
+      "version": "2.4.7",
       "category": "backend",
       "keywords": [
         "datadog",
@@ -528,11 +528,11 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "plugins/signoz",
         "ref": "main",
-        "sha": "5bda89e13755e4c7c1c7feb0af215d7a228b84a4"
+        "sha": "03c8f19a3b0aef044f2be4775c35e91a3a9382f2"
       },
       "strict": true,
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.10.3000",
+      "version": "2026.11.1200",
       "category": "backend",
       "keywords": [
         "signoz",
