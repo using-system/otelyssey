@@ -5,7 +5,7 @@ plugins:
     subdir: "plugins/codex/arize-phoenix"
     ref: "767847c3386492f9783b623cf78e3eee47d0cea3"
   - repo: dash0hq/agent-skills
-    ref: "120c2a9f0bfd143ee9ccd911b95626ece33c37fe"
+    ref: "46b52b9212d799f02f45faa83af6b041b2aef38b"
   - repo: dynatrace-oss/dynatrace-managed-mcp
     ref: "857cecf40383335b90fffb8bf67c5b0dd2447a64"
   - repo: grafana/ai-marketplace
