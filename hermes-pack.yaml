@@ -27,7 +27,7 @@ plugins:
     subdir: "marketplace/oddyssey"
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime-agent-plugin
-    ref: "d0664f5126b6571b8a7cfcb2fdc63f46b12c2ba6"
+    ref: "53bf475db29f2450f40ecc8f70c4d7f0945a9671"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills

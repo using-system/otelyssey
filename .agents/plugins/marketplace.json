@@ -328,7 +328,7 @@
     {
       "name": "oneuptime",
       "description": "Work with your OneUptime project from your coding agent: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
-      "version": "14.0.103",
+      "version": "14.2.0",
       "keywords": [
         "incident management",
         "monitoring",
@@ -347,7 +347,7 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime-agent-plugin.git",
         "ref": "main",
-        "sha": "d0664f5126b6571b8a7cfcb2fdc63f46b12c2ba6"
+        "sha": "53bf475db29f2450f40ecc8f70c4d7f0945a9671"
       },
       "policy": {
         "installation": "AVAILABLE",
