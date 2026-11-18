@@ -9,7 +9,7 @@ OpenTelemetry skills and reference documentation for AI coding assistants
 - License: Apache-2.0
 - Keywords: `otel`, `opentelemetry`, `observability`, `o11y`, `instrumentation`, `monitoring`, `ai-agent`, `skills`, `agentic`, `engineering`, `developer`, `coding`, `productivity`
 - Homepage: <https://github.com/dash0hq/agent-skills>
-- Stars 102, forks 16, watchers 0 (refreshed 2026-11-13T11:05:08Z)
+- Stars 102, forks 17, watchers 0 (refreshed 2026-11-18T11:49:10Z)
 
 ## Install
 

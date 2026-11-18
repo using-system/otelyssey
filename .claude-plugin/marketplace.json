@@ -418,12 +418,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.5.0",
-        "sha": "02a6cc556322f0a4338db7ab52327a2c31783ffa"
+        "ref": "v2.5.1",
+        "sha": "5f4e01d201bb129b2cb4d29bd097f89b9ea634a2"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.5.0",
+      "version": "2.5.1",
       "category": "backend",
       "keywords": [
         "datadog",
