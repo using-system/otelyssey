@@ -42,12 +42,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/dash0hq/agent-skills.git",
-        "ref": "v1.4.1",
-        "sha": "d665e500f851b20867823688e4d5f220228b3c1b"
+        "ref": "v1.4.2",
+        "sha": "c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc"
       },
       "strict": true,
       "description": "OpenTelemetry skills and reference documentation for AI coding assistants",
-      "version": "1.4.1",
+      "version": "1.4.2",
       "category": "instrumentation",
       "keywords": [
         "otel",
@@ -418,12 +418,12 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.5.1",
-        "sha": "5f4e01d201bb129b2cb4d29bd097f89b9ea634a2"
+        "ref": "v2.5.2",
+        "sha": "6eba0dca12b259ae710a9367c70f9fbafcb1b3a4"
       },
       "strict": true,
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.5.1",
+      "version": "2.5.2",
       "category": "backend",
       "keywords": [
         "datadog",
@@ -476,11 +476,11 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "2441fe4497510dd81507bf644d6d6f2360047e72"
+        "sha": "166df1eb045a0c167237f83a3c22e6572075bf2f"
       },
       "strict": true,
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.52.0",
+      "version": "0.52.10",
       "category": "observability",
       "keywords": [
         "agents",

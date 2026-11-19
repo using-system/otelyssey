@@ -9,7 +9,7 @@ Query logs, alerts, dashboards, SIEM insights, and detection rules from Sumo Log
 - License: Apache-2.0
 - Keywords: `sumo logic`, `observability`, `logs`, `log search`, `monitoring`, `alerts`, `siem`, `insights`, `incidents`, `dashboards`, `detection rules`, `cloud operations`, `root cause analysis`, `security`, `devops`, `error`, `latency`, `troubleshoot`, `investigate`, `sumo-logic`, `mcp`, `copilot`, `search`
 - Homepage: <https://www.sumologic.com/help/docs/api/mcp-server/>
-- Stars 0, forks 0, watchers 0 (refreshed 2026-09-20T15:10:54Z)
+- Stars 0, forks 1, watchers 0 (refreshed 2026-11-19T11:45:18Z)
 
 ## Install
 

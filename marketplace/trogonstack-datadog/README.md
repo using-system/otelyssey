@@ -9,7 +9,7 @@ Datadog observability skills for designing, redesigning, and auditing dashboards
 - License: MIT
 - Keywords: `trogonstack`, `datadog`, `observability`, `dashboards`
 - Homepage: <https://github.com/TrogonStack/agentskills/tree/main/plugins/trogonstack-datadog>
-- Stars 11, forks 3, watchers 0 (refreshed 2026-10-22T08:40:25Z)
+- Stars 12, forks 3, watchers 0 (refreshed 2026-11-19T11:45:18Z)
 
 ## Install
 
