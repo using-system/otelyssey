@@ -619,7 +619,7 @@
     {
       "name": "sumo-logic",
       "description": "Query logs, alerts, dashboards, SIEM insights, and detection rules from Sumo Logic for production debugging, incident response, and security investigation",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "keywords": [
         "sumo logic",
         "observability",
@@ -652,8 +652,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/SumoLogic/sumologic-ai-plugins.git",
-        "ref": "v1.0.2",
-        "sha": "22833ef646edd916ea8a3e3f94feda300bb78dcf"
+        "ref": "v1.1.0",
+        "sha": "0b4cea497496fad04f6a5d4514b29ef52669b728"
       },
       "policy": {
         "installation": "AVAILABLE",

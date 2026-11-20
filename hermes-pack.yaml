@@ -50,7 +50,7 @@ plugins:
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins
-    ref: "22833ef646edd916ea8a3e3f94feda300bb78dcf"
+    ref: "0b4cea497496fad04f6a5d4514b29ef52669b728"
   - repo: TrogonStack/agentskills
     subdir: "plugins/trogonstack-datadog"
     ref: "8a6be53417e3f6b472e0919fa922a4514810c29a"
