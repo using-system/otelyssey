@@ -444,7 +444,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.5.2",
+      "version": "2.6.1",
       "keywords": [
         "datadog",
         "monitoring",
@@ -461,8 +461,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.5.2",
-        "sha": "6eba0dca12b259ae710a9367c70f9fbafcb1b3a4"
+        "ref": "v2.6.1",
+        "sha": "b1d02e56590c2099c47e15b0cf645eb4ce843853"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -505,7 +505,7 @@
     {
       "name": "save-toolkit",
       "description": "Application-engineering and site-reliability agents and reusable skills.",
-      "version": "0.52.10",
+      "version": "0.52.11",
       "keywords": [
         "agents",
         "skills",
@@ -521,7 +521,7 @@
         "source": "url",
         "url": "https://github.com/latent-sre/save-toolkit.git",
         "ref": "main",
-        "sha": "166df1eb045a0c167237f83a3c22e6572075bf2f"
+        "sha": "c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -4,7 +4,7 @@ Application-engineering and site-reliability agents and reusable skills.
 
 - Repository: [latent-sre/save-toolkit](https://github.com/latent-sre/save-toolkit), the plugin at the root of it
 - Categories: `observability`, `backend`, `instrumentation`, `collector`
-- Version: 0.52.10 (`main`, commit `166df1eb045a`)
+- Version: 0.52.11 (`main`, commit `c7f0a315c4d9`)
 - Author: [latent-sre](https://github.com/latent-sre)
 - License: MIT
 - Keywords: `agents`, `skills`, `sre`, `observability`, `pcf`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install latent-sre/save-toolkit --ref 166df1eb045a0c167237f83a3c22e6572075bf2f
+hermes plugins install latent-sre/save-toolkit --ref c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5
 hermes plugins enable save-toolkit
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout 166df1eb045a0c167237f83a3c22e6572075bf2f
+git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5
 openclaw plugins install ./save-toolkit --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout 166df1eb045a0c167237f83a3c22e6572075bf2f
+git clone https://github.com/latent-sre/save-toolkit && git -C save-toolkit checkout c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5
 mkdir -p ~/.vibe/plugins/save-toolkit && cp -r ./save-toolkit/. ~/.vibe/plugins/save-toolkit
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/latent-sre/save-toolkit ~/.opencode-plugins/save-toolkit && git -C ~/.opencode-plugins/save-toolkit checkout 166df1eb045a0c167237f83a3c22e6572075bf2f
+git clone https://github.com/latent-sre/save-toolkit ~/.opencode-plugins/save-toolkit && git -C ~/.opencode-plugins/save-toolkit checkout c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

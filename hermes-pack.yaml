@@ -36,12 +36,12 @@ plugins:
   - repo: omarmhaimdat/pepe
     ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup
-    ref: "6eba0dca12b259ae710a9367c70f9fbafcb1b3a4"
+    ref: "b1d02e56590c2099c47e15b0cf645eb4ce843853"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
   - repo: latent-sre/save-toolkit
-    ref: "166df1eb045a0c167237f83a3c22e6572075bf2f"
+    ref: "c7f0a315c4d9aa0b0e33baf185f30ea1f31a1fb5"
   - repo: getsentry/agent-plugin
     ref: "2eee4ec823972c222aae89c9213c64c056b64048"
   - repo: SigNoz/agent-skills

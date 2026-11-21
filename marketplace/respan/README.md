@@ -9,7 +9,7 @@ Respan for ChatGPT and Codex: inspect LLM logs and traces, and manage prompts, d
 - License: Apache-2.0
 - Keywords: `llm`, `observability`, `tracing`, `evals`, `prompts`, `datasets`, `mcp`
 - Homepage: <https://respan.ai>
-- Stars 60, forks 17, watchers 2 (refreshed 2026-11-20T11:46:06Z)
+- Stars 61, forks 17, watchers 2 (refreshed 2026-11-21T11:11:06Z)
 
 ## Install
 
