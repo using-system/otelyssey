@@ -32,7 +32,7 @@ plugins:
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills
     subdir: "plugins/otel-instrumentation-skills"
-    ref: "d007ea95f1c17684345239da92e6d42e0f393d08"
+    ref: "35867cc385c339da1969d5c1f49818076ea75f5e"
   - repo: omarmhaimdat/pepe
     ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup

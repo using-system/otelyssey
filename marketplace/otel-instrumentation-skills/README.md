@@ -4,7 +4,7 @@ OpenTelemetry signal quality with durable workflows and fresh, version-correct u
 
 - Repository: [rknightion/otel-instrumentation-skills](https://github.com/rknightion/otel-instrumentation-skills), the plugin at `plugins/otel-instrumentation-skills` in it
 - Categories: `instrumentation`, `collector`
-- Version: 2.0.0 (`main`, commit `d007ea95f1c1`)
+- Version: 3.0.0 (`main`, commit `35867cc385c3`)
 - Author: Rob Knight
 - License: Apache-2.0
 - Keywords: `opentelemetry`, `instrumentation`, `collector`, `semantic-conventions`
@@ -57,28 +57,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install rknightion/otel-instrumentation-skills/plugins/otel-instrumentation-skills --ref d007ea95f1c17684345239da92e6d42e0f393d08
+hermes plugins install rknightion/otel-instrumentation-skills/plugins/otel-instrumentation-skills --ref 35867cc385c339da1969d5c1f49818076ea75f5e
 hermes plugins enable otel-instrumentation-skills
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/rknightion/otel-instrumentation-skills && git -C otel-instrumentation-skills checkout d007ea95f1c17684345239da92e6d42e0f393d08
+git clone https://github.com/rknightion/otel-instrumentation-skills && git -C otel-instrumentation-skills checkout 35867cc385c339da1969d5c1f49818076ea75f5e
 openclaw plugins install ./otel-instrumentation-skills/plugins/otel-instrumentation-skills --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/rknightion/otel-instrumentation-skills && git -C otel-instrumentation-skills checkout d007ea95f1c17684345239da92e6d42e0f393d08
+git clone https://github.com/rknightion/otel-instrumentation-skills && git -C otel-instrumentation-skills checkout 35867cc385c339da1969d5c1f49818076ea75f5e
 mkdir -p ~/.vibe/plugins/otel-instrumentation-skills && cp -r ./otel-instrumentation-skills/plugins/otel-instrumentation-skills/. ~/.vibe/plugins/otel-instrumentation-skills
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/rknightion/otel-instrumentation-skills ~/.opencode-plugins/otel-instrumentation-skills && git -C ~/.opencode-plugins/otel-instrumentation-skills checkout d007ea95f1c17684345239da92e6d42e0f393d08
+git clone https://github.com/rknightion/otel-instrumentation-skills ~/.opencode-plugins/otel-instrumentation-skills && git -C ~/.opencode-plugins/otel-instrumentation-skills checkout 35867cc385c339da1969d5c1f49818076ea75f5e
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

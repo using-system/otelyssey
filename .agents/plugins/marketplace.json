@@ -388,7 +388,7 @@
     {
       "name": "otel-instrumentation-skills",
       "description": "OpenTelemetry signal quality with durable workflows and fresh, version-correct upstream evidence.",
-      "version": "2.0.0",
+      "version": "3.0.0",
       "keywords": [
         "opentelemetry",
         "instrumentation",
@@ -403,7 +403,7 @@
         "url": "https://github.com/rknightion/otel-instrumentation-skills.git",
         "path": "./plugins/otel-instrumentation-skills",
         "ref": "main",
-        "sha": "d007ea95f1c17684345239da92e6d42e0f393d08"
+        "sha": "35867cc385c339da1969d5c1f49818076ea75f5e"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -8,8 +8,8 @@
   "repository": "rknightion/otel-instrumentation-skills",
   "path": "plugins/otel-instrumentation-skills",
   "ref": "main",
-  "sha": "d007ea95f1c17684345239da92e6d42e0f393d08",
-  "version": "2.0.0",
+  "sha": "35867cc385c339da1969d5c1f49818076ea75f5e",
+  "version": "3.0.0",
   "author": {
     "name": "Rob Knight"
   },
