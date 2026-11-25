@@ -444,7 +444,7 @@
     {
       "name": "pup",
       "description": "Datadog API CLI with 49 command groups, 300+ subcommands. Skills and domain agents for monitoring, logs, APM, security, and infrastructure.",
-      "version": "2.6.1",
+      "version": "2.7.1",
       "keywords": [
         "datadog",
         "monitoring",
@@ -461,8 +461,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/DataDog/pup.git",
-        "ref": "v2.6.1",
-        "sha": "b1d02e56590c2099c47e15b0cf645eb4ce843853"
+        "ref": "v2.7.1",
+        "sha": "0c13ef0f646c4faa38a9d06934084b212372b4cb"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -560,7 +560,7 @@
     {
       "name": "signoz",
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.11.1200",
+      "version": "2026.11.2500",
       "keywords": [
         "signoz",
         "opentelemetry",
@@ -579,7 +579,7 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "./plugins/signoz",
         "ref": "main",
-        "sha": "03c8f19a3b0aef044f2be4775c35e91a3a9382f2"
+        "sha": "62477ca2924acb728380d4da5e005dfc10ed85af"
       },
       "policy": {
         "installation": "AVAILABLE",

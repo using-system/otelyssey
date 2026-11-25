@@ -36,7 +36,7 @@ plugins:
   - repo: omarmhaimdat/pepe
     ref: "753dca53eca3b1673ce627671b000a035da74a51"
   - repo: DataDog/pup
-    ref: "b1d02e56590c2099c47e15b0cf645eb4ce843853"
+    ref: "0c13ef0f646c4faa38a9d06934084b212372b4cb"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
@@ -46,7 +46,7 @@ plugins:
     ref: "2eee4ec823972c222aae89c9213c64c056b64048"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
-    ref: "03c8f19a3b0aef044f2be4775c35e91a3a9382f2"
+    ref: "62477ca2924acb728380d4da5e005dfc10ed85af"
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins
