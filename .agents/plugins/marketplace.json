@@ -42,7 +42,7 @@
     {
       "name": "dash0-agent-skills",
       "description": "OpenTelemetry skills and reference documentation for AI coding assistants",
-      "version": "1.4.2",
+      "version": "1.5.0",
       "keywords": [
         "otel",
         "opentelemetry",
@@ -65,8 +65,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/dash0hq/agent-skills.git",
-        "ref": "v1.4.2",
-        "sha": "c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc"
+        "ref": "v1.5.0",
+        "sha": "8f066476ab1946e8f1b8db72b52bdc7818e2f230"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -328,7 +328,7 @@
     {
       "name": "oneuptime",
       "description": "Work with your OneUptime project from your coding agent: investigate and respond to incidents and alerts, check monitors and status pages, and query logs, metrics and traces.",
-      "version": "14.2.0",
+      "version": "17.3.0",
       "keywords": [
         "incident management",
         "monitoring",
@@ -347,7 +347,7 @@
         "source": "url",
         "url": "https://github.com/OneUptime/oneuptime-agent-plugin.git",
         "ref": "main",
-        "sha": "53bf475db29f2450f40ecc8f70c4d7f0945a9671"
+        "sha": "cfe2ead0cb82c8ef31cd8e7fa7ff6b0904e8f68c"
       },
       "policy": {
         "installation": "AVAILABLE",

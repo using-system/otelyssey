@@ -8,8 +8,8 @@
   "repository": "OneUptime/oneuptime-agent-plugin",
   "path": "",
   "ref": "main",
-  "sha": "53bf475db29f2450f40ecc8f70c4d7f0945a9671",
-  "version": "14.2.0",
+  "sha": "cfe2ead0cb82c8ef31cd8e7fa7ff6b0904e8f68c",
+  "version": "17.3.0",
   "author": {
     "name": "OneUptime",
     "email": "support@oneuptime.com",

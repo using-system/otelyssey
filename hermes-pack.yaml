@@ -5,7 +5,7 @@ plugins:
     subdir: "plugins/codex/arize-phoenix"
     ref: "767847c3386492f9783b623cf78e3eee47d0cea3"
   - repo: dash0hq/agent-skills
-    ref: "c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc"
+    ref: "8f066476ab1946e8f1b8db72b52bdc7818e2f230"
   - repo: dynatrace-oss/dynatrace-managed-mcp
     ref: "857cecf40383335b90fffb8bf67c5b0dd2447a64"
   - repo: grafana/ai-marketplace
@@ -27,7 +27,7 @@ plugins:
     subdir: "marketplace/oddyssey"
     ref: "bad606e2031e644dc72b38d17c8282c5f0b292a0"
   - repo: OneUptime/oneuptime-agent-plugin
-    ref: "53bf475db29f2450f40ecc8f70c4d7f0945a9671"
+    ref: "cfe2ead0cb82c8ef31cd8e7fa7ff6b0904e8f68c"
   - repo: ollygarden/opentelemetry-agent-skills
     ref: "ea1a9401c449a43e319a634030bea66390173dff"
   - repo: rknightion/otel-instrumentation-skills

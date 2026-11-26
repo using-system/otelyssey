@@ -4,7 +4,7 @@ OpenTelemetry skills and reference documentation for AI coding assistants
 
 - Repository: [dash0hq/agent-skills](https://github.com/dash0hq/agent-skills), the plugin at the root of it
 - Categories: `instrumentation`, `collector`
-- Version: 1.4.2 (`v1.4.2`, commit `c7cdb3d02853`)
+- Version: 1.5.0 (`v1.5.0`, commit `8f066476ab19`)
 - Author: Dash0
 - License: Apache-2.0
 - Keywords: `otel`, `opentelemetry`, `observability`, `o11y`, `instrumentation`, `monitoring`, `ai-agent`, `skills`, `agentic`, `engineering`, `developer`, `coding`, `productivity`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install dash0hq/agent-skills --ref c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc
+hermes plugins install dash0hq/agent-skills --ref 8f066476ab1946e8f1b8db72b52bdc7818e2f230
 hermes plugins enable dash0-agent-skills
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/dash0hq/agent-skills && git -C agent-skills checkout c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc
+git clone https://github.com/dash0hq/agent-skills && git -C agent-skills checkout 8f066476ab1946e8f1b8db72b52bdc7818e2f230
 openclaw plugins install ./agent-skills --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/dash0hq/agent-skills && git -C agent-skills checkout c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc
+git clone https://github.com/dash0hq/agent-skills && git -C agent-skills checkout 8f066476ab1946e8f1b8db72b52bdc7818e2f230
 mkdir -p ~/.vibe/plugins/dash0-agent-skills && cp -r ./agent-skills/. ~/.vibe/plugins/dash0-agent-skills
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/dash0hq/agent-skills ~/.opencode-plugins/dash0-agent-skills && git -C ~/.opencode-plugins/dash0-agent-skills checkout c7cdb3d02853030a8a301844b2e6bcfb17d2c5bc
+git clone https://github.com/dash0hq/agent-skills ~/.opencode-plugins/dash0-agent-skills && git -C ~/.opencode-plugins/dash0-agent-skills checkout 8f066476ab1946e8f1b8db72b52bdc7818e2f230
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:
