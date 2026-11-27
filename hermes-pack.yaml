@@ -34,7 +34,7 @@ plugins:
     subdir: "plugins/otel-instrumentation-skills"
     ref: "35867cc385c339da1969d5c1f49818076ea75f5e"
   - repo: omarmhaimdat/pepe
-    ref: "753dca53eca3b1673ce627671b000a035da74a51"
+    ref: "066acd23c4c8d07af177aee9c632c3969ad108aa"
   - repo: DataDog/pup
     ref: "0c13ef0f646c4faa38a9d06934084b212372b4cb"
   - repo: respanai/respan
@@ -46,7 +46,7 @@ plugins:
     ref: "2eee4ec823972c222aae89c9213c64c056b64048"
   - repo: SigNoz/agent-skills
     subdir: "plugins/signoz"
-    ref: "62477ca2924acb728380d4da5e005dfc10ed85af"
+    ref: "4c157bbe3f27479a2a1ed563a82e7d4ecd8a605b"
   - repo: amiable-dev/skills-telemetry
     ref: "c33a407d7ce6d3e686718ccc5a5df5f269f0b9d5"
   - repo: SumoLogic/sumologic-ai-plugins

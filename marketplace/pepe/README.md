@@ -4,7 +4,7 @@ Find why an HTTP endpoint is slow and prove a fix: ping it by phase, load-test i
 
 - Repository: [omarmhaimdat/pepe](https://github.com/omarmhaimdat/pepe), the plugin at the root of it
 - Categories: `observability`, `instrumentation`
-- Version: 0.58.0 (`v0.58.0`, commit `753dca53eca3`)
+- Version: 0.59.0 (`v0.59.0`, commit `066acd23c4c8`)
 - Author: [Omar Mhaimdat](https://github.com/omarmhaimdat)
 - License: MIT
 - Keywords: `http`, `load-testing`, `latency`, `performance`, `opentelemetry`, `benchmark`, `mcp`
@@ -60,28 +60,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install omarmhaimdat/pepe --ref 753dca53eca3b1673ce627671b000a035da74a51
+hermes plugins install omarmhaimdat/pepe --ref 066acd23c4c8d07af177aee9c632c3969ad108aa
 hermes plugins enable pepe
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/omarmhaimdat/pepe && git -C pepe checkout 753dca53eca3b1673ce627671b000a035da74a51
+git clone https://github.com/omarmhaimdat/pepe && git -C pepe checkout 066acd23c4c8d07af177aee9c632c3969ad108aa
 openclaw plugins install ./pepe --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/omarmhaimdat/pepe && git -C pepe checkout 753dca53eca3b1673ce627671b000a035da74a51
+git clone https://github.com/omarmhaimdat/pepe && git -C pepe checkout 066acd23c4c8d07af177aee9c632c3969ad108aa
 mkdir -p ~/.vibe/plugins/pepe && cp -r ./pepe/. ~/.vibe/plugins/pepe
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/omarmhaimdat/pepe ~/.opencode-plugins/pepe && git -C ~/.opencode-plugins/pepe checkout 753dca53eca3b1673ce627671b000a035da74a51
+git clone https://github.com/omarmhaimdat/pepe ~/.opencode-plugins/pepe && git -C ~/.opencode-plugins/pepe checkout 066acd23c4c8d07af177aee9c632c3969ad108aa
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

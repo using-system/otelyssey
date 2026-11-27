@@ -7,8 +7,8 @@
   "repository": "SigNoz/agent-skills",
   "path": "plugins/signoz",
   "ref": "main",
-  "sha": "62477ca2924acb728380d4da5e005dfc10ed85af",
-  "version": "2026.11.2500",
+  "sha": "4c157bbe3f27479a2a1ed563a82e7d4ecd8a605b",
+  "version": "2026.11.2600",
   "author": {
     "name": "SigNoz",
     "url": "https://signoz.io"

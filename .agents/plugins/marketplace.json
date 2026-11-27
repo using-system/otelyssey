@@ -414,7 +414,7 @@
     {
       "name": "pepe",
       "description": "Find why an HTTP endpoint is slow and prove a fix: ping it by phase, load-test it, see which operation inside the service the time goes to (from its OpenTelemetry spans), and compare before and after. A skill and pepe's MCP server, under guardrails.",
-      "version": "0.58.0",
+      "version": "0.59.0",
       "keywords": [
         "http",
         "load-testing",
@@ -431,8 +431,8 @@
       "source": {
         "source": "url",
         "url": "https://github.com/omarmhaimdat/pepe.git",
-        "ref": "v0.58.0",
-        "sha": "753dca53eca3b1673ce627671b000a035da74a51"
+        "ref": "v0.59.0",
+        "sha": "066acd23c4c8d07af177aee9c632c3969ad108aa"
       },
       "policy": {
         "installation": "AVAILABLE",
@@ -560,7 +560,7 @@
     {
       "name": "signoz",
       "description": "Official SigNoz plugin for MCP setup, docs, queries, dashboards, and alerts",
-      "version": "2026.11.2500",
+      "version": "2026.11.2600",
       "keywords": [
         "signoz",
         "opentelemetry",
@@ -579,7 +579,7 @@
         "url": "https://github.com/SigNoz/agent-skills.git",
         "path": "./plugins/signoz",
         "ref": "main",
-        "sha": "62477ca2924acb728380d4da5e005dfc10ed85af"
+        "sha": "4c157bbe3f27479a2a1ed563a82e7d4ecd8a605b"
       },
       "policy": {
         "installation": "AVAILABLE",
