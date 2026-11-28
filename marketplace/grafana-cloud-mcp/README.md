@@ -4,12 +4,12 @@ For Grafana Cloud: a hosted MCP server with OAuth sign-in for dashboards, metric
 
 - Repository: [grafana/ai-marketplace](https://github.com/grafana/ai-marketplace), the plugin at `kiro/grafana-cloud-mcp` in it
 - Categories: `backend`
-- Version: 0.3.1 (`main`, commit `77a6f1a277c3`)
+- Version: 0.3.2 (`main`, commit `547f63fd8147`)
 - Author: Grafana Labs
 - License: Apache-2.0
 - Keywords: `grafana`, `mcp`, `cloud`, `observability`, `dashboards`, `prometheus`, `loki`, `tempo`, `alerting`, `incidents`, `oncall`, `monitoring`
 - Homepage: <https://github.com/grafana/ai-marketplace/tree/main/plugins/grafana-cloud-mcp>
-- Stars 20, forks 6, watchers 0 (refreshed 2026-11-12T11:21:19Z)
+- Stars 21, forks 6, watchers 1 (refreshed 2026-11-28T11:52:35Z)
 
 ## Install
 
@@ -58,28 +58,28 @@ Hermes Agent:
 
 ```text
 hermes plugins pack install https://raw.githubusercontent.com/using-system/otelyssey/main/hermes-pack.yaml
-hermes plugins install grafana/ai-marketplace/kiro/grafana-cloud-mcp --ref 77a6f1a277c35d3205dc34abf78d85e49ca5ccf1
+hermes plugins install grafana/ai-marketplace/kiro/grafana-cloud-mcp --ref 547f63fd81472e6c2326e2652b0dabf54ba6b97b
 hermes plugins enable grafana-cloud-mcp
 ```
 
 OpenClaw:
 
 ```text
-git clone https://github.com/grafana/ai-marketplace && git -C ai-marketplace checkout 77a6f1a277c35d3205dc34abf78d85e49ca5ccf1
+git clone https://github.com/grafana/ai-marketplace && git -C ai-marketplace checkout 547f63fd81472e6c2326e2652b0dabf54ba6b97b
 openclaw plugins install ./ai-marketplace/kiro/grafana-cloud-mcp --force --accept-capabilities
 ```
 
 Mistral Vibe:
 
 ```text
-git clone https://github.com/grafana/ai-marketplace && git -C ai-marketplace checkout 77a6f1a277c35d3205dc34abf78d85e49ca5ccf1
+git clone https://github.com/grafana/ai-marketplace && git -C ai-marketplace checkout 547f63fd81472e6c2326e2652b0dabf54ba6b97b
 mkdir -p ~/.vibe/plugins/grafana-cloud-mcp && cp -r ./ai-marketplace/kiro/grafana-cloud-mcp/. ~/.vibe/plugins/grafana-cloud-mcp
 ```
 
 OpenCode:
 
 ```text
-git clone https://github.com/grafana/ai-marketplace ~/.opencode-plugins/grafana-cloud-mcp && git -C ~/.opencode-plugins/grafana-cloud-mcp checkout 77a6f1a277c35d3205dc34abf78d85e49ca5ccf1
+git clone https://github.com/grafana/ai-marketplace ~/.opencode-plugins/grafana-cloud-mcp && git -C ~/.opencode-plugins/grafana-cloud-mcp checkout 547f63fd81472e6c2326e2652b0dabf54ba6b97b
 ```
 
 Then merge into `~/.config/opencode/opencode.json`:

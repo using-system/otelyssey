@@ -6,9 +6,9 @@
   ],
   "repository": "DataDog/pup",
   "path": "",
-  "ref": "v2.7.1",
-  "sha": "0c13ef0f646c4faa38a9d06934084b212372b4cb",
-  "version": "2.7.1",
+  "ref": "v2.7.2",
+  "sha": "4c88d5c35201fb333c76ba395a464119925d4c47",
+  "version": "2.7.2",
   "author": {
     "name": "Datadog",
     "email": "support@datadoghq.com"

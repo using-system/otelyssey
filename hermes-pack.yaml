@@ -10,7 +10,7 @@ plugins:
     ref: "857cecf40383335b90fffb8bf67c5b0dd2447a64"
   - repo: grafana/ai-marketplace
     subdir: "kiro/grafana-cloud-mcp"
-    ref: "77a6f1a277c35d3205dc34abf78d85e49ca5ccf1"
+    ref: "547f63fd81472e6c2326e2652b0dabf54ba6b97b"
   - repo: grafana/ai-marketplace
     subdir: "kiro/grafana-mcp"
     ref: "77a6f1a277c35d3205dc34abf78d85e49ca5ccf1"
@@ -34,9 +34,9 @@ plugins:
     subdir: "plugins/otel-instrumentation-skills"
     ref: "35867cc385c339da1969d5c1f49818076ea75f5e"
   - repo: omarmhaimdat/pepe
-    ref: "066acd23c4c8d07af177aee9c632c3969ad108aa"
+    ref: "cbed09c4f775e260f38a539ed7aedfe045ba5470"
   - repo: DataDog/pup
-    ref: "0c13ef0f646c4faa38a9d06934084b212372b4cb"
+    ref: "4c88d5c35201fb333c76ba395a464119925d4c47"
   - repo: respanai/respan
     subdir: "chatgpt-plugin"
     ref: "cc9a1e326b8191ff32c99bce2d8425d10867ba1f"
